@@ -109,7 +109,6 @@ body{font-family:'Outfit',sans-serif;background:#0a0806;color:#fff;min-height:10
 <body>
 <div class="blob b1"></div><div class="blob b2"></div>
 
-<!-- SPLASH -->
 <div class="splash" id="sp">
 <div class="logo" id="logoBtn">AfroDownload</div>
 <div style="color:#ffd966;letter-spacing:6px;font-size:.95rem;margin-top:8px;font-weight:700">THE HOME OF AFROBEATS</div>
@@ -117,7 +116,6 @@ body{font-family:'Outfit',sans-serif;background:#0a0806;color:#fff;min-height:10
 <div style="color:#7a6e4a;font-size:.8rem;margin-top:18px;font-weight:600">415 FAMILY • GHANA</div>
 </div>
 
-<!-- APP -->
 <div class="app" id="app" style="display:none">
 <div class="top">
 <h2 id="tt">Discover</h2>
@@ -128,7 +126,6 @@ body{font-family:'Outfit',sans-serif;background:#0a0806;color:#fff;min-height:10
 </div>
 
 <div class="screens">
-<!-- HOME -->
 <div class="screen on" id="home">
 <div class="hero">
 <h3>Hello Emmanuel 👋</h3>
@@ -170,7 +167,6 @@ body{font-family:'Outfit',sans-serif;background:#0a0806;color:#fff;min-height:10
 <div id="allLib"></div>
 </div>
 
-<!-- SEARCH -->
 <div class="screen" id="search">
 <div class="search">
 <i class="fas fa-search"></i>
@@ -179,7 +175,6 @@ body{font-family:'Outfit',sans-serif;background:#0a0806;color:#fff;min-height:10
 <div id="sr"></div>
 </div>
 
-<!-- LIBRARY -->
 <div class="screen" id="lib">
 <div class="sec"><h4>Favorites</h4><span id="clearFavBtn">Clear</span></div>
 <div id="fv"></div>
@@ -187,7 +182,6 @@ body{font-family:'Outfit',sans-serif;background:#0a0806;color:#fff;min-height:10
 <div id="dl"></div>
 </div>
 
-<!-- PROFILE -->
 <div class="screen" id="pro">
 <div style="text-align:center;padding:18px 0 10px">
 <div style="width:100px;height:100px;border-radius:34px;background:linear-gradient(135deg,#f5b400,#ffd966);margin:0 auto;display:flex;align-items:center;justify-content:center;font-size:48px;font-weight:900;color:#0a0806">E</div>
@@ -219,7 +213,6 @@ body{font-family:'Outfit',sans-serif;background:#0a0806;color:#fff;min-height:10
 </div>
 </div>
 
-<!-- NAV -->
 <div class="nav">
 <div class="ni active" data-s="home"><i class="fas fa-house"></i><span>Home</span></div>
 <div class="ni" data-s="search"><i class="fas fa-magnifying-glass"></i><span>Search</span></div>
@@ -228,7 +221,6 @@ body{font-family:'Outfit',sans-serif;background:#0a0806;color:#fff;min-height:10
 </div>
 </div>
 
-<!-- PLAYER -->
 <div class="player" id="pl">
 <button class="close-btn" id="cp"><i class="fas fa-xmark"></i></button>
 <div class="art" id="pa">🎵</div>
@@ -248,7 +240,6 @@ body{font-family:'Outfit',sans-serif;background:#0a0806;color:#fff;min-height:10
 </div>
 </div>
 
-<!-- DOWNLOAD MODAL -->
 <div class="modal" id="dm">
 <div class="box">
 <h3>Download</h3>
@@ -260,7 +251,6 @@ body{font-family:'Outfit',sans-serif;background:#0a0806;color:#fff;min-height:10
 </div>
 </div>
 
-<!-- PIN MODAL -->
 <div class="modal" id="pinM">
 <div class="box">
 <h3>🔒 Founder Access</h3>
@@ -273,7 +263,6 @@ body{font-family:'Outfit',sans-serif;background:#0a0806;color:#fff;min-height:10
 </div>
 </div>
 
-<!-- DELETE MODAL -->
 <div class="modal" id="delM">
 <div class="box" style="text-align:center">
 <div style="width:52px;height:52px;border-radius:16px;background:rgba(255,59,59,.15);color:#ff3b3b;display:flex;align-items:center;justify-content:center;margin:0 auto 10px;font-size:22px"><i class="fas fa-trash"></i></div>
@@ -292,128 +281,71 @@ body{font-family:'Outfit',sans-serif;background:#0a0806;color:#fff;min-height:10
 (function(){
 "use strict";
 
-// ══════════════════════════════════════════════════════
-//  ✅ YOUR CLOUDINARY CREDENTIALS (already filled in)
-// ══════════════════════════════════════════════════════
-const CLOUDINARY_CLOUD  = "lzglyuhq";
-const CLOUDINARY_PRESET = "YungeeFounder";
-const FOUNDER_PIN       = "415";             // ← CHANGE THIS to your own secret PIN
-const REMOTE_LIBRARY_URL = "";               // ← Optional: URL to songs.json (see below)
-// ══════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════
+//  YOUR CLOUDINARY CREDENTIALS
+// ══════════════════════════════════════════════════
+var CLOUDINARY_CLOUD  = "lzglyuhq";
+var CLOUDINARY_PRESET = "YungeeFounder";
+var FOUNDER_PIN       = "415";
+var REMOTE_LIBRARY_URL = "";
+// ══════════════════════════════════════════════════
 
-let isFounder = sessionStorage.getItem('afro_founder') === 'true';
-let remoteSongs = [];
-let ups = JSON.parse(localStorage.getItem('afro_yellow_ups') || '[]');
-let favs = JSON.parse(localStorage.getItem('afro_favs') || '[]');
-let downs = JSON.parse(localStorage.getItem('afro_downs') || '[]');
-let songs = [];
-let cur=null, dTarget=null, delAct=null, isPlay=false, curIndex=0;
-const aud = new Audio();
-const $ = id => document.getElementById(id);
-const toastEl = $('toast');
+var isFounder = sessionStorage.getItem('afro_founder') === 'true';
+var remoteSongs = [];
+var ups = JSON.parse(localStorage.getItem('afro_yellow_ups') || '[]');
+var favs = JSON.parse(localStorage.getItem('afro_favs') || '[]');
+var downs = JSON.parse(localStorage.getItem('afro_downs') || '[]');
+var songs = [];
+var cur = null, dTarget = null, delAct = null, isPlay = false, curIndex = 0;
+var aud = new Audio();
+var $ = function(id){ return document.getElementById(id); };
 
-function toast(m){toastEl.textContent=m;toastEl.classList.add('on');clearTimeout(toast._t);toast._t=setTimeout(()=>toastEl.classList.remove('on'),2600)}
-function esc(t){if(!t)return '';const d=document.createElement('div');d.textContent=t;return d.innerHTML}
+function toast(m){
+  var t = $('toast');
+  if(!t) return;
+  t.textContent = m;
+  t.classList.add('on');
+  clearTimeout(toast._t);
+  toast._t = setTimeout(function(){ t.classList.remove('on'); }, 2600);
+}
 
-// ---------- LOAD REMOTE LIBRARY ----------
+function esc(t){
+  if(!t) return '';
+  var d = document.createElement('div');
+  d.textContent = t;
+  return d.innerHTML;
+}
+
 async function loadRemoteLibrary(){
   if(!REMOTE_LIBRARY_URL) return;
   try{
-    const r = await fetch(REMOTE_LIBRARY_URL,{cache:'no-store'});
-    if(!r.ok) throw new Error('HTTP '+r.status);
-    const d = await r.json();
+    var r = await fetch(REMOTE_LIBRARY_URL, {cache:'no-store'});
+    if(!r.ok) throw new Error('HTTP ' + r.status);
+    var d = await r.json();
     if(Array.isArray(d)) remoteSongs = d;
-    console.log('☁️ Remote songs loaded:', remoteSongs.length);
-  }catch(e){console.warn('Remote load failed:',e)}
+    console.log('Remote songs loaded: ' + remoteSongs.length);
+  }catch(e){ console.warn('Remote load failed:', e); }
 }
 
 function rebuildSongs(){
-  const map = new Map();
-  remoteSongs.forEach(s => map.set(s.id, s));
-  ups.forEach(s => map.set(s.id, s));
+  var map = new Map();
+  remoteSongs.forEach(function(s){ map.set(s.id, s); });
+  ups.forEach(function(s){ map.set(s.id, s); });
   songs = Array.from(map.values());
 }
 
 function updateFounderUI(){
-  $('upZ').style.display = isFounder ? 'block' : 'none';
-  $('lockedBox').style.display = isFounder ? 'none' : 'block';
-  $('founderBadge').classList.toggle('on', isFounder);
-  $('logoutBtn').style.display = isFounder ? 'flex' : 'none';
-  $('cloudSyncBtn').style.display = isFounder ? 'flex' : 'none';
+  var upZ = $('upZ'), locked = $('lockedBox');
+  if(upZ) upZ.style.display = isFounder ? 'block' : 'none';
+  if(locked) locked.style.display = isFounder ? 'none' : 'block';
+  var fb = $('founderBadge');
+  if(fb) fb.classList.toggle('on', isFounder);
+  var lb = $('logoutBtn');
+  if(lb) lb.style.display = isFounder ? 'flex' : 'none';
+  var cs = $('cloudSyncBtn');
+  if(cs) cs.style.display = isFounder ? 'flex' : 'none';
 }
 
-// ---------- CARD RENDER ----------
 function cardHtml(s){
-  const cover = s.coverImg ? `<img src="${esc(s.coverImg)}" onerror="this.style.display='none'">` : (s.cover||'💿');
-  return `<div class="card">
-    <div class="cv" onclick="play(${s.id})">${cover}</div>
-    <div class="ti">${esc(s.title)}</div>
-    <div class="ar">${esc(s.artist)}</div>
-    <div class="acts">
-      <button class="ibtn" onclick="play(${s.id})"><i class="fas fa-play"></i></button>
-      <button class="ibtn" onclick="openD(${s.id})"><i class="fas fa-download"></i></button>
-      ${isFounder?`<button class="ibtn del" onclick="askDelU(${s.id})"><i class="fas fa-trash"></i></button>`:''}
-    </div>
-  </div>`;
-}
-
-function itemHtml(s, opts){
-  opts = opts || {};
-  const cover = s.coverImg ? `<img src="${esc(s.coverImg)}" onerror="this.style.display='none'">` : (s.cover||'💿');
-  return `<div class="item">
-    <div class="ic">${cover}</div>
-    <div class="info">
-      <div class="t">${esc(s.title)}</div>
-      <div class="a">${esc(s.artist)}</div>
-    </div>
-    <button class="ibtn" onclick="play(${s.id})"><i class="fas fa-play"></i></button>
-    ${opts.download?`<button class="ibtn" onclick="openD(${s.id})"><i class="fas fa-download"></i></button>`:''}
-    ${opts.del?`<button class="ibtn del" onclick="${opts.del}(${s.id})"><i class="fas fa-trash"></i></button>`:''}
-  </div>`;
-}
-
-// ---------- RENDER ALL ----------
-function render(){
-  rebuildSongs();
-  $('uc').textContent = ups.length + ' songs';
-  $('ht').textContent = songs.length + ' tracks';
-  $('pu').textContent = ups.length;
-  $('pf').textContent = favs.length;
-  $('pd').textContent = downs.length;
-
-  $('ur').innerHTML = ups.length ? ups.map(cardHtml).join('') :
-    `<div class="empty-msg" style="border:2px dashed rgba(255,215,0,.2);border-radius:20px;padding:30px;margin-top:10px"><div style="font-size:40px">📂</div><div style="margin-top:10px;font-weight:700">No songs yet</div><div style="font-size:.85rem;color:#7a6e4a;margin-top:4px">${isFounder?'Tap the upload box above':'Founder will add songs soon'}</div></div>`;
-
-  $('allLib').innerHTML = songs.length ? songs.map(s => itemHtml(s,{download:true,del:isFounder?'askDelU':null})).join('') :
-    `<div class="empty-msg">Library is empty</div>`;
-
-  const favSongs = favs.map(id => songs.find(x=>x.id==id)).filter(Boolean);
-  $('fv').innerHTML = favSongs.length ? favSongs.map(s => itemHtml(s,{del:'askDelF'})).join('') :
-    `<div class="empty-msg">No favorites yet</div>`;
-
-  const downSongs = downs.map(id => songs.find(x=>x.id==id)).filter(Boolean);
-  $('dl').innerHTML = downSongs.length ? downSongs.map(s => itemHtml(s,{del:'askDelD'})).join('') :
-    `<div class="empty-msg">No downloads yet</div>`;
-
-  renderSearch($('si').value || '');
-}
-
-function renderSearch(q){
-  q = (q||'').toLowerCase();
-  const r = songs.filter(s => s.title.toLowerCase().includes(q) || s.artist.toLowerCase().includes(q));
-  $('sr').innerHTML = r.length ? r.map(s => itemHtml(s,{download:true,del:isFounder?'askDelU':null})).join('') :
-    `<div class="empty-msg">${songs.length?'No results':'Library is empty'}</div>`;
-}
-
-// ---------- PLAYBACK ----------
-window.play = function(id){
-  const s = songs.find(x => x.id == id);
-  if(!s) return;
-  if(!s.audio){toast('This song has no audio URL');return}
-  cur = s;
-  curIndex = songs.findIndex(x => x.id == id);
-  aud.src = s.audio;
-  aud.play().catch(() => toast('Tap play to start'));
-  isPlay = true;
-  $('pt').textContent = s.title;
-  $('pr').text
+  var cover = s.coverImg
+    ? '<img src="' + esc(s.coverImg) + '" onerror="this.s
