@@ -1,185 +1,1296 @@
 <!DOCTYPE html>
 <html lang="en">
-<head><style>
-@font-face {
-  font-family: "Optimistic";
-  font-style: normal;
-  font-weight: 400 600;
-  font-display: swap;
-  src: url("/fonts/OptimisticAI_VF_Optimized.woff2") format("woff2");
-}
-@font-face {
-  font-family: "Optimistic Mono";
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-  src: url("/fonts/OptimisticMono_W_TextRegular.woff2") format("woff2");
-}
-:where(html) {
-  font-family: "Optimistic", system-ui, sans-serif;
-}
-:where(code, pre, kbd, samp) {
-  font-family: "Optimistic Mono", ui-monospace, monospace;
-}
-</style>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-<title>AfroDownload · Yellow Gold</title>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700;800;900&display=swap" rel="stylesheet">
-<style>
-*{margin:0;padding:0;box-sizing:border-box}
-body{font-family:'Outfit',sans-serif;background:#0a0806;color:#fff;min-height:100vh;display:flex;justify-content:center;-webkit-tap-highlight-color:transparent}
-.blob{position:fixed;width:600px;height:600px;border-radius:50%;filter:blur(110px);opacity:.35;z-index:0}
-.b1{background:radial-gradient(circle,#ffd966,#f5b400);top:-180px;left:-130px}
-.b2{background:radial-gradient(circle,#ffb800,#8a6e00);bottom:-180px;right:-130px}
-.app{width:100%;max-width:430px;background:rgba(10,8,4,.92);backdrop-filter:blur(24px);min-height:100vh;display:flex;flex-direction:column;position:relative;z-index:1;border-left:1px solid rgba(255,215,0,.15);border-right:1px solid rgba(255,215,0,.15);box-shadow:0 0 60px rgba(255,200,0,.1)}
-.splash{position:fixed;inset:0;z-index:999;background:#0a0806;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity .5s ease}
-.splash.hide{opacity:0;pointer-events:none}
-.logo{font-size:3.4rem;font-weight:900;background:linear-gradient(135deg,#ffd966,#f5b400,#ffe066);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.run{margin-top:28px;background:linear-gradient(135deg,#f5b400,#ffd966);border:none;padding:20px 58px;border-radius:120px;color:#0a0806;font-weight:900;font-size:1.35rem;cursor:pointer;box-shadow:0 0 50px rgba(255,200,0,.6)}
-.top{padding:18px 20px;display:flex;justify-content:space-between;align-items:center}
-.top h2{font-weight:800;font-size:1.7rem;background:linear-gradient(135deg,#fff,#ffd966);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.screens{flex:1;overflow-y:auto;padding:0 18px 110px}
-.screen{display:none}.screen.on{display:block}
-.hero{background:linear-gradient(145deg,#1a1408,#2a1f0a);border:1px solid rgba(255,215,0,.3);border-radius:28px;padding:22px 20px;margin:6px 0 20px}
-.hero h3{font-size:1.7rem;font-weight:800;color:#ffd966}
-.hero p{color:rgba(255,255,255,.75);margin-top:6px;font-size:.95rem}
-.hero .badge-group{margin-top:14px;display:flex;gap:10px;flex-wrap:wrap}
-.hero .badge{background:rgba(0,0,0,.5);border:1px solid rgba(255,215,0,.3);padding:8px 18px;border-radius:40px;font-size:.85rem;font-weight:700;color:#ffd966;display:inline-flex;align-items:center;gap:8px}
-.upload{border:2px dashed rgba(255,215,0,.45);background:rgba(255,215,0,.06);border-radius:24px;padding:24px 16px;text-align:center;cursor:pointer;margin-bottom:6px}
-.upload i{font-size:44px;color:#ffd966}
-.upload .ut{font-weight:800;font-size:1.2rem;margin-top:8px;color:#fff}
-.upload .us{font-size:.85rem;color:#b8a87a;font-weight:500}
-.sec{display:flex;justify-content:space-between;align-items:baseline;margin:24px 0 12px}
-.sec h4{font-weight:800;font-size:1.25rem;color:#fff}
-.sec span{color:#ffd966;font-size:.85rem;font-weight:700;cursor:pointer;background:rgba(255,215,0,.1);padding:6px 14px;border-radius:30px;border:1px solid rgba(255,215,0,.2)}
-.row{display:flex;gap:14px;overflow-x:auto;padding-bottom:10px}
-.row::-webkit-scrollbar{display:none}
-.card{min-width:160px;max-width:160px;background:#141008;border:1px solid rgba(255,215,0,.18);border-radius:24px;padding:12px}
-.card .cv{width:100%;aspect-ratio:1;border-radius:18px;background:#221b0a;display:flex;align-items:center;justify-content:center;font-size:48px;border:1px solid rgba(255,215,0,.15);cursor:pointer}
-.card .ti{font-weight:800;font-size:1rem;margin-top:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#fff}
-.card .ar{font-size:.8rem;color:#b8a87a}
-.acts{display:flex;justify-content:space-between;margin-top:12px;gap:4px}
-.ibtn{background:rgba(255,215,0,.1);border:1px solid rgba(255,215,0,.18);color:#ffd966;width:34px;height:34px;border-radius:12px;display:flex;align-items:center;justify-content:center;cursor:pointer}
-.ibtn.del{color:#ff6b6b}
-.search{background:#141008;border:1.5px solid rgba(255,215,0,.3);border-radius:24px;padding:14px 20px;display:flex;gap:14px;align-items:center;margin:12px 0 18px}
-.search i{color:#ffd966;font-size:1.2rem}
-.search input{flex:1;background:transparent;border:none;color:#fff;outline:none;font-size:1rem;font-family:'Outfit',sans-serif}
-.search input::placeholder{color:#7a6e4a}
-.item{display:flex;align-items:center;gap:16px;padding:14px;background:#141008;border-radius:20px;margin-bottom:10px;border:1px solid rgba(255,215,0,.12)}
-.item .ic{width:54px;height:54px;border-radius:16px;background:#221b0a;display:flex;align-items:center;justify-content:center;font-size:28px;border:1px solid rgba(255,215,0,.2);flex-shrink:0}
-.info{flex:1;min-width:0}.info .t{font-weight:700;font-size:1.05rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#fff}.info .a{font-size:.8rem;color:#b8a87a}
-.nav{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);width:calc(100% - 32px);max-width:400px;background:rgba(14,11,5,.96);border:1.5px solid rgba(255,215,0,.35);border-radius:30px;display:flex;justify-content:space-around;padding:8px 6px;z-index:50}
-.ni{flex:1;display:flex;flex-direction:column;align-items:center;padding:8px 4px;border-radius:22px;color:#a08c4a;cursor:pointer;gap:4px}
-.ni i{font-size:1.5rem}.ni span{font-size:.7rem;font-weight:700}
-.ni.active{background:linear-gradient(135deg,#f5b400,#ffd966);color:#0a0806;box-shadow:0 0 24px rgba(255,200,0,.5)}
-.player{position:fixed;inset:0;z-index:500;background:rgba(8,6,3,.98);display:none;flex-direction:column;align-items:center;justify-content:center;padding:28px 20px}
-.player.on{display:flex}
-.player .close-btn{position:absolute;top:20px;right:20px;width:50px;height:50px;border-radius:50%;background:rgba(255,215,0,.15);border:1px solid rgba(255,215,0,.35);color:#ffd966;font-size:1.4rem;display:flex;align-items:center;justify-content:center;cursor:pointer}
-.art{width:260px;height:260px;border-radius:40px;background:#1f190a;border:2px solid rgba(255,215,0,.35);display:flex;align-items:center;justify-content:center;font-size:90px}
-.player .ptitle{margin-top:28px;font-weight:900;font-size:2rem;color:#fff;text-align:center}
-.player .partist{color:#ffd966;font-size:1.1rem;font-weight:600;margin-top:4px}
-.prog{width:100%;max-width:340px;height:8px;background:rgba(255,215,0,.15);border-radius:20px;margin-top:24px;overflow:hidden;cursor:pointer}
-.fill{height:100%;background:linear-gradient(90deg,#f5b400,#ffd966);width:0%;border-radius:20px}
-.time-row{display:flex;justify-content:space-between;width:100%;max-width:340px;margin-top:10px;color:#b8a87a;font-size:.85rem;font-weight:600}
-.ctrls{display:flex;gap:28px;margin-top:24px;align-items:center}
-.cbtn2{width:58px;height:58px;border-radius:50%;background:rgba(255,215,0,.12);border:1.5px solid rgba(255,215,0,.3);color:#ffd966;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:1.5rem}
-.cbtn2.play{width:82px;height:82px;background:linear-gradient(135deg,#f5b400,#ffd966);border:none;color:#0a0806;font-size:2rem}
-.player .extra-actions{display:flex;gap:20px;margin-top:28px}
-.player .extra-actions .ibtn{width:54px;height:54px;border-radius:18px;font-size:1.3rem}
-.modal{position:fixed;inset:0;background:rgba(0,0,0,.8);backdrop-filter:blur(14px);z-index:1000;display:none;align-items:center;justify-content:center;padding:20px}
-.modal.on{display:flex}
-.box{background:#151005;border:1.5px solid rgba(255,215,0,.4);border-radius:32px;padding:28px;width:100%;max-width:350px}
-.box h3{font-weight:800;font-size:1.5rem;color:#ffd966}
-.box p{color:#c9b582;margin:8px 0 18px}
-.btn{border:none;padding:14px 24px;border-radius:100px;font-weight:800;font-size:1rem;cursor:pointer;font-family:'Outfit',sans-serif}
-.btn-p{background:linear-gradient(135deg,#f5b400,#ffd966);color:#0a0806}
-.btn-g{background:rgba(255,215,0,.08);color:#ffd966;border:1.5px solid rgba(255,215,0,.25)}
-.toast{position:fixed;bottom:100px;left:50%;transform:translateX(-50%);background:#1f190a;border:1.5px solid #ffd966;color:#ffd966;font-weight:700;padding:14px 28px;border-radius:100px;opacity:0;transition:.3s;z-index:2000;pointer-events:none}
-.toast.on{opacity:1}
-.empty-msg{color:#7a6e4a;padding:16px 12px;font-weight:600;font-size:.95rem;text-align:center}
-.stat-number{font-weight:900;font-size:1.6rem;color:#ffd966}
-.stat-label{font-size:.75rem;color:#b8a87a;font-weight:700}
-</style>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>AfroDownload · Yellow Gold</title>
+  <!-- Font Awesome & Outfit font -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    /* ----- FONT FACES (using system fallbacks if external fonts are blocked) ----- */
+    @font-face {
+      font-family: "Optimistic";
+      font-style: normal;
+      font-weight: 400 600;
+      font-display: swap;
+      src: url("/fonts/OptimisticAI_VF_Optimized.woff2") format("woff2");
+    }
+    @font-face {
+      font-family: "Optimistic Mono";
+      font-style: normal;
+      font-weight: 400;
+      font-display: swap;
+      src: url("/fonts/OptimisticMono_W_TextRegular.woff2") format("woff2");
+    }
+    :where(html) {
+      font-family: "Optimistic", system-ui, sans-serif;
+    }
+    :where(code, pre, kbd, samp) {
+      font-family: "Optimistic Mono", ui-monospace, monospace;
+    }
+
+    /* ----- RESET & BASE ----- */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Outfit', sans-serif;
+      background: #0a0806;
+      color: #fff;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    /* ----- BACKGROUND BLOBS ----- */
+    .blob {
+      position: fixed;
+      width: 600px;
+      height: 600px;
+      border-radius: 50%;
+      filter: blur(110px);
+      opacity: .35;
+      z-index: 0;
+      pointer-events: none;
+    }
+    .b1 {
+      background: radial-gradient(circle, #ffd966, #f5b400);
+      top: -180px;
+      left: -130px;
+    }
+    .b2 {
+      background: radial-gradient(circle, #ffb800, #8a6e00);
+      bottom: -180px;
+      right: -130px;
+    }
+
+    /* ----- APP CONTAINER ----- */
+    .app {
+      width: 100%;
+      max-width: 430px;
+      background: rgba(10, 8, 4, .92);
+      backdrop-filter: blur(24px);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      z-index: 1;
+      border-left: 1px solid rgba(255, 215, 0, .15);
+      border-right: 1px solid rgba(255, 215, 0, .15);
+      box-shadow: 0 0 60px rgba(255, 200, 0, .1);
+    }
+
+    /* ----- SPLASH ----- */
+    .splash {
+      position: fixed;
+      inset: 0;
+      z-index: 999;
+      background: #0a0806;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      transition: opacity .5s ease;
+    }
+    .splash.hide {
+      opacity: 0;
+      pointer-events: none;
+    }
+    .logo {
+      font-size: 3.4rem;
+      font-weight: 900;
+      background: linear-gradient(135deg, #ffd966, #f5b400, #ffe066);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .run {
+      margin-top: 28px;
+      background: linear-gradient(135deg, #f5b400, #ffd966);
+      border: none;
+      padding: 20px 58px;
+      border-radius: 120px;
+      color: #0a0806;
+      font-weight: 900;
+      font-size: 1.35rem;
+      cursor: pointer;
+      box-shadow: 0 0 50px rgba(255, 200, 0, .6);
+      font-family: 'Outfit', sans-serif;
+    }
+
+    /* ----- TOP BAR ----- */
+    .top {
+      padding: 18px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .top h2 {
+      font-weight: 800;
+      font-size: 1.7rem;
+      background: linear-gradient(135deg, #fff, #ffd966);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    /* ----- SCREENS ----- */
+    .screens {
+      flex: 1;
+      overflow-y: auto;
+      padding: 0 18px 110px;
+    }
+    .screen {
+      display: none;
+    }
+    .screen.on {
+      display: block;
+    }
+
+    /* ----- HERO ----- */
+    .hero {
+      background: linear-gradient(145deg, #1a1408, #2a1f0a);
+      border: 1px solid rgba(255, 215, 0, .3);
+      border-radius: 28px;
+      padding: 22px 20px;
+      margin: 6px 0 20px;
+    }
+    .hero h3 {
+      font-size: 1.7rem;
+      font-weight: 800;
+      color: #ffd966;
+    }
+    .hero p {
+      color: rgba(255, 255, 255, .75);
+      margin-top: 6px;
+      font-size: .95rem;
+    }
+    .hero .badge-group {
+      margin-top: 14px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .hero .badge {
+      background: rgba(0, 0, 0, .5);
+      border: 1px solid rgba(255, 215, 0, .3);
+      padding: 8px 18px;
+      border-radius: 40px;
+      font-size: .85rem;
+      font-weight: 700;
+      color: #ffd966;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* ----- UPLOAD ----- */
+    .upload {
+      border: 2px dashed rgba(255, 215, 0, .45);
+      background: rgba(255, 215, 0, .06);
+      border-radius: 24px;
+      padding: 24px 16px;
+      text-align: center;
+      cursor: pointer;
+      margin-bottom: 6px;
+    }
+    .upload i {
+      font-size: 44px;
+      color: #ffd966;
+    }
+    .upload .ut {
+      font-weight: 800;
+      font-size: 1.2rem;
+      margin-top: 8px;
+      color: #fff;
+    }
+    .upload .us {
+      font-size: .85rem;
+      color: #b8a87a;
+      font-weight: 500;
+    }
+
+    /* ----- SECTIONS ----- */
+    .sec {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin: 24px 0 12px;
+    }
+    .sec h4 {
+      font-weight: 800;
+      font-size: 1.25rem;
+      color: #fff;
+    }
+    .sec span {
+      color: #ffd966;
+      font-size: .85rem;
+      font-weight: 700;
+      cursor: pointer;
+      background: rgba(255, 215, 0, .1);
+      padding: 6px 14px;
+      border-radius: 30px;
+      border: 1px solid rgba(255, 215, 0, .2);
+    }
+
+    /* ----- ROW / CARDS ----- */
+    .row {
+      display: flex;
+      gap: 14px;
+      overflow-x: auto;
+      padding-bottom: 10px;
+    }
+    .row::-webkit-scrollbar {
+      display: none;
+    }
+    .card {
+      min-width: 160px;
+      max-width: 160px;
+      background: #141008;
+      border: 1px solid rgba(255, 215, 0, .18);
+      border-radius: 24px;
+      padding: 12px;
+    }
+    .card .cv {
+      width: 100%;
+      aspect-ratio: 1;
+      border-radius: 18px;
+      background: #221b0a;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 48px;
+      border: 1px solid rgba(255, 215, 0, .15);
+      cursor: pointer;
+    }
+    .card .ti {
+      font-weight: 800;
+      font-size: 1rem;
+      margin-top: 10px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      color: #fff;
+    }
+    .card .ar {
+      font-size: .8rem;
+      color: #b8a87a;
+    }
+
+    /* ----- ACTION BUTTONS ----- */
+    .acts {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 12px;
+      gap: 4px;
+    }
+    .ibtn {
+      background: rgba(255, 215, 0, .1);
+      border: 1px solid rgba(255, 215, 0, .18);
+      color: #ffd966;
+      width: 34px;
+      height: 34px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: background 0.2s;
+      font-size: 0.9rem;
+    }
+    .ibtn:hover {
+      background: rgba(255, 215, 0, .2);
+    }
+    .ibtn.del {
+      color: #ff6b6b;
+    }
+
+    /* ----- SEARCH ----- */
+    .search {
+      background: #141008;
+      border: 1.5px solid rgba(255, 215, 0, .3);
+      border-radius: 24px;
+      padding: 14px 20px;
+      display: flex;
+      gap: 14px;
+      align-items: center;
+      margin: 12px 0 18px;
+    }
+    .search i {
+      color: #ffd966;
+      font-size: 1.2rem;
+    }
+    .search input {
+      flex: 1;
+      background: transparent;
+      border: none;
+      color: #fff;
+      outline: none;
+      font-size: 1rem;
+      font-family: 'Outfit', sans-serif;
+    }
+    .search input::placeholder {
+      color: #7a6e4a;
+    }
+
+    /* ----- LIST ITEMS ----- */
+    .item {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 14px;
+      background: #141008;
+      border-radius: 20px;
+      margin-bottom: 10px;
+      border: 1px solid rgba(255, 215, 0, .12);
+    }
+    .item .ic {
+      width: 54px;
+      height: 54px;
+      border-radius: 16px;
+      background: #221b0a;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      border: 1px solid rgba(255, 215, 0, .2);
+      flex-shrink: 0;
+    }
+    .info {
+      flex: 1;
+      min-width: 0;
+    }
+    .info .t {
+      font-weight: 700;
+      font-size: 1.05rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      color: #fff;
+    }
+    .info .a {
+      font-size: .8rem;
+      color: #b8a87a;
+    }
+
+    /* ----- NAVIGATION ----- */
+    .nav {
+      position: fixed;
+      bottom: 16px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: calc(100% - 32px);
+      max-width: 400px;
+      background: rgba(14, 11, 5, .96);
+      border: 1.5px solid rgba(255, 215, 0, .35);
+      border-radius: 30px;
+      display: flex;
+      justify-content: space-around;
+      padding: 8px 6px;
+      z-index: 50;
+      backdrop-filter: blur(16px);
+    }
+    .ni {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 8px 4px;
+      border-radius: 22px;
+      color: #a08c4a;
+      cursor: pointer;
+      gap: 4px;
+      transition: all 0.2s;
+    }
+    .ni i {
+      font-size: 1.5rem;
+    }
+    .ni span {
+      font-size: .7rem;
+      font-weight: 700;
+    }
+    .ni.active {
+      background: linear-gradient(135deg, #f5b400, #ffd966);
+      color: #0a0806;
+      box-shadow: 0 0 24px rgba(255, 200, 0, .5);
+    }
+
+    /* ----- PLAYER ----- */
+    .player {
+      position: fixed;
+      inset: 0;
+      z-index: 500;
+      background: rgba(8, 6, 3, .98);
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 28px 20px;
+    }
+    .player.on {
+      display: flex;
+    }
+    .player .close-btn {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: rgba(255, 215, 0, .15);
+      border: 1px solid rgba(255, 215, 0, .35);
+      color: #ffd966;
+      font-size: 1.4rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+    .art {
+      width: 260px;
+      height: 260px;
+      border-radius: 40px;
+      background: #1f190a;
+      border: 2px solid rgba(255, 215, 0, .35);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 90px;
+    }
+    .player .ptitle {
+      margin-top: 28px;
+      font-weight: 900;
+      font-size: 2rem;
+      color: #fff;
+      text-align: center;
+    }
+    .player .partist {
+      color: #ffd966;
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-top: 4px;
+    }
+    .prog {
+      width: 100%;
+      max-width: 340px;
+      height: 8px;
+      background: rgba(255, 215, 0, .15);
+      border-radius: 20px;
+      margin-top: 24px;
+      overflow: hidden;
+      cursor: pointer;
+    }
+    .fill {
+      height: 100%;
+      background: linear-gradient(90deg, #f5b400, #ffd966);
+      width: 0%;
+      border-radius: 20px;
+      transition: width 0.1s;
+    }
+    .time-row {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+      max-width: 340px;
+      margin-top: 10px;
+      color: #b8a87a;
+      font-size: .85rem;
+      font-weight: 600;
+    }
+    .ctrls {
+      display: flex;
+      gap: 28px;
+      margin-top: 24px;
+      align-items: center;
+    }
+    .cbtn2 {
+      width: 58px;
+      height: 58px;
+      border-radius: 50%;
+      background: rgba(255, 215, 0, .12);
+      border: 1.5px solid rgba(255, 215, 0, .3);
+      color: #ffd966;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 1.5rem;
+      transition: background 0.2s;
+    }
+    .cbtn2:hover {
+      background: rgba(255, 215, 0, .25);
+    }
+    .cbtn2.play {
+      width: 82px;
+      height: 82px;
+      background: linear-gradient(135deg, #f5b400, #ffd966);
+      border: none;
+      color: #0a0806;
+      font-size: 2rem;
+    }
+    .player .extra-actions {
+      display: flex;
+      gap: 20px;
+      margin-top: 28px;
+    }
+    .player .extra-actions .ibtn {
+      width: 54px;
+      height: 54px;
+      border-radius: 18px;
+      font-size: 1.3rem;
+    }
+
+    /* ----- MODALS ----- */
+    .modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, .8);
+      backdrop-filter: blur(14px);
+      z-index: 1000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .modal.on {
+      display: flex;
+    }
+    .box {
+      background: #151005;
+      border: 1.5px solid rgba(255, 215, 0, .4);
+      border-radius: 32px;
+      padding: 28px;
+      width: 100%;
+      max-width: 350px;
+    }
+    .box h3 {
+      font-weight: 800;
+      font-size: 1.5rem;
+      color: #ffd966;
+    }
+    .box p {
+      color: #c9b582;
+      margin: 8px 0 18px;
+    }
+    .btn {
+      border: none;
+      padding: 14px 24px;
+      border-radius: 100px;
+      font-weight: 800;
+      font-size: 1rem;
+      cursor: pointer;
+      font-family: 'Outfit', sans-serif;
+      transition: opacity 0.2s;
+    }
+    .btn:hover {
+      opacity: 0.9;
+    }
+    .btn-p {
+      background: linear-gradient(135deg, #f5b400, #ffd966);
+      color: #0a0806;
+    }
+    .btn-g {
+      background: rgba(255, 215, 0, .08);
+      color: #ffd966;
+      border: 1.5px solid rgba(255, 215, 0, .25);
+    }
+
+    /* ----- TOAST ----- */
+    .toast {
+      position: fixed;
+      bottom: 100px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #1f190a;
+      border: 1.5px solid #ffd966;
+      color: #ffd966;
+      font-weight: 700;
+      padding: 14px 28px;
+      border-radius: 100px;
+      opacity: 0;
+      transition: .3s;
+      z-index: 2000;
+      pointer-events: none;
+      white-space: nowrap;
+      max-width: 90vw;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .toast.on {
+      opacity: 1;
+    }
+
+    /* ----- MISC ----- */
+    .empty-msg {
+      color: #7a6e4a;
+      padding: 16px 12px;
+      font-weight: 600;
+      font-size: .95rem;
+      text-align: center;
+    }
+    .stat-number {
+      font-weight: 900;
+      font-size: 1.6rem;
+      color: #ffd966;
+    }
+    .stat-label {
+      font-size: .75rem;
+      color: #b8a87a;
+      font-weight: 700;
+    }
+  </style>
 </head>
 <body>
-<div class="blob b1"></div><div class="blob b2"></div>
-<div class="splash" id="sp"><div class="logo">AfroDownload</div><div style="color:#ffd966;letter-spacing:6px;font-size:.95rem;margin-top:8px;font-weight:700">THE HOME OF AFROBEATS</div><button class="run" id="runBtn"><i class="fas fa-bolt"></i> Launch App</button><div style="color:#7a6e4a;font-size:.8rem;margin-top:18px;font-weight:600">415 FAMILY • GHANA</div></div>
-<div class="app" id="app" style="display:none">
-<div class="top"><h2 id="tt">Discover</h2><button class="ibtn" id="profileBtn" style="width:46px;height:46px;border-radius:16px"><i class="fas fa-user"></i></button></div>
-<div class="screens">
-<div class="screen on" id="home"><div class="hero"><h3>Hello Emmanuel 👋</h3><p>Upload, stream & share Afrobeats worldwide</p><div class="badge-group"><span class="badge"><i class="fas fa-music"></i> <span id="ht">0 tracks</span></span><span class="badge"><i class="fas fa-fire"></i> 415 Clean</span></div></div>
-<div class="upload" id="upZ"><i class="fas fa-cloud-arrow-up"></i><div class="ut">Tap to upload your MP3</div><div class="us">MP3, WAV • Max 50MB</div></div><input type="file" id="fi" accept=".mp3,.wav,.m4a,audio/*" hidden>
-<div class="sec"><h4>Your Uploads</h4><span id="uc">0 songs</span></div><div class="row" id="ur"></div>
-<div class="sec"><h4>Library</h4><span id="seeAll">View all</span></div><div id="allLib"></div>
-</div>
-<div class="screen" id="search"><div class="search"><i class="fas fa-search"></i><input id="si" placeholder="Search your uploads..."></div><div id="sr"></div></div>
-<div class="screen" id="lib"><div class="sec"><h4>Favorites</h4><span id="clearFavBtn">Clear</span></div><div id="fv"></div><div class="sec"><h4>Downloads</h4><span id="clearDownBtn">Clear</span></div><div id="dl"></div></div>
-<div class="screen" id="pro"><div style="text-align:center;padding:18px 0 10px"><div style="width:100px;height:100px;border-radius:34px;background:linear-gradient(135deg,#f5b400,#ffd966);margin:0 auto;display:flex;align-items:center;justify-content:center;font-size:48px;font-weight:900;color:#0a0806">E</div><h3 style="margin-top:18px;font-size:1.8rem;font-weight:800">Emmanuel Sackey</h3><p style="color:#b8a87a;font-size:.95rem">Founder • Accra, GH</p><div style="display:flex;gap:36px;justify-content:center;margin-top:22px"><div><div class="stat-number" id="pu">0</div><div class="stat-label">Uploads</div></div><div><div class="stat-number" id="pf">0</div><div class="stat-label">Likes</div></div><div><div class="stat-number" id="pd">0</div><div class="stat-label">Saved</div></div></div></div><div style="margin-top:20px"><div class="item" id="shareProfileBtn" style="cursor:pointer"><div class="ic"><i class="fas fa-share-nodes" style="color:#ffd966"></i></div><div class="info"><div class="t">Share App</div><div class="a">afrodowndload415.github.io</div></div><i class="fas fa-chevron-right" style="color:#7a6e4a"></i></div></div></div>
-</div>
-<div class="nav"><div class="ni active" data-s="home"><i class="fas fa-house"></i><span>Home</span></div><div class="ni" data-s="search"><i class="fas fa-magnifying-glass"></i><span>Search</span></div><div class="ni" data-s="lib"><i class="fas fa-bookmark"></i><span>Library</span></div><div class="ni" data-s="pro"><i class="fas fa-user"></i><span>You</span></div></div>
-</div>
-<div class="player" id="pl"><button class="close-btn" id="cp"><i class="fas fa-xmark"></i></button><div class="art" id="pa">🎵</div><div class="ptitle" id="pt">Title</div><div class="partist" id="pr">Artist</div><div class="prog" id="pw"><div class="fill" id="pfill"></div></div><div class="time-row"><span id="ct">0:00</span><span id="td">0:00</span></div><div class="ctrls"><button class="cbtn2" id="prev"><i class="fas fa-backward"></i></button><button class="cbtn2 play" id="pp"><i class="fas fa-play"></i></button><button class="cbtn2" id="next"><i class="fas fa-forward"></i></button></div><div class="extra-actions"><button class="ibtn" id="fb"><i class="far fa-heart"></i></button><button class="ibtn" id="db"><i class="fas fa-download"></i></button><button class="ibtn" id="sb"><i class="fas fa-share-nodes"></i></button></div></div>
-<div class="modal" id="dm"><div class="box"><h3>Download</h3><p id="mt"></p><div style="display:flex;gap:10px;margin-top:14px"><button class="btn btn-g" style="flex:1" id="cd">Cancel</button><button class="btn btn-p" style="flex:1" id="cfd"><i class="fas fa-download"></i> Download</button></div></div></div>
-<div class="modal" id="delM"><div class="box" style="text-align:center"><div style="width:52px;height:52px;border-radius:16px;background:rgba(255,59,59,.15);color:#ff3b3b;display:flex;align-items:center;justify-content:center;margin:0 auto 10px;font-size:22px"><i class="fas fa-trash"></i></div><h3 id="delT">Delete?</h3><p id="delMsg"></p><div style="display:flex;gap:10px"><button class="btn btn-g" style="flex:1" id="cDel">Cancel</button><button class="btn btn-p" style="flex:1;background:#ff3b3b;color:#fff" id="okDel">Delete</button></div></div></div>
-<div class="toast" id="toast"></div>
-<script>
-const base = [];
-let songs=[...base];
-let ups=JSON.parse(localStorage.getItem('afro_yellow_ups')||'[]');
-ups.forEach(s=>songs.unshift(s));
-let favs=JSON.parse(localStorage.getItem('afro_favs')||'[]');
-let downs=JSON.parse(localStorage.getItem('afro_downs')||'[]');
-let cur=null,dTarget=null,delAct=null,isPlay=false,curIndex=0;
-const aud=new Audio();
-const toast=m=>{let t=document.getElementById('toast');t.textContent=m;t.classList.add('on');setTimeout(()=>t.classList.remove('on'),2500)};
-const card=s=>{return `<div class="card"><div class="cv" onclick="play(${s.id})">${s.cover||'💿'}</div><div class="ti">${s.title}</div><div class="ar">${s.artist}</div><div class="acts"><button class="ibtn" onclick="play(${s.id})"><i class="fas fa-play"></i></button><button class="ibtn" onclick="openD(${s.id})"><i class="fas fa-download"></i></button><button class="ibtn del" onclick="askDelU(${s.id})"><i class="fas fa-trash"></i></button></div></div>`};
-const render=()=>{
-document.getElementById('ur').innerHTML=ups.length?ups.map(card).join(''):`<div class="empty-msg" style="border:2px dashed rgba(255,215,0,.2);border-radius:20px;padding:30px;margin-top:10px"><div style="font-size:40px">📂</div><div style="margin-top:10px;font-weight:700">No songs yet</div><div style="font-size:.85rem;color:#7a6e4a;margin-top:4px">Tap the upload box above to add your first MP3</div></div>`;
-document.getElementById('allLib').innerHTML=songs.length?songs.map(s=>`<div class="item"><div class="ic">${s.cover||'💿'}</div><div class="info"><div class="t">${s.title}</div><div class="a">${s.artist}</div></div><button class="ibtn" onclick="play(${s.id})"><i class="fas fa-play"></i></button><button class="ibtn del" onclick="askDelU(${s.id})"><i class="fas fa-trash"></i></button></div>`).join(''):`<div class="empty-msg">Your library is empty</div>`;
-document.getElementById('uc').textContent=ups.length+' songs';
-document.getElementById('ht').textContent=songs.length+' tracks';
-document.getElementById('pu').textContent=ups.length;
-document.getElementById('pf').textContent=favs.length;
-document.getElementById('pd').textContent=downs.length;
-document.getElementById('fv').innerHTML=favs.length?favs.map(id=>{let s=songs.find(x=>x.id==id);return s?`<div class="item"><div class="ic">${s.cover||'💿'}</div><div class="info"><div class="t">${s.title}</div><div class="a">${s.artist}</div></div><button class="ibtn" onclick="play(${s.id})"><i class="fas fa-play"></i></button><button class="ibtn del" onclick="askDelF(${s.id})"><i class="fas fa-trash"></i></button></div>`:''}).join(''):`<div class="empty-msg">No favorites yet</div>`;
-document.getElementById('dl').innerHTML=downs.length?downs.map(id=>{let s=songs.find(x=>x.id==id);return s?`<div class="item"><div class="ic">${s.cover||'💿'}</div><div class="info"><div class="t">${s.title}</div><div class="a">${s.artist}</div></div><button class="ibtn" onclick="play(${s.id})"><i class="fas fa-play"></i></button><button class="ibtn del" onclick="askDelD(${s.id})"><i class="fas fa-trash"></i></button></div>`:''}).join(''):`<div class="empty-msg">No downloads yet</div>`;
-renderS(document.getElementById('si').value||'')};
-const renderS=q=>{q=(q||'').toLowerCase();let r=songs.filter(s=>s.title.toLowerCase().includes(q)||s.artist.toLowerCase().includes(q));document.getElementById('sr').innerHTML=r.length?r.map(s=>`<div class="item"><div class="ic">${s.cover||'💿'}</div><div class="info"><div class="t">${s.title}</div><div class="a">${s.artist}</div></div><button class="ibtn" onclick="play(${s.id})"><i class="fas fa-play"></i></button><button class="ibtn" onclick="openD(${s.id})"><i class="fas fa-download"></i></button><button class="ibtn del" onclick="askDelU(${s.id})"><i class="fas fa-trash"></i></button></div>`).join(''):`<div class="empty-msg">${songs.length?'No results':'Upload songs first'}</div>`};
-function playNext(){if(!songs.length)return;curIndex=(curIndex+1)%songs.length;play(songs[curIndex].id)}
-function playPrev(){if(!songs.length)return;curIndex=(curIndex-1+songs.length)%songs.length;play(songs[curIndex].id)}
-window.play=id=>{let s=songs.find(x=>x.id==id);if(!s)return;cur=s;curIndex=songs.findIndex(x=>x.id==id);aud.src=s.audio;aud.play().catch(()=>toast('Tap play'));isPlay=true;document.getElementById('pt').textContent=s.title;document.getElementById('pr').textContent=s.artist;document.getElementById('pa').textContent=s.cover||'💿';document.getElementById('pl').classList.add('on');document.getElementById('pp').innerHTML='<i class="fas fa-pause"></i>';toast('Now playing: '+s.title)};
-window.openD=id=>{let s=songs.find(x=>x.id==id);if(!s)return;dTarget=s;document.getElementById('mt').textContent=s.title+' - '+s.artist;document.getElementById('dm').classList.add('on')};
-window.askDelU=id=>{let s=songs.find(x=>x.id==id);document.getElementById('delT').textContent='Delete upload?';document.getElementById('delMsg').textContent=`Delete "${s.title}" permanently?`;delAct=()=>{songs=songs.filter(x=>x.id!=id);ups=ups.filter(x=>x.id!=id);favs=favs.filter(x=>x!=id);downs=downs.filter(x=>x!=id);localStorage.setItem('afro_yellow_ups',JSON.stringify(ups));localStorage.setItem('afro_favs',JSON.stringify(favs));localStorage.setItem('afro_downs',JSON.stringify(downs));render();toast('Deleted 🗑️')};document.getElementById('delM').classList.add('on')};
-window.askDelF=id=>{document.getElementById('delT').textContent='Remove favorite?';document.getElementById('delMsg').textContent=`Remove from favorites?`;delAct=()=>{favs=favs.filter(x=>x!=id);localStorage.setItem('afro_favs',JSON.stringify(favs));render();toast('Removed')};document.getElementById('delM').classList.add('on')};
-window.askDelD=id=>{document.getElementById('delT').textContent='Delete download?';document.getElementById('delMsg').textContent=`Remove from downloads?`;delAct=()=>{downs=downs.filter(x=>x!=id);localStorage.setItem('afro_downs',JSON.stringify(downs));render();toast('Removed')};document.getElementById('delM').classList.add('on')};
-window.clearF=t=>{let count=t=='fav'?favs.length:downs.length;if(!count){toast(t=='fav'?'No favorites':'No downloads');return}document.getElementById('delT').textContent=t=='fav'?'Clear favorites?':'Clear downloads?';document.getElementById('delMsg').textContent=`Remove ${count} ${t=='fav'?'favorites':'downloads'}?`;delAct=()=>{if(t=='fav'){favs=[];localStorage.setItem('afro_favs','[]')}else{downs=[];localStorage.setItem('afro_downs','[]')}render();toast('Cleared')};document.getElementById('delM').classList.add('on')};
-document.getElementById('runBtn').addEventListener('click',()=>{document.getElementById('sp').classList.add('hide');setTimeout(()=>{document.getElementById('sp').style.display='none';document.getElementById('app').style.display='flex';render()},400)});
-document.querySelectorAll('.ni').forEach(el=>{el.addEventListener('click',()=>{document.querySelectorAll('.ni').forEach(n=>n.classList.remove('active'));el.classList.add('active');document.querySelectorAll('.screen').forEach(s=>s.classList.remove('on'));document.getElementById(el.dataset.s).classList.add('on');document.getElementById('tt').textContent=el.dataset.s=='home'?'Discover':el.dataset.s=='search'?'Search':el.dataset.s=='lib'?'Your Library':'Profile'})});
-document.getElementById('cp').addEventListener('click',()=>{document.getElementById('pl').classList.remove('on');aud.pause();isPlay=false});
-document.getElementById('pp').addEventListener('click',()=>{if(isPlay){aud.pause();isPlay=false;document.getElementById('pp').innerHTML='<i class="fas fa-play"></i>'}else{aud.play();isPlay=true;document.getElementById('pp').innerHTML='<i class="fas fa-pause"></i>'}});
-document.getElementById('prev').addEventListener('click',playPrev);
-document.getElementById('next').addEventListener('click',playNext);
-aud.addEventListener('ended',playNext);
-document.getElementById('profileBtn').addEventListener('click',()=>{document.querySelectorAll('.ni').forEach(n=>n.classList.remove('active'));document.querySelector('[data-s="pro"]').classList.add('active');document.querySelectorAll('.screen').forEach(s=>s.classList.remove('on'));document.getElementById('pro').classList.add('on');document.getElementById('tt').textContent='Profile'});
-document.getElementById('seeAll').addEventListener('click',()=>{document.querySelectorAll('.ni').forEach(n=>n.classList.remove('active'));document.querySelector('[data-s="search"]').classList.add('active');document.querySelectorAll('.screen').forEach(s=>s.classList.remove('on'));document.getElementById('search').classList.add('on');document.getElementById('tt').textContent='Library'});
-document.getElementById('clearFavBtn').addEventListener('click',()=>clearF('fav'));
-document.getElementById('clearDownBtn').addEventListener('click',()=>clearF('down'));
-document.getElementById('shareProfileBtn').addEventListener('click',()=>{if(navigator.share){navigator.share({title:'AfroDownload',url:location.href})}else{navigator.clipboard.writeText(location.href);toast('Link copied!')}});
-document.getElementById('cd').addEventListener('click',()=>document.getElementById('dm').classList.remove('on'));
-document.getElementById('cfd').addEventListener('click',()=>{if(!dTarget)return;if(!downs.includes(dTarget.id)){downs.push(dTarget.id);localStorage.setItem('afro_downs',JSON.stringify(downs))}document.getElementById('dm').classList.remove('on');render();toast('Downloaded: '+dTarget.title)});
-document.getElementById('fb').addEventListener('click',()=>{if(!cur)return;let i=favs.indexOf(cur.id);if(i>=0){favs.splice(i,1);toast('Removed')}else{favs.push(cur.id);toast('Favorite ❤️')}localStorage.setItem('afro_favs',JSON.stringify(favs));render()});
-document.getElementById('db').addEventListener('click',()=>{if(cur)openD(cur.id)});
-document.getElementById('sb').addEventListener('click',()=>{if(navigator.share&&cur){navigator.share({title:cur.title,url:location.href})}else{toast('Link copied!')}});
-document.getElementById('si').addEventListener('input',e=>renderS(e.target.value));
-document.getElementById('upZ').addEventListener('click',()=>document.getElementById('fi').click());
-document.getElementById('fi').addEventListener('change',e=>{let f=e.target.files[0];if(!f)return;if(f.size>50*1024*1024){toast('Too big! Max 50MB');return}let url=URL.createObjectURL(f);let ns={id:Date.now(),title:f.name.replace(/\.[^/.]+$/,''),artist:'Your Upload',cover:'💿',audio:url,isU:true};ups.unshift(ns);songs.unshift(ns);localStorage.setItem('afro_yellow_ups',JSON.stringify(ups));render();toast('Uploaded: '+ns.title)});
-document.getElementById('cDel').addEventListener('click',()=>{document.getElementById('delM').classList.remove('on');delAct=null});
-document.getElementById('okDel').addEventListener('click',()=>{if(delAct)delAct();document.getElementById('delM').classList.remove('on');delAct=null});
-aud.addEventListener('timeupdate',()=>{if(aud.duration){let p=(aud.currentTime/aud.duration)*100;document.getElementById('pfill').style.width=p+'%';let fmt=n=>Math.floor(n/60)+':'+('0'+Math.floor(n%60)).slice(-2);document.getElementById('ct').textContent=fmt(aud.currentTime);document.getElementById('td').textContent=fmt(aud.duration)}});
-document.getElementById('pw').addEventListener('click',e=>{if(!aud.duration)return;let r=e.currentTarget.getBoundingClientRect();aud.currentTime=((e.clientX-r.left)/r.width)*aud.duration});
-render();
-</script>
-<script>(function(){var loc=location.href.replace(/#.*$/,"");var ATTR_NAMES=["data-product-id","data-productid","data-product_id","product-id","productid","product_id","data-source-entity-id","source-entity-id","source_entity_id","data-product","data-metadata","data-meta"];var DATASET_KEYS=["productId","productid","product_id","sourceEntityId","sourceentityid","source_entity_id","product","metadata","meta"];function readProductId(value){if(typeof value!=="string"||value.length===0)return null;if(/^[0-9]{6,}$/.test(value))return value;var match=value.match(/(?:product(?:_|-)?id|source(?:_|-)?entity(?:_|-)?id)["'=:\s]+([0-9]{6,})/i);return match?match[1]:null}function extractProductId(start){for(var node=start;node&&node!==document.body;node=node.parentElement){for(var i=0;i<ATTR_NAMES.length;i++){var attrValue=node.getAttribute&&node.getAttribute(ATTR_NAMES[i]);var attrProductId=readProductId(attrValue);if(attrProductId)return attrProductId}var dataset=node.dataset||null;if(dataset){for(var j=0;j<DATASET_KEYS.length;j++){var dataValue=dataset[DATASET_KEYS[j]];var dataProductId=readProductId(dataValue);if(dataProductId)return dataProductId}}}return null}function isInlineMediaSlotElement(node){return !!(node&&node.getAttribute&&node.getAttribute("data-clippy-inline-media-slot")!==null)}function findInlineMediaSlot(start){for(var node=start;node&&node!==document.body;node=node.parentElement){if(isInlineMediaSlotElement(node))return node}return null}function readInlineMediaUrl(node){if(!node)return null;return node.getAttribute&&((node.getAttribute("data-clippy-inline-media-url")||node.getAttribute("data-url")||node.getAttribute("data_url")))||node.href||null}function stripHash(url){return String(url).replace(/#.*$/,"")}function urlsMatch(a,b){if(!a||!b)return false;try{return stripHash(new URL(a,loc).href)===stripHash(new URL(b,loc).href)}catch(_){return stripHash(a)===stripHash(b)}}function isFirstPartyReelUrl(value){try{var url=new URL(value,loc);if(url.protocol!=="https:")return false;var host=url.hostname.toLowerCase();var supported=host==="instagram.com"||host.endsWith(".instagram.com")||host==="facebook.com"||host.endsWith(".facebook.com");return supported&&/\/reels?\//i.test(url.pathname)}catch(_){return false}}function isInlineMediaUrlClick(node,href){var slot=findInlineMediaSlot(node);if(!slot)return false;var slotUrl=readInlineMediaUrl(slot);if(slotUrl)return urlsMatch(href,slotUrl);return isFirstPartyReelUrl(href)}function findDataHref(start){for(var node=start;node&&node!==document.body;node=node.parentElement){if(node.getAttribute){var href=node.getAttribute("data-href")||node.getAttribute("data-url");if(href)return{href:href,node:node}}}return null}var nativeOpen=window.open;window.open=function(url){if(parent!==window&&typeof url==="string"&&/^https?:\/\//.test(url)){parent.postMessage({type:"ecto:usercontent-link-click",href:url},"*");return null}return nativeOpen?nativeOpen.apply(window,arguments):null};document.addEventListener("click",function(e){var target=e.target instanceof Element?e.target:null;if(!target)return;if(parent===window)return;var a=target.closest?target.closest("a[href]"):null;if(a&&a.href&&/^https?:\/\//.test(a.href)&&a.href.replace(/#.*$/,"")!==loc){if(isInlineMediaUrlClick(a,a.href))return;var productId=extractProductId(target)||extractProductId(a);if(productId){e.preventDefault();parent.postMessage({type:"ecto-artifact-link-click",productId:productId},"*");return}e.preventDefault();parent.postMessage({type:"ecto:usercontent-link-click",href:a.href},"*");return}var dataHref=findDataHref(target);if(dataHref&&/^https?:\/\//.test(dataHref.href)&&dataHref.href.replace(/#.*$/,"")!==loc){if(isInlineMediaUrlClick(dataHref.node,dataHref.href))return;e.preventDefault();parent.postMessage({type:"ecto:usercontent-link-click",href:dataHref.href},"*")}},true)})();</script><script>(function(){var FOCUS_TYPE="ecto:artifact-focus-request";var CLOSE_TYPE="ecto:artifact-close-request";function focusArtifactDocument(){var body=document.body;if(!body)return;try{window.focus();}catch(e){}if(!body.hasAttribute("tabindex"))body.setAttribute("tabindex","-1");try{body.focus({preventScroll:true});}catch(e){try{body.focus();}catch(e2){}}}window.addEventListener("message",function(event){if(event.source!==window.parent)return;var data=event.data;if(!data||typeof data!=="object"||data.type!==FOCUS_TYPE)return;if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",focusArtifactDocument,{once:true});return;}focusArtifactDocument();});window.addEventListener("keydown",function(event){if(event.key!=="Escape")return;window.setTimeout(function(){if(event.defaultPrevented)return;window.parent.postMessage({type:CLOSE_TYPE},"*");},0);});})();</script></body>
+  <div class="blob b1"></div>
+  <div class="blob b2"></div>
+
+  <!-- SPLASH -->
+  <div class="splash" id="sp">
+    <div class="logo">AfroDownload</div>
+    <div style="color:#ffd966;letter-spacing:6px;font-size:.95rem;margin-top:8px;font-weight:700">THE HOME OF AFROBEATS</div>
+    <button class="run" id="runBtn"><i class="fas fa-bolt"></i> Launch App</button>
+    <div style="color:#7a6e4a;font-size:.8rem;margin-top:18px;font-weight:600">415 FAMILY • GHANA</div>
+  </div>
+
+  <!-- APP -->
+  <div class="app" id="app" style="display:none">
+    <div class="top">
+      <h2 id="tt">Discover</h2>
+      <button class="ibtn" id="profileBtn" style="width:46px;height:46px;border-radius:16px"><i class="fas fa-user"></i></button>
+    </div>
+
+    <div class="screens">
+      <!-- HOME SCREEN -->
+      <div class="screen on" id="home">
+        <div class="hero">
+          <h3>Hello Yungee 👋</h3>
+          <p>Upload, stream & share Afrobeats worldwide</p>
+          <div class="badge-group">
+            <span class="badge"><i class="fas fa-music"></i> <span id="ht">0 tracks</span></span>
+            <span class="badge"><i class="fas fa-fire"></i> 415 Clean</span>
+          </div>
+        </div>
+
+        <div class="upload" id="upZ">
+          <i class="fas fa-cloud-arrow-up"></i>
+          <div class="ut">Tap to upload your MP3</div>
+          <div class="us">MP3, WAV • Max 50MB</div>
+        </div>
+        <input type="file" id="fi" accept=".mp3,.wav,.m4a,audio/*" hidden>
+
+        <div class="sec">
+          <h4>Your Uploads</h4>
+          <span id="uc">0 songs</span>
+        </div>
+        <div class="row" id="ur"></div>
+
+        <div class="sec">
+          <h4>Library</h4>
+          <span id="seeAll">View all</span>
+        </div>
+        <div id="allLib"></div>
+      </div>
+
+      <!-- SEARCH SCREEN -->
+      <div class="screen" id="search">
+        <div class="search">
+          <i class="fas fa-search"></i>
+          <input id="si" placeholder="Search your uploads...">
+        </div>
+        <div id="sr"></div>
+      </div>
+
+      <!-- LIBRARY SCREEN -->
+      <div class="screen" id="lib">
+        <div class="sec">
+          <h4>Favorites</h4>
+          <span id="clearFavBtn">Clear</span>
+        </div>
+        <div id="fv"></div>
+        <div class="sec">
+          <h4>Downloads</h4>
+          <span id="clearDownBtn">Clear</span>
+        </div>
+        <div id="dl"></div>
+      </div>
+
+      <!-- PROFILE SCREEN -->
+      <div class="screen" id="pro">
+        <div style="text-align:center;padding:18px 0 10px">
+          <div style="width:100px;height:100px;border-radius:34px;background:linear-gradient(135deg,#f5b400,#ffd966);margin:0 auto;display:flex;align-items:center;justify-content:center;font-size:48px;font-weight:900;color:#0a0806">E</div>
+          <h3 style="margin-top:18px;font-size:1.8rem;font-weight:800">Emmanuel Sackey</h3>
+          <p style="color:#b8a87a;font-size:.95rem">Founder • Accra, GH</p>
+          <div style="display:flex;gap:36px;justify-content:center;margin-top:22px">
+            <div><div class="stat-number" id="pu">0</div><div class="stat-label">Uploads</div></div>
+            <div><div class="stat-number" id="pf">0</div><div class="stat-label">Likes</div></div>
+            <div><div class="stat-number" id="pd">0</div><div class="stat-label">Saved</div></div>
+          </div>
+        </div>
+        <div style="margin-top:20px">
+          <div class="item" id="shareProfileBtn" style="cursor:pointer">
+            <div class="ic"><i class="fas fa-share-nodes" style="color:#ffd966"></i></div>
+            <div class="info"><div class="t">Share App</div><div class="a">afrodowndload415.github.io</div></div>
+            <i class="fas fa-chevron-right" style="color:#7a6e4a"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BOTTOM NAV -->
+    <div class="nav">
+      <div class="ni active" data-s="home"><i class="fas fa-house"></i><span>Home</span></div>
+      <div class="ni" data-s="search"><i class="fas fa-magnifying-glass"></i><span>Search</span></div>
+      <div class="ni" data-s="lib"><i class="fas fa-bookmark"></i><span>Library</span></div>
+      <div class="ni" data-s="pro"><i class="fas fa-user"></i><span>You</span></div>
+    </div>
+  </div>
+
+  <!-- PLAYER -->
+  <div class="player" id="pl">
+    <button class="close-btn" id="cp"><i class="fas fa-xmark"></i></button>
+    <div class="art" id="pa">🎵</div>
+    <div class="ptitle" id="pt">Title</div>
+    <div class="partist" id="pr">Artist</div>
+    <div class="prog" id="pw"><div class="fill" id="pfill"></div></div>
+    <div class="time-row"><span id="ct">0:00</span><span id="td">0:00</span></div>
+    <div class="ctrls">
+      <button class="cbtn2" id="prev"><i class="fas fa-backward"></i></button>
+      <button class="cbtn2 play" id="pp"><i class="fas fa-play"></i></button>
+      <button class="cbtn2" id="next"><i class="fas fa-forward"></i></button>
+    </div>
+    <div class="extra-actions">
+      <button class="ibtn" id="fb"><i class="far fa-heart"></i></button>
+      <button class="ibtn" id="db"><i class="fas fa-download"></i></button>
+      <button class="ibtn" id="sb"><i class="fas fa-share-nodes"></i></button>
+    </div>
+  </div>
+
+  <!-- DOWNLOAD MODAL -->
+  <div class="modal" id="dm">
+    <div class="box">
+      <h3>Download</h3>
+      <p id="mt"></p>
+      <div style="display:flex;gap:10px;margin-top:14px">
+        <button class="btn btn-g" style="flex:1" id="cd">Cancel</button>
+        <button class="btn btn-p" style="flex:1" id="cfd"><i class="fas fa-download"></i> Download</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- DELETE MODAL -->
+  <div class="modal" id="delM">
+    <div class="box" style="text-align:center">
+      <div style="width:52px;height:52px;border-radius:16px;background:rgba(255,59,59,.15);color:#ff3b3b;display:flex;align-items:center;justify-content:center;margin:0 auto 10px;font-size:22px">
+        <i class="fas fa-trash"></i>
+      </div>
+      <h3 id="delT">Delete?</h3>
+      <p id="delMsg"></p>
+      <div style="display:flex;gap:10px">
+        <button class="btn btn-g" style="flex:1" id="cDel">Cancel</button>
+        <button class="btn btn-p" style="flex:1;background:#ff3b3b;color:#fff" id="okDel">Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST -->
+  <div class="toast" id="toast"></div>
+
+  <script>
+    // ------------------------------------------------------------
+    // FIXED & IMPROVED JAVASCRIPT
+    // ------------------------------------------------------------
+    (function(){
+      "use strict";
+
+      // ---------- DATA ----------
+      const base = []; // no predefined songs
+      let songs = [...base];
+      let ups = JSON.parse(localStorage.getItem('afro_yellow_ups') || '[]');
+      // Note: we do NOT push blob URLs into songs here; they are managed separately.
+      // For persistence, uploaded songs are stored in ups, but blob URLs expire.
+      // We'll keep ups as the source for uploaded songs, and merge with base.
+      // To avoid duplicates, we'll rebuild songs from ups + base each time.
+      // But base is empty, so songs = ups (with fresh blob URLs if available? no, we can't)
+      // Actually, stored blob URLs will not work after reload. So we'll keep ups
+      // only for metadata, but the audio URL will be invalid. We'll handle gracefully.
+
+      let favs = JSON.parse(localStorage.getItem('afro_favs') || '[]');
+      let downs = JSON.parse(localStorage.getItem('afro_downs') || '[]');
+
+      let cur = null;
+      let dTarget = null;
+      let delAct = null;
+      let isPlay = false;
+      let curIndex = 0;
+
+      const aud = new Audio();
+
+      // ---------- DOM CACHE ----------
+      const $ = id => document.getElementById(id);
+      const toastEl = $('toast');
+      const urEl = $('ur');
+      const allLibEl = $('allLib');
+      const ucEl = $('uc');
+      const htEl = $('ht');
+      const puEl = $('pu');
+      const pfEl = $('pf');
+      const pdEl = $('pd');
+      const fvEl = $('fv');
+      const dlEl = $('dl');
+      const siEl = $('si');
+      const srEl = $('sr');
+      const spEl = $('sp');
+      const appEl = $('app');
+      const ttEl = $('tt');
+      const plEl = $('pl');
+      const ptEl = $('pt');
+      const prEl = $('pr');
+      const paEl = $('pa');
+      const ppEl = $('pp');
+      const pfillEl = $('pfill');
+      const ctEl = $('ct');
+      const tdEl = $('td');
+      const pwEl = $('pw');
+      const fbEl = $('fb');
+      const dbEl = $('db');
+      const sbEl = $('sb');
+      const dmEl = $('dm');
+      const mtEl = $('mt');
+      const delMEl = $('delM');
+      const delTEl = $('delT');
+      const delMsgEl = $('delMsg');
+
+      // ---------- TOAST ----------
+      function toast(msg) {
+        toastEl.textContent = msg;
+        toastEl.classList.add('on');
+        clearTimeout(toast._timer);
+        toast._timer = setTimeout(() => toastEl.classList.remove('on'), 2500);
+      }
+
+      // ---------- RENDER HELPERS ----------
+      function escapeHtml(text) {
+        if (!text) return '';
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+      }
+
+      function cardHtml(s) {
+        return `<div class="card">
+          <div class="cv" onclick="play(${s.id})">${s.cover || '💿'}</div>
+          <div class="ti">${escapeHtml(s.title)}</div>
+          <div class="ar">${escapeHtml(s.artist)}</div>
+          <div class="acts">
+            <button class="ibtn" onclick="play(${s.id})"><i class="fas fa-play"></i></button>
+            <button class="ibtn" onclick="openD(${s.id})"><i class="fas fa-download"></i></button>
+            <button class="ibtn del" onclick="askDelU(${s.id})"><i class="fas fa-trash"></i></button>
+          </div>
+        </div>`;
+      }
+
+      // ---------- RENDER ----------
+      function render() {
+        // Merge ups into songs (ups take precedence, but avoid duplicates by id)
+        // Since base is empty, songs = ups. We'll rebuild songs from ups each time.
+        // But we must preserve any base songs? base is empty. So:
+        songs = [...ups]; // all uploaded songs
+        // Also include any base songs (none for now)
+        // Note: if you later add base songs, merge them carefully.
+
+        // Update counts
+        ucEl.textContent = ups.length + ' songs';
+        htEl.textContent = songs.length + ' tracks';
+        puEl.textContent = ups.length;
+        pfEl.textContent = favs.length;
+        pdEl.textContent = downs.length;
+
+        // Your Uploads row
+        if (ups.length) {
+          urEl.innerHTML = ups.map(cardHtml).join('');
+        } else {
+          urEl.innerHTML = `<div class="empty-msg" style="border:2px dashed rgba(255,215,0,.2);border-radius:20px;padding:30px;margin-top:10px">
+            <div style="font-size:40px">📂</div>
+            <div style="margin-top:10px;font-weight:700">No songs yet</div>
+            <div style="font-size:.85rem;color:#7a6e4a;margin-top:4px">Tap the upload box above to add your first MP3</div>
+          </div>`;
+        }
+
+        // All library
+        if (songs.length) {
+          allLibEl.innerHTML = songs.map(s => `
+            <div class="item">
+              <div class="ic">${s.cover || '💿'}</div>
+              <div class="info">
+                <div class="t">${escapeHtml(s.title)}</div>
+                <div class="a">${escapeHtml(s.artist)}</div>
+              </div>
+              <button class="ibtn" onclick="play(${s.id})"><i class="fas fa-play"></i></button>
+              <button class="ibtn del" onclick="askDelU(${s.id})"><i class="fas fa-trash"></i></button>
+            </div>
+          `).join('');
+        } else {
+          allLibEl.innerHTML = `<div class="empty-msg">Your library is empty</div>`;
+        }
+
+        // Favorites
+        if (favs.length) {
+          fvEl.innerHTML = favs.map(id => {
+            const s = songs.find(x => x.id == id);
+            if (!s) return '';
+            return `<div class="item">
+              <div class="ic">${s.cover || '💿'}</div>
+              <div class="info">
+                <div class="t">${escapeHtml(s.title)}</div>
+                <div class="a">${escapeHtml(s.artist)}</div>
+              </div>
+              <button class="ibtn" onclick="play(${s.id})"><i class="fas fa-play"></i></button>
+              <button class="ibtn del" onclick="askDelF(${s.id})"><i class="fas fa-trash"></i></button>
+            </div>`;
+          }).join('');
+        } else {
+          fvEl.innerHTML = `<div class="empty-msg">No favorites yet</div>`;
+        }
+
+        // Downloads
+        if (downs.length) {
+          dlEl.innerHTML = downs.map(id => {
+            const s = songs.find(x => x.id == id);
+            if (!s) return '';
+            return `<div class="item">
+              <div class="ic">${s.cover || '💿'}</div>
+              <div class="info">
+                <div class="t">${escapeHtml(s.title)}</div>
+                <div class="a">${escapeHtml(s.artist)}</div>
+              </div>
+              <button class="ibtn" onclick="play(${s.id})"><i class="fas fa-play"></i></button>
+              <button class="ibtn del" onclick="askDelD(${s.id})"><i class="fas fa-trash"></i></button>
+            </div>`;
+          }).join('');
+        } else {
+          dlEl.innerHTML = `<div class="empty-msg">No downloads yet</div>`;
+        }
+
+        // Also re-render search results
+        renderSearch(siEl.value || '');
+      }
+
+      function renderSearch(q) {
+        q = (q || '').toLowerCase();
+        const results = songs.filter(s =>
+          s.title.toLowerCase().includes(q) || s.artist.toLowerCase().includes(q)
+        );
+        if (results.length) {
+          srEl.innerHTML = results.map(s => `
+            <div class="item">
+              <div class="ic">${s.cover || '💿'}</div>
+              <div class="info">
+                <div class="t">${escapeHtml(s.title)}</div>
+                <div class="a">${escapeHtml(s.artist)}</div>
+              </div>
+              <button class="ibtn" onclick="play(${s.id})"><i class="fas fa-play"></i></button>
+              <button class="ibtn" onclick="openD(${s.id})"><i class="fas fa-download"></i></button>
+              <button class="ibtn del" onclick="askDelU(${s.id})"><i class="fas fa-trash"></i></button>
+            </div>
+          `).join('');
+        } else {
+          srEl.innerHTML = `<div class="empty-msg">${songs.length ? 'No results' : 'Upload songs first'}</div>`;
+        }
+      }
+
+      // ---------- PLAYBACK ----------
+      function playNext() {
+        if (!songs.length) return;
+        curIndex = (curIndex + 1) % songs.length;
+        play(songs[curIndex].id);
+      }
+
+      function playPrev() {
+        if (!songs.length) return;
+        curIndex = (curIndex - 1 + songs.length) % songs.length;
+        play(songs[curIndex].id);
+      }
+
+      window.play = function(id) {
+        const s = songs.find(x => x.id == id);
+        if (!s) return;
+        cur = s;
+        curIndex = songs.findIndex(x => x.id == id);
+        aud.src = s.audio;
+        aud.play().catch(() => toast('Tap play to start audio'));
+        isPlay = true;
+        ptEl.textContent = s.title;
+        prEl.textContent = s.artist;
+        paEl.textContent = s.cover || '💿';
+        plEl.classList.add('on');
+        ppEl.innerHTML = '<i class="fas fa-pause"></i>';
+        toast('Now playing: ' + s.title);
+      };
+
+      window.openD = function(id) {
+        const s = songs.find(x => x.id == id);
+        if (!s) return;
+        dTarget = s;
+        mtEl.textContent = s.title + ' - ' + s.artist;
+        dmEl.classList.add('on');
+      };
+
+      // ---------- DELETE ACTIONS ----------
+      window.askDelU = function(id) {
+        const s = songs.find(x => x.id == id);
+        if (!s) return;
+        delTEl.textContent = 'Delete upload?';
+        delMsgEl.textContent = `Delete "${s.title}" permanently?`;
+        delAct = function() {
+          songs = songs.filter(x => x.id != id);
+          ups = ups.filter(x => x.id != id);
+          favs = favs.filter(x => x != id);
+          downs = downs.filter(x => x != id);
+          localStorage.setItem('afro_yellow_ups', JSON.stringify(ups));
+          localStorage.setItem('afro_favs', JSON.stringify(favs));
+          localStorage.setItem('afro_downs', JSON.stringify(downs));
+          render();
+          toast('Deleted 🗑️');
+        };
+        delMEl.classList.add('on');
+      };
+
+      window.askDelF = function(id) {
+        delTEl.textContent = 'Remove favorite?';
+        delMsgEl.textContent = 'Remove from favorites?';
+        delAct = function() {
+          favs = favs.filter(x => x != id);
+          localStorage.setItem('afro_favs', JSON.stringify(favs));
+          render();
+          toast('Removed');
+        };
+        delMEl.classList.add('on');
+      };
+
+      window.askDelD = function(id) {
+        delTEl.textContent = 'Delete download?';
+        delMsgEl.textContent = 'Remove from downloads?';
+        delAct = function() {
+          downs = downs.filter(x => x != id);
+          localStorage.setItem('afro_downs', JSON.stringify(downs));
+          render();
+          toast('Removed');
+        };
+        delMEl.classList.add('on');
+      };
+
+      function clearF(t) {
+        const count = t == 'fav' ? favs.length : downs.length;
+        if (!count) {
+          toast(t == 'fav' ? 'No favorites' : 'No downloads');
+          return;
+        }
+        delTEl.textContent = t == 'fav' ? 'Clear favorites?' : 'Clear downloads?';
+        delMsgEl.textContent = `Remove ${count} ${t == 'fav' ? 'favorites' : 'downloads'}?`;
+        delAct = function() {
+          if (t == 'fav') {
+            favs = [];
+            localStorage.setItem('afro_favs', '[]');
+          } else {
+            downs = [];
+            localStorage.setItem('afro_downs', '[]');
+          }
+          render();
+          toast('Cleared');
+        };
+        delMEl.classList.add('on');
+      }
+
+      // ---------- EVENT LISTENERS ----------
+      // Splash launch
+      $('runBtn').addEventListener('click', function() {
+        spEl.classList.add('hide');
+        setTimeout(() => {
+          spEl.style.display = 'none';
+          appEl.style.display = 'flex';
+          render();
+        }, 400);
+      });
+
+      // Nav tabs
+      document.querySelectorAll('.ni').forEach(el => {
+        el.addEventListener('click', function() {
+          document.querySelectorAll('.ni').forEach(n => n.classList.remove('active'));
+          this.classList.add('active');
+          document.querySelectorAll('.screen').forEach(s => s.classList.remove('on'));
+          const target = this.dataset.s;
+          $(target).classList.add('on');
+          ttEl.textContent = target === 'home' ? 'Discover' :
+                             target === 'search' ? 'Search' :
+                             target === 'lib' ? 'Your Library' : 'Profile';
+        });
+      });
+
+      // Player close
+      $('cp').addEventListener('click', function() {
+        plEl.classList.remove('on');
+        aud.pause();
+        isPlay = false;
+        ppEl.innerHTML = '<i class="fas fa-play"></i>';
+      });
+
+      // Play/pause
+      ppEl.addEventListener('click', function() {
+        if (isPlay) {
+          aud.pause();
+          isPlay = false;
+          this.innerHTML = '<i class="fas fa-play"></i>';
+        } else {
+          aud.play().catch(() => toast('Cannot play'));
+          isPlay = true;
+          this.innerHTML = '<i class="fas fa-pause"></i>';
+        }
+      });
+
+      $('prev').addEventListener('click', playPrev);
+      $('next').addEventListener('click', playNext);
+      aud.addEventListener('ended', playNext);
+
+      // Profile button in top bar
+      $('profileBtn').addEventListener('click', function() {
+        document.querySelectorAll('.ni').forEach(n => n.classList.remove('active'));
+        document.querySelector('[data-s="pro"]').classList.add('active');
+        document.querySelectorAll('.screen').forEach(s => s.classList.remove('on'));
+        $('pro').classList.add('on');
+        ttEl.textContent = 'Profile';
+      });
+
+      // See all
+      $('seeAll').addEventListener('click', function() {
+        document.querySelectorAll('.ni').forEach(n => n.classList.remove('active'));
+        document.querySelector('[data-s="search"]').classList.add('active');
+        document.querySelectorAll('.screen').forEach(s => s.classList.remove('on'));
+        $('search').classList.add('on');
+        ttEl.textContent = 'Library';
+      });
+
+      // Clear buttons
+      $('clearFavBtn').addEventListener('click', () => clearF('fav'));
+      $('clearDownBtn').addEventListener('click', () => clearF('down'));
+
+      // Share profile
+      $('shareProfileBtn').addEventListener('click', function() {
+        if (navigator.share) {
+          navigator.share({ title: 'AfroDownload', url: location.href });
+        } else {
+          navigator.clipboard.writeText(location.href).then(() => toast('Link copied!'));
+        }
+      });
+
+      // Download modal
+      $('cd').addEventListener('click', () => dmEl.classList.remove('on'));
+      $('cfd').addEventListener('click', function() {
+        if (!dTarget) return;
+        if (!downs.includes(dTarget.id)) {
+          downs.push(dTarget.id);
+          localStorage.setItem('afro_downs', JSON.stringify(downs));
+        }
+        dmEl.classList.remove('on');
+        render();
+        toast('Downloaded: ' + dTarget.title);
+      });
+
+      // Player extra actions
+      fbEl.addEventListener('click', function() {
+        if (!cur) return;
+        const idx = favs.indexOf(cur.id);
+        if (idx >= 0) {
+          favs.splice(idx, 1);
+          toast('Removed');
+        } else {
+          favs.push(cur.id);
+          toast('Favorite ❤️');
+        }
+        localStorage.setItem('afro_favs', JSON.stringify(favs));
+        render();
+      });
+
+      dbEl.addEventListener('click', function() {
+        if (cur) openD(cur.id);
+      });
+
+      sbEl.addEventListener('click', function() {
+        if (navigator.share && cur) {
+          navigator.share({ title: cur.title, url: location.href });
+        } else {
+          toast('Link copied!');
+        }
+      });
+
+      // Search input
+      siEl.addEventListener('input', function(e) {
+        renderSearch(e.target.value);
+      });
+
+      // Upload
+      $('upZ').addEventListener('click', () => $('fi').click());
+      $('fi').addEventListener('change', function(e) {
+        const f = e.target.files[0];
+        if (!f) return;
+        if (f.size > 50 * 1024 * 1024) {
+          toast('Too big! Max 50MB');
+          return;
+        }
+        const url = URL.createObjectURL(f);
+        const ns = {
+          id: Date.now(),
+          title: f.name.replace(/\.[^/.]+$/, ''),
+          artist: 'Your Upload',
+          cover: '💿',
+          audio: url,
+          isU: true
+        };
+        ups.unshift(ns);
+        localStorage.setItem('afro_yellow_ups', JSON.stringify(ups));
+        render();
+        toast('Uploaded: ' + ns.title);
+        // Reset input so same file can be re-uploaded if needed
+        e.target.value = '';
+      });
+
+      // Delete modal buttons
+      $('cDel').addEventListener('click', function() {
+        delMEl.classList.remove('on');
+        delAct = null;
+      });
+      $('okDel').addEventListener('click', function() {
+        if (delAct) delAct();
+        delMEl.classList.remove('on');
+        delAct = null;
+      });
+
+      // Progress bar update
+      aud.addEventListener('timeupdate', function() {
+        if (aud.duration) {
+          const p = (aud.currentTime / aud.duration) * 100;
+          pfillEl.style.width = p + '%';
+          const fmt = n => Math.floor(n / 60) + ':' + ('0' + Math.floor(n % 60)).slice(-2);
+          ctEl.textContent = fmt(aud.currentTime);
+          tdEl.textContent = fmt(aud.duration);
+        }
+      });
+
+      // Seek
+      pwEl.addEventListener('click', function(e) {
+        if (!aud.duration) return;
+        const rect = this.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        aud.currentTime = (x / rect.width) * aud.duration;
+      });
+
+      // Initial render
+      render();
+
+      // Expose clearF globally for inline calls if any (none used, but safe)
+      window.clearF = clearF;
+    })();
+  </script>
+</body>
 </html>
