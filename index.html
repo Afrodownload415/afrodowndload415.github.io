@@ -427,8 +427,7 @@ function itemHtml(s, opts){
   var heartIcon = isFav(s.id) ? '<i class="fas fa-heart"></i>' : '<i class="far fa-heart"></i>';
   var html = '<div class="item">' +
     '<div class="ic">' + cover + '</div>' +
-    '<div class="info">' +
-      '<div class="t">' + esc(s.title) + '</div>' +
+    '<div class="info">' +'<div class="t">' + esc(s.title) + '<span class="tag">New</span></div>' +
       '<div class="a">' + esc(s.artist) + '</div>' +
     '</div>' +
     '<button class="ibtn" onclick="play(' + s.id + ')"><i class="fas fa-play"></i></button>' +
