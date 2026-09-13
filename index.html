@@ -792,9 +792,12 @@ function init(){
   if($('prev')) $('prev').addEventListener('click', playPrev);
   if($('next')) $('next').addEventListener('click', playNext);
   aud.addEventListener('ended', playNext);
-
-  if($('fb')){
-    $('fb').addEventListener('click', function(){
+if($('sb')){
+  $('sb').addEventListener('click', function(){
+    if(navigator.share && cur){ navigator.share({title:cur.title, url:location.href}); }
+    else { navigator.clipboard.writeText(location.href).then(function(){ toast('Link copied!'); }); }
+  });
+}
       if(!cur){ toast('No song playing'); return; }
       toggleFav(cur.id);
     });
