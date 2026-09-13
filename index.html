@@ -712,29 +712,7 @@ function init(){
 
   if($('cd')) $('cd').addEventListener('click', function(){ if($('dm')) $('dm').classList.remove('on'); });
 
-  if($('cfd')){
-    $('cfd').addEventListener('click', function(){
-      if(!dTarget) return;
-      if(downs.indexOf(dTarget.id) === -1){
-        downs.push(dTarget.id);
-        localStorage.setItem('afro_downs', JSON.stringify(downs));
-      }
-      if(dTarget.audio){
-        var a = document.createElement('a');
-        a.href = dTarget.audio;
-        a.download = dTarget.title + '.mp3';
-        a.target = '_blank';
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        toast('Downloading: ' + dTarget.title);
-      } else {
-        toast('No audio file to download');
-      }
-      if($('dm')) $('dm').classList.remove('on');
-      render();
-    });
-  }
+  
 
   if($('cp')){
     $('cp').addEventListener('click', function(){
@@ -744,7 +722,34 @@ function init(){
       if($('pp')) $('pp').innerHTML = '<i class="fas fa-play"></i>';
     });
   }
-
+if($('cfd')){
+  $('cfd').addEventListener('click', function(){
+    if(!dTarget) return;
+    if(downs.indexOf(dTarget.id) === -1){
+      downs.push(dTarget.id);
+      localStorage.setItem('afro_downs', JSON.stringify(downs));
+    }
+    if(dTarget.audio){
+      toast('Starting download...');
+      // Try direct download first
+      var a = document.createElement('a');
+      a.href = dTarget.audio;
+      a.download = dTarget.title + '.mp3';
+      a.target = '_blank';
+      a.rel = 'noopener';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      setTimeout(function(){
+        toast('Saved to Downloads: ' + dTarget.title);
+      }, 800);
+    } else {
+      toast('No audio file to download');
+    }
+    if($('dm')) $('dm').classList.remove('on');
+    render();
+  });
+}
   if($('pp')){
     $('pp').addEventListener('click', function(){
       if(isPlay){
@@ -754,6 +759,14 @@ function init(){
       } else {
         aud.play().catch(function(){ toast('Cannot play'); });
         isPlay = true;
+       // Show heart state
+if($('fb')){
+  if(favs.indexOf(s.id) >= 0){
+    $('fb').innerHTML = '<i class="fas fa-heart" style="color:#ff6b6b"></i>';
+  } else {
+    $('fb').innerHTML = '<i class="far fa-heart"></i>';
+  }
+  } 
         $('pp').innerHTML = '<i class="fas fa-pause"></i>';
       }
     });
@@ -764,13 +777,23 @@ function init(){
   aud.addEventListener('ended', playNext);
 
   if($('fb')){
-    $('fb').addEventListener('click', function(){
-      if(!cur) return;
-      var i = favs.indexOf(cur.id);
-      if(i >= 0){ favs.splice(i, 1); toast('Removed'); }
-      else { favs.push(cur.id); toast('Favorite ❤️'); }
-      localStorage.setItem('afro_favs', JSON.stringify(favs));
-      render();
+if($('fb')){
+  $('fb').addEventListener('click', function(){
+    if(!cur) return;
+    var i = favs.indexOf(cur.id);
+    if(i >= 0){
+      favs.splice(i, 1);
+      toast('Removed from favorites');
+      $('fb').innerHTML = '<i class="far fa-heart"></i>';
+    } else {
+      favs.push(cur.id);
+      toast('Favorite ❤️');
+      $('fb').innerHTML = '<i class="fas fa-heart" style="color:#ff6b6b"></i>';
+    }
+    localStorage.setItem('afro_favs', JSON.stringify(favs));
+    render();
+  });
+}    
     });
   }
 
