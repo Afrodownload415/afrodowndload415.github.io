@@ -24,7 +24,8 @@ body{font-family:'Outfit',sans-serif;background:#0a0806;color:#fff;min-height:10
 .founder-badge.on{display:inline-block}
 .screens{flex:1;overflow-y:auto;padding:0 18px 110px}
 .screen{display:none}.screen.on{display:block}
-.hero{background:linear-gradient(145deg,#1a1408,#2a1f0a);border:1px solid rgba(255,215,0,.3);border-radius:28px;padding:22px 20px;margin:6px 0 20px}
+.hero{background:linear-gradient(145deg,#1a1408,#2a1f0a);border:1px solid rgba(255,215,0,.3);bo.hero{background:linear-gradient(145deg,#1a1408,#2a1f0a);border:1px solid rgba(255,215,0,.3);border-radius:28px;padding:26px 22px;margin:6px 0 20px;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;top:-40%;right:-20%;width:200px;height:200px;background:radial-gradient(circle,rgba(255,215,0,.15),transparent 70%);border-radius:50%;pointer-events:none}rder-radius:28px;padding:22px 20px;margin:6px 0 20px}
 .hero h3{font-size:1.7rem;font-weight:800;color:#ffd966}
 .hero p{color:rgba(255,255,255,.75);margin-top:6px;font-size:.95rem}
 .hero .badge-group{margin-top:14px;display:flex;gap:10px;flex-wrap:wrap}
