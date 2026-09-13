@@ -145,7 +145,7 @@ body{font-family:'Outfit',sans-serif;background:#0a0806;color:#fff;min-height:10
 <div class="upload" id="upZ" style="display:none">
 <i class="fas fa-cloud-arrow-up"></i>
 <div class="ut">Tap to upload to Cloud ☁️</div>
-<div class="us">MP3, WAV • Max 50MB • Founder only</div>
+<div class="us">MP3, WAV • Max 50MB • Multiple files allowed</div>
 </div>
 
 <div class="upload locked" id="lockedBox">
@@ -792,12 +792,9 @@ function init(){
   if($('prev')) $('prev').addEventListener('click', playPrev);
   if($('next')) $('next').addEventListener('click', playNext);
   aud.addEventListener('ended', playNext);
-if($('sb')){
-  $('sb').addEventListener('click', function(){
-    if(navigator.share && cur){ navigator.share({title:cur.title, url:location.href}); }
-    else { navigator.clipboard.writeText(location.href).then(function(){ toast('Link copied!'); }); }
-  });
-}
+
+  if($('fb')){
+    $('fb').addEventListener('click', function(){
       if(!cur){ toast('No song playing'); return; }
       toggleFav(cur.id);
     });
@@ -823,53 +820,78 @@ if($('sb')){
     });
   }
 
+  // ══════════════════════════════════════════════════
+  // MULTI-FILE UPLOAD HANDLER
+  // ══════════════════════════════════════════════════
   if($('fi')){
     $('fi').addEventListener('change', function(e){
-      var f = e.target.files[0];
+      var files = Array.from(e.target.files);
       e.target.value = '';
-      if(!f) return;
+      if(!files.length) return;
       if(!isFounder){ toast('Founder only'); return; }
-      if(f.size > 50 * 1024 * 1024){ toast('Too big! Max 50MB'); return; }
+
+      // Filter oversized files
+      var valid = files.filter(function(f){ return f.size <= 50 * 1024 * 1024; });
+      var skipped = files.length - valid.length;
+      if(skipped > 0){ toast(skipped + ' file(s) skipped (over 50MB)'); }
+      if(!valid.length) return;
 
       if($('upProg')) $('upProg').classList.add('on');
       if($('upBar')) $('upBar').style.width = '0%';
-      if($('upStatus')) $('upStatus').textContent = 'Uploading...';
 
-      uploadToCloudinary(
-        f,
-        function(pct){
-          if($('upBar')) $('upBar').style.width = pct + '%';
-          if($('upStatus')) $('upStatus').textContent = 'Uploading... ' + pct + '%';
-        },
-        function(result){
-          var ns = {
-            id: Date.now(),
-            title: f.name.replace(/\.[^/.]+$/, ''),
-            artist: 'Yungee',
-            cover: '💿',
-            coverImg: '',
-            audio: result.secure_url,
-            publicId: result.public_id,
-            isU: true
-          };
-          ups.unshift(ns);
-          localStorage.setItem('afro_yellow_ups', JSON.stringify(ups));
-          render();
-          toast('Uploaded to cloud ☁️');
+      var total = valid.length;
+      var completed = 0;
+      var failed = 0;
+
+      function uploadNext(index){
+        if(index >= valid.length){
           setTimeout(function(){
             if($('upProg')) $('upProg').classList.remove('on');
             if($('upBar')) $('upBar').style.width = '0%';
-          }, 1200);
-        },
-        function(err){
-          console.error(err);
-          toast(err.message || 'Upload failed');
-          setTimeout(function(){
-            if($('upProg')) $('upProg').classList.remove('on');
-            if($('upBar')) $('upBar').style.width = '0%';
-          }, 1200);
+          }, 1500);
+          var msg = '✅ ' + completed + ' uploaded';
+          if(failed > 0) msg += ', ' + failed + ' failed';
+          toast(msg);
+          return;
         }
-      );
+
+        var f = valid[index];
+        if($('upBar')) $('upBar').style.width = '0%';
+        if($('upStatus')) $('upStatus').textContent = 'Uploading ' + (index + 1) + ' of ' + total + '...';
+
+        uploadToCloudinary(
+          f,
+          function(pct){
+            if($('upBar')) $('upBar').style.width = pct + '%';
+            if($('upStatus')) $('upStatus').textContent =
+              'Uploading ' + (index + 1) + ' of ' + total + ' (' + pct + '%)';
+          },
+          function(result){
+            var ns = {
+              id: Date.now() + index,
+              title: f.name.replace(/\.[^/.]+$/, ''),
+              artist: 'Yungee',
+              cover: '💿',
+              coverImg: '',
+              audio: result.secure_url,
+              publicId: result.public_id,
+              isU: true
+            };
+            ups.unshift(ns);
+            localStorage.setItem('afro_yellow_ups', JSON.stringify(ups));
+            completed++;
+            render();
+            setTimeout(function(){ uploadNext(index + 1); }, 300);
+          },
+          function(err){
+            console.error('Failed:', f.name, err);
+            failed++;
+            setTimeout(function(){ uploadNext(index + 1); }, 300);
+          }
+        );
+      }
+
+      uploadNext(0);
     });
   }
 
