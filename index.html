@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 <title>AfroDownload · Yellow Gold</title>
+<link rel="icon" type="image/png" href="logo.jpg.png">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
@@ -55,6 +56,7 @@ body{font-family:'Outfit',sans-serif;background:#0a0806;color:#fff;min-height:10
 .ibtn{background:rgba(255,215,0,.1);border:1px solid rgba(255,215,0,.18);color:#ffd966;width:34px;height:34px;border-radius:12px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:background .2s;font-size:.9rem}
 .ibtn:hover{background:rgba(255,215,0,.25)}
 .ibtn.del{color:#ff6b6b}
+.ibtn.fav-on{color:#ff6b6b;background:rgba(255,107,107,.15);border-color:rgba(255,107,107,.4)}
 .search{background:#141008;border:1.5px solid rgba(255,215,0,.3);border-radius:24px;padding:14px 20px;display:flex;gap:14px;align-items:center;margin:12px 0 18px}
 .search i{color:#ffd966;font-size:1.2rem}
 .search input{flex:1;background:transparent;border:none;color:#fff;outline:none;font-size:1rem;font-family:'Outfit',sans-serif}
@@ -86,6 +88,7 @@ body{font-family:'Outfit',sans-serif;background:#0a0806;color:#fff;min-height:10
 .cbtn2.play{width:82px;height:82px;background:linear-gradient(135deg,#f5b400,#ffd966);border:none;color:#0a0806;font-size:2rem}
 .player .extra-actions{display:flex;gap:20px;margin-top:28px}
 .player .extra-actions .ibtn{width:54px;height:54px;border-radius:18px;font-size:1.3rem}
+.player .extra-actions .ibtn.fav-on{color:#ff6b6b;background:rgba(255,107,107,.15);border-color:rgba(255,107,107,.4)}
 .modal{position:fixed;inset:0;background:rgba(0,0,0,.8);backdrop-filter:blur(14px);z-index:1000;display:none;align-items:center;justify-content:center;padding:20px}
 .modal.on{display:flex}
 .box{background:#151005;border:1.5px solid rgba(255,215,0,.4);border-radius:32px;padding:28px;width:100%;max-width:350px}
@@ -122,7 +125,6 @@ body{font-family:'Outfit',sans-serif;background:#0a0806;color:#fff;min-height:10
 <img src="logo.jpg.png" style="width:42px;height:42px;object-fit:contain;border-radius:12px" alt="AfroDownload">
 <h2 id="tt">Discover</h2>
 </div>
-
 <div style="display:flex;align-items:center;gap:10px">
 <span class="founder-badge" id="founderBadge">👑 FOUNDER</span>
 <button class="ibtn" id="profileBtn" style="width:46px;height:46px;border-radius:16px"><i class="fas fa-user"></i></button>
@@ -285,14 +287,10 @@ body{font-family:'Outfit',sans-serif;background:#0a0806;color:#fff;min-height:10
 (function(){
 "use strict";
 
-// ══════════════════════════════════════════════════
-//  CLOUDINARY CREDENTIALS
-// ══════════════════════════════════════════════════
-var CLOUDINARY_CLOUD  = "lzgtyuhq";
-var CLOUDINARY_PRESET = "YungeeFounder";
-var FOUNDER_PIN       = "4698";
+var CLOUDINARY_CLOUD   = "lzgtyuhq";
+var CLOUDINARY_PRESET  = "YungeeFounder";
+var FOUNDER_PIN        = "4698";
 var REMOTE_LIBRARY_URL = "https://gist.githubusercontent.com/Afrodownload415/6faabc97ec5e5d983a7658ad75508a58/raw/Songs.json";
-// ══════════════════════════════════════════════════
 
 var isFounder = sessionStorage.getItem('afro_founder') === 'true';
 var remoteSongs = [];
@@ -347,16 +345,21 @@ function updateFounderUI(){
   if(cs) cs.style.display = isFounder ? 'flex' : 'none';
 }
 
+function isFav(id){ return favs.indexOf(id) >= 0; }
+
 function cardHtml(s){
   var cover = s.coverImg
     ? '<img src="' + esc(s.coverImg) + '" onerror="this.style.display=\'none\'">'
     : (s.cover || '💿');
+  var favClass = isFav(s.id) ? 'ibtn fav-on' : 'ibtn';
+  var heartIcon = isFav(s.id) ? '<i class="fas fa-heart"></i>' : '<i class="far fa-heart"></i>';
   return '<div class="card">' +
     '<div class="cv" onclick="play(' + s.id + ')">' + cover + '</div>' +
     '<div class="ti">' + esc(s.title) + '</div>' +
     '<div class="ar">' + esc(s.artist) + '</div>' +
     '<div class="acts">' +
       '<button class="ibtn" onclick="play(' + s.id + ')"><i class="fas fa-play"></i></button>' +
+      '<button class="' + favClass + '" onclick="toggleFav(' + s.id + ')">' + heartIcon + '</button>' +
       '<button class="ibtn" onclick="openD(' + s.id + ')"><i class="fas fa-download"></i></button>' +
       (isFounder ? '<button class="ibtn del" onclick="askDelU(' + s.id + ')"><i class="fas fa-trash"></i></button>' : '') +
     '</div>' +
@@ -368,17 +371,41 @@ function itemHtml(s, opts){
   var cover = s.coverImg
     ? '<img src="' + esc(s.coverImg) + '" onerror="this.style.display=\'none\'">'
     : (s.cover || '💿');
+  var favClass = isFav(s.id) ? 'ibtn fav-on' : 'ibtn';
+  var heartIcon = isFav(s.id) ? '<i class="fas fa-heart"></i>' : '<i class="far fa-heart"></i>';
   var html = '<div class="item">' +
     '<div class="ic">' + cover + '</div>' +
     '<div class="info">' +
       '<div class="t">' + esc(s.title) + '</div>' +
       '<div class="a">' + esc(s.artist) + '</div>' +
     '</div>' +
-    '<button class="ibtn" onclick="play(' + s.id + ')"><i class="fas fa-play"></i></button>';
+    '<button class="ibtn" onclick="play(' + s.id + ')"><i class="fas fa-play"></i></button>' +
+    '<button class="' + favClass + '" onclick="toggleFav(' + s.id + ')">' + heartIcon + '</button>';
   if(opts.download) html += '<button class="ibtn" onclick="openD(' + s.id + ')"><i class="fas fa-download"></i></button>';
   if(opts.del) html += '<button class="ibtn del" onclick="' + opts.del + '(' + s.id + ')"><i class="fas fa-trash"></i></button>';
   html += '</div>';
   return html;
+}
+
+window.toggleFav = function(id){
+  var i = favs.indexOf(id);
+  if(i >= 0){ favs.splice(i, 1); toast('Removed from favorites'); }
+  else { favs.push(id); toast('Favorite ❤️'); }
+  localStorage.setItem('afro_favs', JSON.stringify(favs));
+  if(cur && cur.id == id) updateHeartButton();
+  render();
+};
+
+function updateHeartButton(){
+  var fb = $('fb');
+  if(!fb) return;
+  if(cur && isFav(cur.id)){
+    fb.classList.add('fav-on');
+    fb.innerHTML = '<i class="fas fa-heart"></i>';
+  } else {
+    fb.classList.remove('fav-on');
+    fb.innerHTML = '<i class="far fa-heart"></i>';
+  }
 }
 
 function render(){
@@ -463,6 +490,7 @@ window.play = function(id){
   if($('pa')) $('pa').innerHTML = s.coverImg ? '<img src="' + esc(s.coverImg) + '">' : (s.cover || '💿');
   if($('pl')) $('pl').classList.add('on');
   if($('pp')) $('pp').innerHTML = '<i class="fas fa-pause"></i>';
+  updateHeartButton();
   toast('Now playing: ' + s.title);
 };
 
@@ -712,7 +740,31 @@ function init(){
 
   if($('cd')) $('cd').addEventListener('click', function(){ if($('dm')) $('dm').classList.remove('on'); });
 
-  
+  if($('cfd')){
+    $('cfd').addEventListener('click', function(){
+      if(!dTarget) return;
+      if(downs.indexOf(dTarget.id) === -1){
+        downs.push(dTarget.id);
+        localStorage.setItem('afro_downs', JSON.stringify(downs));
+      }
+      if(dTarget.audio){
+        toast('Starting download...');
+        var a = document.createElement('a');
+        a.href = dTarget.audio;
+        a.download = dTarget.title + '.mp3';
+        a.target = '_blank';
+        a.rel = 'noopener';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        setTimeout(function(){ toast('Saved: ' + dTarget.title); }, 800);
+      } else {
+        toast('No audio file to download');
+      }
+      if($('dm')) $('dm').classList.remove('on');
+      render();
+    });
+  }
 
   if($('cp')){
     $('cp').addEventListener('click', function(){
@@ -722,34 +774,7 @@ function init(){
       if($('pp')) $('pp').innerHTML = '<i class="fas fa-play"></i>';
     });
   }
-if($('cfd')){
-  $('cfd').addEventListener('click', function(){
-    if(!dTarget) return;
-    if(downs.indexOf(dTarget.id) === -1){
-      downs.push(dTarget.id);
-      localStorage.setItem('afro_downs', JSON.stringify(downs));
-    }
-    if(dTarget.audio){
-      toast('Starting download...');
-      // Try direct download first
-      var a = document.createElement('a');
-      a.href = dTarget.audio;
-      a.download = dTarget.title + '.mp3';
-      a.target = '_blank';
-      a.rel = 'noopener';
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      setTimeout(function(){
-        toast('Saved to Downloads: ' + dTarget.title);
-      }, 800);
-    } else {
-      toast('No audio file to download');
-    }
-    if($('dm')) $('dm').classList.remove('on');
-    render();
-  });
-}
+
   if($('pp')){
     $('pp').addEventListener('click', function(){
       if(isPlay){
@@ -759,14 +784,6 @@ if($('cfd')){
       } else {
         aud.play().catch(function(){ toast('Cannot play'); });
         isPlay = true;
-       // Show heart state
-if($('fb')){
-  if(favs.indexOf(s.id) >= 0){
-    $('fb').innerHTML = '<i class="fas fa-heart" style="color:#ff6b6b"></i>';
-  } else {
-    $('fb').innerHTML = '<i class="far fa-heart"></i>';
-  }
-  } 
         $('pp').innerHTML = '<i class="fas fa-pause"></i>';
       }
     });
@@ -777,23 +794,9 @@ if($('fb')){
   aud.addEventListener('ended', playNext);
 
   if($('fb')){
-if($('fb')){
-  $('fb').addEventListener('click', function(){
-    if(!cur) return;
-    var i = favs.indexOf(cur.id);
-    if(i >= 0){
-      favs.splice(i, 1);
-      toast('Removed from favorites');
-      $('fb').innerHTML = '<i class="far fa-heart"></i>';
-    } else {
-      favs.push(cur.id);
-      toast('Favorite ❤️');
-      $('fb').innerHTML = '<i class="fas fa-heart" style="color:#ff6b6b"></i>';
-    }
-    localStorage.setItem('afro_favs', JSON.stringify(favs));
-    render();
-  });
-}    
+    $('fb').addEventListener('click', function(){
+      if(!cur){ toast('No song playing'); return; }
+      toggleFav(cur.id);
     });
   }
 
@@ -905,7 +908,6 @@ function boot(){
     updateFounderUI();
     render();
     console.log('AfroDownload ready 🎧');
-    console.log('Cloud:', CLOUDINARY_CLOUD, '| Preset:', CLOUDINARY_PRESET, '| Folder: afrodownload');
   });
 }
 
