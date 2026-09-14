@@ -328,7 +328,19 @@ body{font-family:'Outfit',sans-serif;background:#0a0806;color:#fff;min-height:10
 </div>
 </div>
 </div>
-
+<div class="modal" id="syncM">
+<div class="box" style="max-width:420px">
+<h3>📝 Update Public List</h3>
+<p style="font-size:.85rem;color:#c9b582">Copy the list below, then paste it into your Gist. Everyone will see your songs.</p>
+<textarea id="syncText" readonly style="width:100%;height:180px;background:#0a0806;border:1.5px solid rgba(255,215,0,.3);border-radius:14px;padding:12px;color:#fff;font-family:monospace;font-size:.7rem;outline:none;resize:none;margin-bottom:12px"></textarea>
+<div style="display:flex;gap:10px">
+<button class="btn btn-g" style="flex:1" id="syncClose">Close</button>
+<button class="btn btn-p" style="flex:1" id="syncCopy">Copy</button>
+</div>
+<button class="btn btn-p" style="width:100%;margin-top:10px;background:rgba(102,217,255,.15);color:#66d9ff;border:1.5px solid rgba(102,217,255,.4)" id="syncOpen">Open Gist</button>
+</div>
+</div>
+  
 <div class="modal" id="delM">
 <div class="box" style="text-align:center">
 <div style="width:52px;height:52px;border-radius:16px;background:rgba(255,59,59,.15);color:#ff3b3b;display:flex;align-items:center;justify-content:center;margin:0 auto 10px;font-size:22px"><i class="fas fa-trash"></i></div>
