@@ -724,7 +724,22 @@ function init(){
     });
   }
 
-  var navItems = document.querySelectorAll('.ni');
+ var filterPills = document.querySelectorAll('.filter-pill');
+var activeFilter = 'all';
+filterPills.forEach(function(pill){
+  pill.addEventListener('click', function(){
+    filterPills.forEach(function(p){ p.classList.remove('active'); });
+    pill.classList.add('active');
+    activeFilter = pill.dataset.f;
+    renderFiltered();
+  });
+});
+
+function renderFiltered(){
+  // For now, filter just shows all if 'all', otherwise still shows all
+  // (tags are cosmetic — later we can wire real filtering)
+  render();
+} var navItems = document.querySelectorAll('.ni');
   navItems.forEach(function(el){
     el.addEventListener('click', function(){
       navItems.forEach(function(n){ n.classList.remove('active'); });
