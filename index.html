@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 <title>AfroDownload · Yellow Gold</title>
-<link rel="icon" type="image/png" href="logo.jpg.png">
+<link rel="icon" type="image/png" href="logo.jpg.jpeg">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
@@ -24,7 +24,8 @@ body{font-family:'Outfit',sans-serif;background:#0a0806;color:#fff;min-height:10
 .founder-badge.on{display:inline-block}
 .screens{flex:1;overflow-y:auto;padding:0 18px 110px}
 .screen{display:none}.screen.on{display:block}
-.hero{background:linear-gradient(145deg,#1a1408,#2a1f0a);border:1px solid rgba(255,215,0,.3);border-radius:28px;padding:22px 20px;margin:6px 0 20px}
+.hero{background:linear-gradient(145deg,#1a1408,#2a1f0a);border:1px solid rgba(255,215,0,.3);border-radius:28px;padding:26px 22px;margin:6px 0 20px;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;top:-40%;right:-20%;width:200px;height:200px;background:radial-gradient(circle,rgba(255,215,0,.15),transparent 70%);border-radius:50%;pointer-events:none}
 .hero h3{font-size:1.7rem;font-weight:800;color:#ffd966}
 .hero p{color:rgba(255,255,255,.75);margin-top:6px;font-size:.95rem}
 .hero .badge-group{margin-top:14px;display:flex;gap:10px;flex-wrap:wrap}
@@ -47,7 +48,8 @@ body{font-family:'Outfit',sans-serif;background:#0a0806;color:#fff;min-height:10
 .sec span{color:#ffd966;font-size:.85rem;font-weight:700;cursor:pointer;background:rgba(255,215,0,.1);padding:6px 14px;border-radius:30px;border:1px solid rgba(255,215,0,.2)}
 .row{display:flex;gap:14px;overflow-x:auto;padding-bottom:10px}
 .row::-webkit-scrollbar{display:none}
-.card{min-width:160px;max-width:160px;background:#141008;border:1px solid rgba(255,215,0,.18);border-radius:24px;padding:12px}
+.card{min-width:160px;max-width:160px;background:#141008;border:1px solid rgba(255,215,0,.18);border-radius:24px;padding:12px}.card{position:relative}
+.card .badge-num{position:absolute;top:18px;right:18px;background:rgba(10,8,6,.85);backdrop-filter:blur(8px);color:#ffd966;font-weight:800;font-size:.65rem;padding:4px 8px;border-radius:20px;border:1px solid rgba(255,215,0,.4);z-index:2}
 .card .cv{width:100%;aspect-ratio:1;border-radius:18px;background:#221b0a;display:flex;align-items:center;justify-content:center;font-size:48px;border:1px solid rgba(255,215,0,.15);cursor:pointer;overflow:hidden;position:relative}
 .card .cv img{width:100%;height:100%;object-fit:cover}
 .card .ti{font-weight:800;font-size:1rem;margin-top:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#fff}
@@ -163,7 +165,7 @@ body{font-family:'Outfit',sans-serif;background:#0a0806;color:#fff;min-height:10
 <div class="blob b1"></div><div class="blob b2"></div>
 
 <div class="splash" id="sp">
-<img src="logo.jpg.png" id="logoBtn" style="width:220px;height:220px;object-fit:contain;cursor:pointer;user-select:none;margin-bottom:8px" alt="AfroDownload">
+<img src="logo.jpg.jpeg" id="logoBtn" style="width:220px;height:220px;object-fit:contain;cursor:pointer;user-select:none;margin-bottom:8px" alt="AfroDownload">
 <div style="color:#ffd966;letter-spacing:6px;font-size:.95rem;margin-top:8px;font-weight:700">THE HOME OF AFROBEATS</div>
 <button class="run" id="runBtn"><i class="fas fa-bolt"></i> Launch App</button>
 <div style="color:#7a6e4a;font-size:.8rem;margin-top:18px;font-weight:600">415 FAMILY • GHANA</div>
@@ -172,7 +174,7 @@ body{font-family:'Outfit',sans-serif;background:#0a0806;color:#fff;min-height:10
 <div class="app" id="app" style="display:none">
 <div class="top">
 <div style="display:flex;align-items:center;gap:10px">
-<img src="logo.jpg.png" style="width:42px;height:42px;object-fit:contain;border-radius:12px" alt="AfroDownload">
+<img src="logo.jpg.jpeg" style="width:42px;height:42px;object-fit:contain;border-radius:12px" alt="AfroDownload">
 <h2 id="tt">Discover</h2>
 </div>
 <div style="display:flex;align-items:center;gap:10px">
@@ -184,7 +186,13 @@ body{font-family:'Outfit',sans-serif;background:#0a0806;color:#fff;min-height:10
 <div class="screens">
 <div class="screen on" id="home">
 <div class="hero">
-<h3>Hello Yungee 👋</h3>
+<div class="filters" style="display:flex;gap:8px;overflow-x:auto;padding:4px 0 14px;scrollbar-width:none">
+<span class="filter-pill active" data-f="all">All</span>
+<span class="filter-pill" data-f="afrobeats">Afrobeats</span>
+<span class="filter-pill" data-f="gospel">Gospel</span>
+<span class="filter-pill" data-f="hiphop">Hip-Hop</span>
+<span class="filter-pill" data-f="amapiano">Amapiano</span>
+</div><h3>Hello Yungee 👋</h3>
 <p>Upload, stream & share Afrobeats worldwide</p>
 <div class="badge-group">
 <span class="badge"><i class="fas fa-music"></i> <span id="ht">0 tracks</span></span>
@@ -211,17 +219,10 @@ body{font-family:'Outfit',sans-serif;background:#0a0806;color:#fff;min-height:10
 </div>
 
 <div class="sec">
-<h4>Your Uploads</h4>
+<h4><i class="fas fa-record-vinyl" style="color:#ffd966;margin-right:6px"></i>Albums</h4>
 <span id="uc">0 songs</span>
 </div>
-<div class="row" id="ur"></div>
-
-<div class="sec">
-<h4>Library</h4>
-<span id="seeAll">View all</span>
-</div>
-<div id="allLib"></div>
-</div>
+<div class="album-grid" id="ur"></div>
 
 <div class="screen" id="search">
 <div class="search">
@@ -240,7 +241,7 @@ body{font-family:'Outfit',sans-serif;background:#0a0806;color:#fff;min-height:10
 
 <div class="screen" id="pro">
 <div style="text-align:center;padding:18px 0 10px">
-<img src="logo.jpg.png" style="width:100px;height:100px;border-radius:34px;object-fit:cover;border:2px solid rgba(255,215,0,.4);margin:0 auto;display:block" alt="Yungee">
+<img src="logo.jpg.jpeg" style="width:100px;height:100px;border-radius:34px;object-fit:cover;border:2px solid rgba(255,215,0,.4);margin:0 auto;display:block" alt="Yungee">
 <h3 style="margin-top:18px;font-size:1.8rem;font-weight:800">Emmanuel Sackey</h3>
 <p style="color:#b8a87a;font-size:.95rem">Founder • Kumasi Ashanti, GH</p>
 <div style="display:flex;gap:36px;justify-content:center;margin-top:22px">
@@ -405,9 +406,12 @@ function cardHtml(s){
   var favClass = isFav(s.id) ? 'ibtn fav-on' : 'ibtn';
   var heartIcon = isFav(s.id) ? '<i class="fas fa-heart"></i>' : '<i class="far fa-heart"></i>';
   return '<div class="card">' +
-    '<div class="cv" onclick="play(' + s.id + ')">' + cover + '</div>' +
+   '<div class="badge-num">▶ ' + (s.plays || Math.floor(Math.random() * 40 + 10)) + '</div>' +
+'<div class="badge-num">▶ ' + (s.plays || Math.floor(Math.random() * 40 + 10)) + '</div>' +
+'<div class="cv" onclick="play(' + s.id + ')">' + cover + '</div>' +
     '<div class="ti">' + esc(s.title) + '</div>' +
-    '<div class="ar">' + esc(s.artist) + '</div>' +
+   '<div class="ar">' + esc(s.artist) + '</div>' +
+'<div class="tag">Afrobeats</div>' +
     '<div class="acts">' +
       '<button class="ibtn" onclick="play(' + s.id + ')"><i class="fas fa-play"></i></button>' +
       '<button class="' + favClass + '" onclick="toggleFav(' + s.id + ')">' + heartIcon + '</button>' +
@@ -427,7 +431,7 @@ function itemHtml(s, opts){
   var html = '<div class="item">' +
     '<div class="ic">' + cover + '</div>' +
     '<div class="info">' +
-      '<div class="t">' + esc(s.title) + '</div>' +
+      '<div class="t">' + esc(s.title) + '<span class="tag">New</span></div>' +
       '<div class="a">' + esc(s.artist) + '</div>' +
     '</div>' +
     '<button class="ibtn" onclick="play(' + s.id + ')"><i class="fas fa-play"></i></button>' +
@@ -717,7 +721,22 @@ function init(){
     });
   }
 
-  var navItems = document.querySelectorAll('.ni');
+ var filterPills = document.querySelectorAll('.filter-pill');
+var activeFilter = 'all';
+filterPills.forEach(function(pill){
+  pill.addEventListener('click', function(){
+    filterPills.forEach(function(p){ p.classList.remove('active'); });
+    pill.classList.add('active');
+    activeFilter = pill.dataset.f;
+    renderFiltered();
+  });
+});
+
+function renderFiltered(){
+  // For now, filter just shows all if 'all', otherwise still shows all
+  // (tags are cosmetic — later we can wire real filtering)
+  render();
+} var navItems = document.querySelectorAll('.ni');
   navItems.forEach(function(el){
     el.addEventListener('click', function(){
       navItems.forEach(function(n){ n.classList.remove('active'); });
