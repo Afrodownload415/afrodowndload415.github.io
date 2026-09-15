@@ -715,8 +715,7 @@ function syncToGist(){
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ songs: combined })
- });
-   .then(function(r){ return r.json(); })
+  }).then(function(r){ return r.json(); })
    .then(function(d){
     if(d.success){ console.log('Synced ' + d.count + ' songs'); }
     else { console.warn('Sync failed:', d.error); }
