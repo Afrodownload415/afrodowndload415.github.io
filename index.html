@@ -705,21 +705,7 @@ function uploadToCloudinary(file, onProgress, onDone, onError){
   xhr.onerror = function(){ onError(new Error('Network error')); };
   xhr.send(formData);
 }
-function 
-  if(!SYNC_WORKER_URL) return;
-  var combined = [];
-  var ids = {};
-  ups.forEach(function(s){ if(!ids[s.id]){ ids[s.id] = true; combined.push(s); } });
-  remoteSongs.forEach(function(s){ if(!ids[s.id]){ ids[s.id] = true; combined.push(s); } });
-  fetch(SYNC_WORKER_URL, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ songs: combined })
-  }).then(function(r){ return r.json(); })
-   .then(function(d){
-    if(d.success){ console.log('Synced ' + d.count + ' songs'); }
-    else { console.warn('Sync failed:', d.error); }
-  })
+
   .catch(function(e){ console.warn('Sync error:', e); });
 }
 function init(){
@@ -997,7 +983,6 @@ function renderFiltered(){
             localStorage.setItem('afro_yellow_ups', JSON.stringify(ups));
             completed++;
             render();
-            syncToGist();
             setTimeout(function(){ uploadNext(index + 1); }, 300);
           },
           function(err){
