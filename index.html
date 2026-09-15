@@ -705,7 +705,7 @@ function uploadToCloudinary(file, onProgress, onDone, onError){
   xhr.onerror = function(){ onError(new Error('Network error')); };
   xhr.send(formData);
 }
-function syncToGist(){
+function 
   if(!SYNC_WORKER_URL) return;
   var combined = [];
   var ids = {};
