@@ -134,11 +134,8 @@ body{font-family:'Outfit',sans-serif;background:#0a0806;color:#fff;min-height:10
 .card:hover,.item:hover{border-color:rgba(255,215,0,.5);box-shadow:0 0 24px rgba(255,200,0,.25),inset 0 0 12px rgba(255,215,0,.05);transform:translateY(-2px)}
 .card:active,.item:active{transform:scale(.98)}
 
-/* 5. Sliding nav indicator */
-.nav{position:relative}
-.ni{position:relative;z-index:2;transition:color .3s}
-.ni.active{background:transparent;box-shadow:none}
-.nav-indicator{position:absolute;top:8px;bottom:8px;left:6px;width:calc(25% - 3px);background:linear-gradient(135deg,#f5b400,#ffd966);border-radius:22px;transition:transform .35s cubic-bezier(.4,0,.2,1);z-index:1;box-shadow:0 0 24px rgba(255,200,0,.5);pointer-events:none}
+
+
 
 /* 6. Smooth page fade-in */
 @keyframes fadeInUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
@@ -292,7 +289,7 @@ body{font-family:'Outfit',sans-serif;background:#0a0806;color:#fff;min-height:10
 </div>
 
 <div class="nav">
-<div class="nav-indicator" id="navIndicator"></div>
+
 <div class="ni active" data-s="home"><i class="fas fa-house"></i><span>Home</span></div>
 <div class="ni" data-s="search"><i class="fas fa-magnifying-glass"></i><span>Search</span></div>
 <div class="ni" data-s="lib"><i class="fas fa-bookmark"></i><span>Library</span></div>
