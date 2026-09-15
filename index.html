@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 <title>AfroDownload · Yellow Gold</title>
-<link rel="icon" type="image/png" href="logo.jpg.jpeg">
+<link rel="icon" type="image/png" href="logo.jpg.png">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
@@ -165,7 +165,7 @@ body{font-family:'Outfit',sans-serif;background:#0a0806;color:#fff;min-height:10
 <div class="blob b1"></div><div class="blob b2"></div>
 
 <div class="splash" id="sp">
-<img src="logo.jpg.jpeg" id="logoBtn" style="width:220px;height:220px;object-fit:contain;cursor:pointer;user-select:none;margin-bottom:8px" alt="AfroDownload">
+<img src="logo.jpg.png" id="logoBtn" style="width:220px;height:220px;object-fit:contain;cursor:pointer;user-select:none;margin-bottom:8px" alt="AfroDownload">
 <div style="color:#ffd966;letter-spacing:6px;font-size:.95rem;margin-top:8px;font-weight:700">THE HOME OF AFROBEATS</div>
 <button class="run" id="runBtn"><i class="fas fa-bolt"></i> Launch App</button>
 <div style="color:#7a6e4a;font-size:.8rem;margin-top:18px;font-weight:600">415 FAMILY • GHANA</div>
@@ -174,7 +174,7 @@ body{font-family:'Outfit',sans-serif;background:#0a0806;color:#fff;min-height:10
 <div class="app" id="app" style="display:none">
 <div class="top">
 <div style="display:flex;align-items:center;gap:10px">
-<img src="logo.jpg.jpeg" style="width:42px;height:42px;object-fit:contain;border-radius:12px" alt="AfroDownload">
+<img src="logo.jpg.png" style="width:42px;height:42px;object-fit:contain;border-radius:12px" alt="AfroDownload">
 <h2 id="tt">Discover</h2>
 </div>
 <div style="display:flex;align-items:center;gap:10px">
@@ -248,7 +248,7 @@ body{font-family:'Outfit',sans-serif;background:#0a0806;color:#fff;min-height:10
 
 <div class="screen" id="pro">
 <div style="text-align:center;padding:18px 0 10px">
-<img src="logo.jpg.jpeg" style="width:100px;height:100px;border-radius:34px;object-fit:cover;border:2px solid rgba(255,215,0,.4);margin:0 auto;display:block" alt="Yungee">
+<img src="logo.jpg.png" style="width:100px;height:100px;border-radius:34px;object-fit:cover;border:2px solid rgba(255,215,0,.4);margin:0 auto;display:block" alt="Yungee">
 <h3 style="margin-top:18px;font-size:1.8rem;font-weight:800">Emmanuel Sackey</h3>
 <p style="color:#b8a87a;font-size:.95rem">Founder • Kumasi Ashanti, GH</p>
 <div style="display:flex;gap:36px;justify-content:center;margin-top:22px">
@@ -262,10 +262,11 @@ body{font-family:'Outfit',sans-serif;background:#0a0806;color:#fff;min-height:10
 <div class="ic"><i class="fas fa-share-nodes" style="color:#ffd966"></i></div>
 <div class="info"><div class="t">Share App</div><div class="a">afrodownload415.github.io</div></div>
 <i class="fas fa-chevron-right" style="color:#7a6e4a"></i>
-</div>
-<div class="item" id="cloudSyncBtn" style="cursor:pointer;display:none">
+</div><div class="item" id="cloudSyncBtn" style="cursor:pointer;display:none">
 <div class="ic"><i class="fas fa-file-export" style="color:#66d9ff"></i></div>
-<div class="info"><div class="t">Export songs.json</div><div class="a">Download your library file</div></div>
+<div class="info"><div class="t">Update Public List</div><div class="a">Make songs visible to everyone</div></div>
+<i class="fas fa-chevron-right" style="color:#7a6e4a"></i>
+</div>>
 <i class="fas fa-chevron-right" style="color:#7a6e4a"></i>
 </div>
 <div class="item" id="logoutBtn" style="cursor:pointer;display:none">
@@ -327,7 +328,19 @@ body{font-family:'Outfit',sans-serif;background:#0a0806;color:#fff;min-height:10
 </div>
 </div>
 </div>
-
+<div class="modal" id="syncM">
+<div class="box" style="max-width:420px">
+<h3>📝 Update Public List</h3>
+<p style="font-size:.85rem;color:#c9b582">Copy the list below, then paste it into your Gist. Everyone will see your songs.</p>
+<textarea id="syncText" readonly style="width:100%;height:180px;background:#0a0806;border:1.5px solid rgba(255,215,0,.3);border-radius:14px;padding:12px;color:#fff;font-family:monospace;font-size:.7rem;outline:none;resize:none;margin-bottom:12px"></textarea>
+<div style="display:flex;gap:10px">
+<button class="btn btn-g" style="flex:1" id="syncClose">Close</button>
+<button class="btn btn-p" style="flex:1" id="syncCopy">Copy</button>
+</div>
+<button class="btn btn-p" style="width:100%;margin-top:10px;background:rgba(102,217,255,.15);color:#66d9ff;border:1.5px solid rgba(102,217,255,.4)" id="syncOpen">Open Gist</button>
+</div>
+</div>
+  
 <div class="modal" id="delM">
 <div class="box" style="text-align:center">
 <div style="width:52px;height:52px;border-radius:16px;background:rgba(255,59,59,.15);color:#ff3b3b;display:flex;align-items:center;justify-content:center;margin:0 auto 10px;font-size:22px"><i class="fas fa-trash"></i></div>
@@ -417,7 +430,7 @@ function cardHtml(s){
 '<div class="badge-num">▶ ' + (s.plays || Math.floor(Math.random() * 40 + 10)) + '</div>' +
 '<div class="cv" onclick="play(' + s.id + ')">' + cover + '</div>' +
     '<div class="ti">' + esc(s.title) + '</div>' +
-   '<div class="ar">' + esc(s.artist) + '</div>' +
+  '<div class="ar">' + esc(s.artist) + '</div>' +
 '<div class="tag">Afrobeats</div>' +
     '<div class="acts">' +
       '<button class="ibtn" onclick="play(' + s.id + ')"><i class="fas fa-play"></i></button>' +
