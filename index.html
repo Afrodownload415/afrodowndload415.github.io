@@ -545,6 +545,11 @@ window.play = function(id){
   if($('pa')) $('pa').innerHTML = s.coverImg ? '<img src="' + esc(s.coverImg) + '">' : (s.cover || '💿');
   if($('pl')) $('pl').classList.add('on');
   if($('pp')) $('pp').innerHTML = '<i class="fas fa-pause"></i>';
+  if($('miniPlayer')) $('miniPlayer').classList.add('on');
+  if($('miniTitle')) $('miniTitle').textContent = s.title;
+  if($('miniArtist')) $('miniArtist').textContent = s.artist;
+  if($('miniCover')) $('miniCover').innerHTML = s.coverImg ? '<img src="' + esc(s.coverImg) + '">' : (s.cover || '🎵');
+  if($('miniPlay')) $('miniPlay').innerHTML = '<i class="fas fa-pause"></i>';
   updateHeartButton();
   updateMiniPlayer();
   toast('Now playing: ' + s.title);
@@ -859,6 +864,26 @@ function init(){
   }
 
   if($('prev')) $('prev').addEventListener('click', playPrev);
+  if($('miniPlay')){
+  $('miniPlay').addEventListener('click', function(){
+    if(isPlay){
+      aud.pause();
+      isPlay = false;
+      $('miniPlay').innerHTML = '<i class="fas fa-play"></i>';
+    } else {
+      aud.play();
+      isPlay = true;
+      $('miniPlay').innerHTML = '<i class="fas fa-pause"></i>';
+    }
+  });
+}
+if($('miniNext')) $('miniNext').addEventListener('click', playNext);
+if($('miniPlayer')){
+  $('miniPlayer').addEventListener('click', function(e){
+    if(e.target.closest('.mini-btn')) return;
+    if($('pl')) $('pl').classList.add('on');
+  });
+}
   if($('next')) $('next').addEventListener('click', playNext);
   aud.addEventListener('ended', playNext);
 
