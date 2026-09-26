@@ -393,7 +393,7 @@ function isFav(id){ return favs.indexOf(id) >= 0; }
 function cardHtml(s){
   var cover = s.coverImg
     ? '<img src="' + esc(s.coverImg) + '" onerror="this.style.display=\'none\'">'
-    : (s.cover || '💿');
+    : '<img src="logo.png" style="width:100%;height:100%;object-fit:cover">';
   var favClass = isFav(s.id) ? 'ibtn fav-on' : 'ibtn';
   var heartIcon = isFav(s.id) ? '<i class="fas fa-heart"></i>' : '<i class="far fa-heart"></i>';
   return '<div class="card">' +
