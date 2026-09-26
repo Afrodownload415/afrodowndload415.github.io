@@ -181,7 +181,7 @@ body{font-family:'Outfit',sans-serif;background:#0a0806;color:#fff;min-height:10
 <div class="bar"><div class="bar-fill" id="upBar"></div></div>
 </div>
 <div class="sec">
-<h4><i class="fas fa-record-vinyl" style="color:#ffd966;margin-right:6px"></i>Albums</h4>
+<h4><i class="fas fa-record-vinyl" style="color:#ffd966;margin-right:6px"></i>Latest Music</h4>
 <span id="uc">0 songs</span>
 </div>
 <div class="album-grid" id="ur"></div>
@@ -476,12 +476,12 @@ function render(){
     if(ups.length){
       ur.innerHTML = ups.map(cardHtml).join('');
     } else {
-      ur.innerHTML = '<div class="empty-msg" style="grid-column:1/-1;border:2px dashed rgba(255,215,0,.2);border-radius:20px;padding:30px">' +
-        '<div style="font-size:40px">📂</div>' +
-        '<div style="margin-top:10px;font-weight:700">No songs yet</div>' +
-        '<div style="font-size:.85rem;color:#7a6e4a;margin-top:4px">' +
-        (isFounder ? 'Tap the upload box above' : 'Founder will add songs soon') +
-        '</div></div>';
+    ur.innerHTML = '<div class="empty-msg" style="grid-column:1/-1;border:2px dashed rgba(255,215,0,.2);border-radius:20px;padding:30px">' +
+  '<div style="font-size:40px">🎵</div>' +
+  '<div style="margin-top:10px;font-weight:700">Music coming soon</div>' +
+  '<div style="font-size:.85rem;color:#7a6e4a;margin-top:4px">' +
+  (isFounder ? 'Tap the upload box above to add songs' : 'Check back soon for new releases') +
+  '</div></div>';
     }
   }
 
