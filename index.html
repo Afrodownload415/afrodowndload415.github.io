@@ -10,11 +10,11 @@
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-html,body{overflow-x:clip!important}
+html,body{overflow-x:hidden!important;max-width:100vw!important;position:relative!important}
 body{font-family:'Outfit',sans-serif;background:#0a0806;color:#fff;min-height:100vh;display:flex;justify-content:center;-webkit-tap-highlight-color:transparent}
-.blob{position:fixed;width:600px;height:600px;border-radius:50%;filter:blur(110px);opacity:.35;z-index:0;pointer-events:none}
-.b1{background:radial-gradient(circle,#ffd966,#f5b400);top:-180px;left:-130px;animation:float1 18s ease-in-out infinite}
-.b2{background:radial-gradient(circle,#ffb800,#8a6e00);bottom:-180px;right:-130px;animation:float2 22s ease-in-out infinite}
+.blob{position:fixed;width:600px;height:600px;border-radius:50%;filter:blur(110px);opacity:.35;z-index:0;pointer-events:none;max-width:100vw!important;max-height:100vh!important}
+.b1{background:radial-gradient(circle,#ffd966,#f5b400);top:-180px;left:0!important;animation:float1 18s ease-in-out infinite}
+.b2{background:radial-gradient(circle,#ffb800,#8a6e00);bottom:-180px;right:0!important;animation:float2 22s ease-in-out infinite}
 @keyframes float1{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(60px,40px) scale(1.1)}}
 @keyframes float2{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(-40px,-60px) scale(1.15)}}
 .app{width:100%;max-width:430px;background:rgba(10,8,4,.92);backdrop-filter:blur(24px);min-height:100vh;display:flex;flex-direction:column;position:relative;z-index:1;border-left:1px solid rgba(255,215,0,.15);border-right:1px solid rgba(255,215,0,.15);box-shadow:0 0 60px rgba(255,200,0,.1);overflow-x:hidden}
@@ -65,6 +65,7 @@ body{font-family:'Outfit',sans-serif;background:#0a0806;color:#fff;min-height:10
 .ibtn:hover{background:rgba(255,215,0,.25)}
 .ibtn.del{color:#ff6b6b}
 .ibtn.fav-on{color:#ff6b6b;background:rgba(255,107,107,.15);border-color:rgba(255,107,107,.4)}
+.ibtn.active-mode{color:#0a0806;background:linear-gradient(135deg,#f5b400,#ffd966);border-color:transparent}
 .search{background:#141008;border:1.5px solid rgba(255,215,0,.3);border-radius:24px;padding:14px 20px;display:flex;gap:14px;align-items:center;margin:12px 0 18px}
 .search i{color:#ffd966;font-size:1.2rem}
 .search input{flex:1;background:transparent;border:none;color:#fff;outline:none;font-size:1rem;font-family:'Outfit',sans-serif}
@@ -89,22 +90,28 @@ body{font-family:'Outfit',sans-serif;background:#0a0806;color:#fff;min-height:10
 .mini-title{font-weight:700;font-size:.9rem;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .mini-artist{font-size:.75rem;color:#b8a87a}
 .mini-btn{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,#f5b400,#ffd966);border:none;color:#0a0806;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:.95rem;flex-shrink:0}
-.player{position:fixed;inset:0;z-index:500;background:rgba(8,6,3,.98);display:none;flex-direction:column;align-items:center;justify-content:center;padding:28px 20px}
+.player{position:fixed;inset:0;z-index:500;background:rgba(8,6,3,.98);display:none;flex-direction:column;align-items:center;justify-content:center;padding:28px 20px;overflow-y:auto}
 .player.on{display:flex}
 .player .close-btn{position:absolute;top:20px;right:20px;width:50px;height:50px;border-radius:50%;background:rgba(255,215,0,.15);border:1px solid rgba(255,215,0,.35);color:#ffd966;font-size:1.4rem;display:flex;align-items:center;justify-content:center;cursor:pointer}
-.art{width:260px;height:260px;border-radius:40px;background:#1f190a;border:2px solid rgba(255,215,0,.35);display:flex;align-items:center;justify-content:center;font-size:90px;overflow:hidden}
+.art{width:240px;height:240px;border-radius:40px;background:#1f190a;border:2px solid rgba(255,215,0,.35);display:flex;align-items:center;justify-content:center;font-size:90px;overflow:hidden;margin-top:20px}
 .art img{width:100%;height:100%;object-fit:cover}
-.player .ptitle{margin-top:28px;font-weight:900;font-size:2rem;color:#fff;text-align:center;max-width:340px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.player .partist{color:#ffd966;font-size:1.1rem;font-weight:600;margin-top:4px}
-.prog{width:100%;max-width:340px;height:8px;background:rgba(255,215,0,.15);border-radius:20px;margin-top:24px;overflow:hidden;cursor:pointer}
+.player .ptitle{margin-top:20px;font-weight:900;font-size:1.6rem;color:#fff;text-align:center;max-width:340px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.player .partist{color:#ffd966;font-size:1.05rem;font-weight:600;margin-top:4px}
+.prog{width:100%;max-width:340px;height:8px;background:rgba(255,215,0,.15);border-radius:20px;margin-top:20px;overflow:hidden;cursor:pointer}
 .fill{height:100%;background:linear-gradient(90deg,#f5b400,#ffd966);width:0%;border-radius:20px;transition:width .1s}
-.time-row{display:flex;justify-content:space-between;width:100%;max-width:340px;margin-top:10px;color:#b8a87a;font-size:.85rem;font-weight:600}
-.ctrls{display:flex;gap:28px;margin-top:24px;align-items:center}
+.time-row{display:flex;justify-content:space-between;width:100%;max-width:340px;margin-top:8px;color:#b8a87a;font-size:.85rem;font-weight:600}
+.volume-row{display:flex;align-items:center;gap:12px;width:100%;max-width:340px;margin-top:14px}
+.volume-row i{color:#ffd966;font-size:.9rem}
+.volume-row input{flex:1;height:6px;border-radius:20px;background:rgba(255,215,0,.15);outline:none;cursor:pointer;-webkit-appearance:none;appearance:none;accent-color:#ffd966}
+.volume-row input::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:18px;height:18px;border-radius:50%;background:linear-gradient(135deg,#f5b400,#ffd966);cursor:pointer}
+.volume-row input::-moz-range-thumb{width:18px;height:18px;border-radius:50%;background:linear-gradient(135deg,#f5b400,#ffd966);cursor:pointer;border:none}
+.ctrls{display:flex;gap:28px;margin-top:20px;align-items:center}
 .cbtn2{width:58px;height:58px;border-radius:50%;background:rgba(255,215,0,.12);border:1.5px solid rgba(255,215,0,.3);color:#ffd966;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:1.5rem;transition:background .2s}
 .cbtn2:hover{background:rgba(255,215,0,.25)}
 .cbtn2.play{width:82px;height:82px;background:linear-gradient(135deg,#f5b400,#ffd966);border:none;color:#0a0806;font-size:2rem}
-.player .extra-actions{display:flex;gap:20px;margin-top:28px}
-.player .extra-actions .ibtn{width:54px;height:54px;border-radius:18px;font-size:1.3rem}
+.player .extra-actions{display:flex;gap:16px;margin-top:20px;align-items:center}
+.player .extra-actions .ibtn{width:48px;height:48px;border-radius:16px;font-size:1.2rem}
+.player .extra-actions .ibtn.active-mode{color:#0a0806;background:linear-gradient(135deg,#f5b400,#ffd966);border-color:transparent}
 .player .extra-actions .ibtn.fav-on{color:#ff6b6b;background:rgba(255,107,107,.15);border-color:rgba(255,107,107,.4)}
 .modal{position:fixed;inset:0;background:rgba(0,0,0,.8);backdrop-filter:blur(14px);z-index:1000;display:none;align-items:center;justify-content:center;padding:20px}
 .modal.on{display:flex}
@@ -124,6 +131,19 @@ body{font-family:'Outfit',sans-serif;background:#0a0806;color:#fff;min-height:10
 .stat-label{font-size:.75rem;color:#b8a87a;font-weight:700}
 .spinner{display:inline-block;width:16px;height:16px;border:2px solid rgba(255,215,0,.3);border-top-color:#ffd966;border-radius:50%;animation:spin .8s linear infinite;vertical-align:middle;margin-right:8px}
 @keyframes spin{to{transform:rotate(360deg)}}
+.queue-panel{position:fixed;inset:0;background:rgba(10,8,6,.98);z-index:700;display:none;flex-direction:column;padding:24px 20px}
+.queue-panel.on{display:flex}
+.queue-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}
+.queue-header h3{color:#ffd966;font-weight:800;font-size:1.3rem}
+.queue-list{flex:1;overflow-y:auto;padding-bottom:20px}
+.queue-item{display:flex;align-items:center;gap:12px;padding:12px;background:#141008;border-radius:16px;margin-bottom:8px;cursor:pointer;border:1px solid rgba(255,215,0,.12);transition:all .2s}
+.queue-item:hover{background:#1f190a;border-color:rgba(255,215,0,.4)}
+.queue-item.active{background:linear-gradient(135deg,rgba(245,180,0,.15),rgba(255,217,102,.15));border-color:#ffd966}
+.queue-item .qi-cover{width:44px;height:44px;border-radius:12px;background:#221b0a;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;overflow:hidden}
+.queue-item .qi-cover img{width:100%;height:100%;object-fit:cover}
+.queue-item .qi-info{flex:1;min-width:0}
+.queue-item .qi-title{font-weight:700;font-size:.9rem;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.queue-item .qi-artist{font-size:.75rem;color:#b8a87a}
 </style>
 </head>
 <body>
@@ -182,7 +202,7 @@ body{font-family:'Outfit',sans-serif;background:#0a0806;color:#fff;min-height:10
 </div>
 <div class="sec">
 <h4><i class="fas fa-record-vinyl" style="color:#ffd966;margin-right:6px"></i>Latest Music</h4>
-
+<span id="uc">0 songs</span>
 </div>
 <div class="album-grid" id="ur"></div>
 </div>
@@ -264,16 +284,32 @@ body{font-family:'Outfit',sans-serif;background:#0a0806;color:#fff;min-height:10
 <div class="partist" id="pr">Artist</div>
 <div class="prog" id="pw"><div class="fill" id="pfill"></div></div>
 <div class="time-row"><span id="ct">0:00</span><span id="td">0:00</span></div>
+<div class="volume-row">
+<i class="fas fa-volume-low"></i>
+<input type="range" id="volumeSlider" min="0" max="100" value="100">
+<i class="fas fa-volume-high"></i>
+</div>
 <div class="ctrls">
 <button class="cbtn2" id="prev"><i class="fas fa-backward"></i></button>
 <button class="cbtn2 play" id="pp"><i class="fas fa-play"></i></button>
 <button class="cbtn2" id="next"><i class="fas fa-forward"></i></button>
 </div>
 <div class="extra-actions">
+<button class="ibtn" id="shuffleBtn" title="Shuffle"><i class="fas fa-shuffle"></i></button>
 <button class="ibtn" id="fb"><i class="far fa-heart"></i></button>
+<button class="ibtn" id="repeatBtn" title="Repeat"><i class="fas fa-repeat"></i></button>
+<button class="ibtn" id="queueBtn" title="Playlist"><i class="fas fa-list"></i></button>
 <button class="ibtn" id="db"><i class="fas fa-download"></i></button>
 <button class="ibtn" id="sb"><i class="fas fa-share-nodes"></i></button>
 </div>
+</div>
+
+<div class="queue-panel" id="queuePanel">
+<div class="queue-header">
+<h3>📋 Up Next</h3>
+<button class="ibtn" id="queueClose"><i class="fas fa-xmark"></i></button>
+</div>
+<div class="queue-list" id="queueList"></div>
 </div>
 
 <div class="modal" id="dm">
@@ -342,6 +378,8 @@ var favs = JSON.parse(localStorage.getItem('afro_favs') || '[]');
 var downs = JSON.parse(localStorage.getItem('afro_downs') || '[]');
 var songs = [];
 var cur = null, dTarget = null, delAct = null, isPlay = false, curIndex = 0;
+var isShuffle = false;
+var repeatMode = 0;
 var aud = new Audio();
 var $ = function(id){ return document.getElementById(id); };
 
@@ -390,10 +428,13 @@ function updateFounderUI(){
 
 function isFav(id){ return favs.indexOf(id) >= 0; }
 
+function getCover(s){
+  if(s.coverImg) return '<img src="' + esc(s.coverImg) + '" onerror="this.style.display=\'none\'">';
+  return '<img src="logo.png" style="width:100%;height:100%;object-fit:cover">';
+}
+
 function cardHtml(s){
-  var cover = s.coverImg
-    ? '<img src="' + esc(s.coverImg) + '" onerror="this.style.display=\'none\'">'
-    : '<img src="logo.png" style="width:100%;height:100%;object-fit:cover">';
+  var cover = getCover(s);
   var favClass = isFav(s.id) ? 'ibtn fav-on' : 'ibtn';
   var heartIcon = isFav(s.id) ? '<i class="fas fa-heart"></i>' : '<i class="far fa-heart"></i>';
   return '<div class="card">' +
@@ -412,9 +453,7 @@ function cardHtml(s){
 
 function itemHtml(s, opts){
   opts = opts || {};
-  var cover = s.coverImg
-    ? '<img src="' + esc(s.coverImg) + '" onerror="this.style.display=\'none\'">'
-    : (s.cover || '💿');
+  var cover = getCover(s);
   var favClass = isFav(s.id) ? 'ibtn fav-on' : 'ibtn';
   var heartIcon = isFav(s.id) ? '<i class="fas fa-heart"></i>' : '<i class="far fa-heart"></i>';
   var html = '<div class="item">' +
@@ -458,8 +497,32 @@ function updateMiniPlayer(){
   if(mp) mp.classList.add('on');
   if($('miniTitle')) $('miniTitle').textContent = cur.title;
   if($('miniArtist')) $('miniArtist').textContent = cur.artist;
-  if($('miniCover')) $('miniCover').innerHTML = cur.coverImg ? '<img src="' + esc(cur.coverImg) + '">' : (cur.cover || '🎵');
+  if($('miniCover')) $('miniCover').innerHTML = getCover(cur);
   if($('miniPlay')) $('miniPlay').innerHTML = isPlay ? '<i class="fas fa-pause"></i>' : '<i class="fas fa-play"></i>';
+}
+
+function renderQueue(){
+  var ql = $('queueList');
+  if(!ql) return;
+  if(!songs.length){ ql.innerHTML = '<div class="empty-msg">No songs</div>'; return; }
+  ql.innerHTML = songs.map(function(s){
+    var cover = getCover(s);
+    return '<div class="queue-item' + (cur && cur.id == s.id ? ' active' : '') + '" data-qid="' + s.id + '">' +
+      '<div class="qi-cover">' + cover + '</div>' +
+      '<div class="qi-info">' +
+        '<div class="qi-title">' + esc(s.title) + '</div>' +
+        '<div class="qi-artist">' + esc(s.artist) + '</div>' +
+      '</div>' +
+    '</div>';
+  }).join('');
+  var items = ql.querySelectorAll('.queue-item');
+  items.forEach(function(el){
+    el.addEventListener('click', function(){
+      var id = parseInt(el.getAttribute('data-qid'), 10);
+      play(id);
+      if($('queuePanel')) $('queuePanel').classList.remove('on');
+    });
+  });
 }
 
 function render(){
@@ -476,12 +539,12 @@ function render(){
     if(ups.length){
       ur.innerHTML = ups.map(cardHtml).join('');
     } else {
-    ur.innerHTML = '<div class="empty-msg" style="grid-column:1/-1;border:2px dashed rgba(255,215,0,.2);border-radius:20px;padding:30px">' +
-  '<div style="font-size:40px">🎵</div>' +
-  '<div style="margin-top:10px;font-weight:700">Music coming soon</div>' +
-  '<div style="font-size:.85rem;color:#7a6e4a;margin-top:4px">' +
-  (isFounder ? 'Tap the upload box above to add songs' : 'Check back soon for new releases') +
-  '</div></div>';
+      ur.innerHTML = '<div class="empty-msg" style="grid-column:1/-1;border:2px dashed rgba(255,215,0,.2);border-radius:20px;padding:30px">' +
+        '<div style="font-size:40px">🎵</div>' +
+        '<div style="margin-top:10px;font-weight:700">Music coming soon</div>' +
+        '<div style="font-size:.85rem;color:#7a6e4a;margin-top:4px">' +
+        (isFounder ? 'Tap the upload box above to add songs' : 'Check back soon for new releases') +
+        '</div></div>';
     }
   }
 
@@ -542,28 +605,33 @@ window.play = function(id){
   isPlay = true;
   if($('pt')) $('pt').textContent = s.title;
   if($('pr')) $('pr').textContent = s.artist;
-  if($('pa')) $('pa').innerHTML = s.coverImg ? '<img src="' + esc(s.coverImg) + '">' : (s.cover || '💿');
+  if($('pa')) $('pa').innerHTML = getCover(s);
   if($('pl')) $('pl').classList.add('on');
   if($('pp')) $('pp').innerHTML = '<i class="fas fa-pause"></i>';
-  if($('miniPlayer')) $('miniPlayer').classList.add('on');
-  if($('miniTitle')) $('miniTitle').textContent = s.title;
-  if($('miniArtist')) $('miniArtist').textContent = s.artist;
-  if($('miniCover')) $('miniCover').innerHTML = s.coverImg ? '<img src="' + esc(s.coverImg) + '">' : (s.cover || '🎵');
-  if($('miniPlay')) $('miniPlay').innerHTML = '<i class="fas fa-pause"></i>';
   updateHeartButton();
   updateMiniPlayer();
+  if($('queuePanel') && $('queuePanel').classList.contains('on')) renderQueue();
   toast('Now playing: ' + s.title);
 };
 
 function playNext(){
   if(!songs.length) return;
-  curIndex = (curIndex + 1) % songs.length;
+  if(repeatMode === 2){ aud.currentTime = 0; aud.play(); return; }
+  if(isShuffle){
+    curIndex = Math.floor(Math.random() * songs.length);
+  } else {
+    curIndex = (curIndex + 1) % songs.length;
+  }
   play(songs[curIndex].id);
 }
 
 function playPrev(){
   if(!songs.length) return;
-  curIndex = (curIndex - 1 + songs.length) % songs.length;
+  if(isShuffle){
+    curIndex = Math.floor(Math.random() * songs.length);
+  } else {
+    curIndex = (curIndex - 1 + songs.length) % songs.length;
+  }
   play(songs[curIndex].id);
 }
 
@@ -657,7 +725,6 @@ function uploadToCloudinary(file, onProgress, onDone, onError){
   formData.append('file', file);
   formData.append('upload_preset', CLOUDINARY_PRESET);
   formData.append('folder', 'afrodownload');
-
   var xhr = new XMLHttpRequest();
   xhr.open('POST', 'https://api.cloudinary.com/v1_1/' + CLOUDINARY_CLOUD + '/auto/upload');
   xhr.upload.onprogress = function(e){
@@ -844,7 +911,6 @@ function init(){
   if($('cp')){
     $('cp').addEventListener('click', function(){
       if($('pl')) $('pl').classList.remove('on');
-      // Music keeps playing — just close the big player
     });
   }
 
@@ -864,28 +930,47 @@ function init(){
   }
 
   if($('prev')) $('prev').addEventListener('click', playPrev);
-  if($('miniPlay')){
-  $('miniPlay').addEventListener('click', function(){
-    if(isPlay){
-      aud.pause();
-      isPlay = false;
-      $('miniPlay').innerHTML = '<i class="fas fa-play"></i>';
-    } else {
-      aud.play();
-      isPlay = true;
-      $('miniPlay').innerHTML = '<i class="fas fa-pause"></i>';
-    }
-  });
-}
-if($('miniNext')) $('miniNext').addEventListener('click', playNext);
-if($('miniPlayer')){
-  $('miniPlayer').addEventListener('click', function(e){
-    if(e.target.closest('.mini-btn')) return;
-    if($('pl')) $('pl').classList.add('on');
-  });
-}
   if($('next')) $('next').addEventListener('click', playNext);
-  aud.addEventListener('ended', playNext);
+
+  aud.addEventListener('ended', function(){
+    if(repeatMode === 2){ aud.currentTime = 0; aud.play(); return; }
+    if(repeatMode === 1 || isShuffle || curIndex < songs.length - 1){ playNext(); }
+  });
+
+  if($('volumeSlider')){
+    $('volumeSlider').addEventListener('input', function(e){
+      aud.volume = e.target.value / 100;
+    });
+  }
+
+  if($('shuffleBtn')){
+    $('shuffleBtn').addEventListener('click', function(){
+      isShuffle = !isShuffle;
+      $('shuffleBtn').classList.toggle('active-mode', isShuffle);
+      toast(isShuffle ? '🔀 Shuffle ON' : 'Shuffle OFF');
+    });
+  }
+
+  if($('repeatBtn')){
+    $('repeatBtn').addEventListener('click', function(){
+      repeatMode = (repeatMode + 1) % 3;
+      if(repeatMode === 0){ $('repeatBtn').classList.remove('active-mode'); toast('Repeat OFF'); }
+      if(repeatMode === 1){ $('repeatBtn').classList.add('active-mode'); toast('🔁 Repeat All'); }
+      if(repeatMode === 2){ $('repeatBtn').classList.add('active-mode'); toast('🔂 Repeat One'); }
+    });
+  }
+
+  if($('queueBtn')){
+    $('queueBtn').addEventListener('click', function(){
+      renderQueue();
+      if($('queuePanel')) $('queuePanel').classList.add('on');
+    });
+  }
+  if($('queueClose')){
+    $('queueClose').addEventListener('click', function(){
+      if($('queuePanel')) $('queuePanel').classList.remove('on');
+    });
+  }
 
   if($('miniPlay')){
     $('miniPlay').addEventListener('click', function(){
