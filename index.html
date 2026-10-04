@@ -144,6 +144,10 @@ body{font-family:'Outfit',sans-serif;background:#0a0806;color:#fff;min-height:10
 .queue-item .qi-info{flex:1;min-width:0}
 .queue-item .qi-title{font-weight:700;font-size:.9rem;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .queue-item .qi-artist{font-size:.75rem;color:#b8a87a}
+.pay-btns{max-width:240px;margin:14px auto 0}
+.pay-btns a{display:block;font-weight:900;padding:12px 20px;border-radius:100px;text-decoration:none;font-size:1rem;text-align:center;margin-bottom:10px}
+.pay-paypal{background:linear-gradient(135deg,#f5b400,#ffd966);color:#0a0806}
+.pay-momo{background:linear-gradient(135deg,#0a7f5a,#0fb87a);color:#fff}
 </style>
 </head>
 <body>
@@ -181,7 +185,7 @@ body{font-family:'Outfit',sans-serif;background:#0a0806;color:#fff;min-height:10
 <h3>Hello Yungee 👋</h3>
 <p>Upload, stream & share Afrobeats worldwide</p>
 <div class="badge-group">
-<span class="badge"><i class="fas fa-music"></i> <span id="ht"> tracks</span></span>
+<span class="badge"><i class="fas fa-music"></i> <span id="ht">0 tracks</span></span>
 <span class="badge"><i class="fas fa-fire"></i> 415 Clean</span>
 </div>
 </div>
@@ -202,7 +206,7 @@ body{font-family:'Outfit',sans-serif;background:#0a0806;color:#fff;min-height:10
 </div>
 <div class="sec">
 <h4><i class="fas fa-record-vinyl" style="color:#ffd966;margin-right:6px"></i>Latest Music</h4>
-<span id="uc">songs</span>
+<span id="uc">0 songs</span>
 </div>
 <div class="album-grid" id="ur"></div>
 </div>
@@ -231,8 +235,12 @@ body{font-family:'Outfit',sans-serif;background:#0a0806;color:#fff;min-height:10
 <div style="text-align:center;padding:18px 0 10px">
 <img src="logo.png" style="width:100px;height:100px;border-radius:34px;object-fit:cover;border:2px solid rgba(255,215,0,.4);margin:0 auto;display:block" alt="Yungee">
 <h3 style="margin-top:18px;font-size:1.8rem;font-weight:800">Emmanuel Sackey</h3>
-<p style="color:#b8a87a;font-size:.95rem">Founder • Kumasi Ashanti, GH</p>
-<a href="https://www.paypal.com/paypalme/emmanuelsackey" target="_blank" style="display:block;max-width:240px;margin:14px auto 0;background:linear-gradient(135deg,#f5b400,#ffd966);color:#0a0806;font-weight:900;padding:12px 20px;border-radius:100px;text-decoration:none;font-size:1rem;text-align:center">☕ Support AfroDownload</a>
+<p style="color:#b8a87a;font-size:.95rem">Founder • Kumasi Ashanti, GH 🇬🇭</p>
+<p style="color:#ffd966;font-size:.85rem;margin-top:6px;font-weight:600">Support keeps this free ❤️</p>
+<div class="pay-btns">
+<a href="https://www.paypal.com/paypalme/emmanuelsackey" target="_blank" class="pay-paypal">☕ Support AfroDownload</a>
+<a href="https://paystack.shop/pay/mdgtmyalre" target="_blank" class="pay-momo">🇬🇭 Pay with MoMo</a>
+</div>
 <div style="display:flex;gap:36px;justify-content:center;margin-top:22px">
 <div><div class="stat-number" id="pu">0</div><div class="stat-label">Uploads</div></div>
 <div><div class="stat-number" id="pf">0</div><div class="stat-label">Likes</div></div>
@@ -536,8 +544,8 @@ function render(){
 
   var ur = $('ur');
   if(ur){
-    if(ups.length){
-      ur.innerHTML = ups.map(cardHtml).join('');
+    if(songs.length){
+      ur.innerHTML = songs.map(cardHtml).join('');
     } else {
       ur.innerHTML = '<div class="empty-msg" style="grid-column:1/-1;border:2px dashed rgba(255,215,0,.2);border-radius:20px;padding:30px">' +
         '<div style="font-size:40px">🎵</div>' +
