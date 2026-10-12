@@ -38,7 +38,6 @@ body{font-family:'Outfit',sans-serif;background:#08060a;color:#fff;min-height:10
 .screen.on{display:block;animation:screenIn .35s cubic-bezier(.4,0,.2,1)}
 @keyframes screenIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
 
-/* ===== ARTIST OF THE WEEK ===== */
 .aotw{position:relative;background:linear-gradient(145deg,#2a1f0a 0%,#1a1408 50%,#221a08 100%);border:1.5px solid rgba(255,215,0,.4);border-radius:28px;padding:24px 20px;margin:6px 0 20px;overflow:hidden;box-shadow:0 12px 40px rgba(255,180,0,.15)}
 .aotw::before{content:'';position:absolute;top:-40%;right:-20%;width:220px;height:220px;background:radial-gradient(circle,rgba(255,215,0,.25),transparent 65%);border-radius:50%;pointer-events:none}
 .aotw::after{content:'';position:absolute;bottom:-50%;left:-15%;width:200px;height:200px;background:radial-gradient(circle,rgba(255,140,0,.15),transparent 70%);border-radius:50%;pointer-events:none}
@@ -68,7 +67,6 @@ body{font-family:'Outfit',sans-serif;background:#08060a;color:#fff;min-height:10
 .aotw-song .as-title{font-weight:700;font-size:.88rem;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .aotw-song .as-play{color:#ffd966;font-size:1rem}
 
-/* ===== DOWNLOAD APP BANNER ===== */
 .app-download{display:flex;align-items:center;gap:14px;background:linear-gradient(135deg,rgba(245,180,0,.12),rgba(255,217,102,.08));border:1.5px solid rgba(255,215,0,.35);border-radius:22px;padding:16px 18px;margin:6px 0 18px;text-decoration:none;color:#fff;transition:all .25s;position:relative;overflow:hidden}
 .app-download::before{content:'';position:absolute;top:-50%;right:-20%;width:150px;height:150px;background:radial-gradient(circle,rgba(255,215,0,.2),transparent 70%);border-radius:50%;pointer-events:none}
 .app-download:hover{background:linear-gradient(135deg,rgba(245,180,0,.2),rgba(255,217,102,.15));transform:translateY(-2px);box-shadow:0 8px 24px rgba(255,180,0,.2)}
@@ -90,8 +88,10 @@ body{font-family:'Outfit',sans-serif;background:#08060a;color:#fff;min-height:10
 
 .filters{display:flex;gap:8px;overflow-x:auto;padding:2px 0 16px;scrollbar-width:none}
 .filters::-webkit-scrollbar{display:none}
-.filter-pill{background:rgba(255,215,0,.06);border:1px solid rgba(255,215,0,.15);color:#a08c4a;font-weight:700;font-size:.82rem;padding:9px 18px;border-radius:100px;white-space:nowrap;cursor:pointer;transition:all .25s;flex-shrink:0}
+.filter-pill{background:rgba(255,215,0,.06);border:1px solid rgba(255,215,0,.15);color:#a08c4a;font-weight:700;font-size:.82rem;padding:9px 18px;border-radius:100px;white-space:nowrap;cursor:pointer;transition:all .25s;flex-shrink:0;display:inline-flex;align-items:center;gap:6px}
 .filter-pill.active{background:linear-gradient(135deg,#f5b400,#ffd966);color:#0a0806;border-color:transparent;box-shadow:0 4px 16px rgba(255,180,0,.35)}
+.pill-count{font-size:.7rem;opacity:.7;margin-left:2px;font-weight:700}
+.filter-pill.active .pill-count{opacity:1}
 
 .upload{position:relative;border:2px dashed rgba(255,215,0,.4);background:linear-gradient(145deg,rgba(255,215,0,.05),rgba(255,215,0,.02));border-radius:24px;padding:26px 20px;text-align:center;cursor:pointer;margin-bottom:18px;transition:all .25s;overflow:hidden}
 .upload::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at center,rgba(255,215,0,.08),transparent 70%);pointer-events:none}
@@ -290,15 +290,8 @@ body{font-family:'Outfit',sans-serif;background:#08060a;color:#fff;min-height:10
   <div class="screens">
 
     <div class="screen on" id="home">
-      <div class="filters">
-        <span class="filter-pill active" data-f="all">All</span>
-        <span class="filter-pill" data-f="afrobeats">Afrobeats</span>
-        <span class="filter-pill" data-f="gospel">Gospel</span>
-        <span class="filter-pill" data-f="hiphop">Hip-Hop</span>
-        <span class="filter-pill" data-f="amapiano">Amapiano</span>
-      </div>
+      <div class="filters" id="filterBar"></div>
 
-      <!-- ARTIST OF THE WEEK -->
       <div class="aotw" id="aotwContainer">
         <span class="aotw-label">⭐ Artist of the Week</span>
         <div class="aotw-top">
@@ -325,6 +318,14 @@ body{font-family:'Outfit',sans-serif;background:#08060a;color:#fff;min-height:10
         </div>
         <i class="fas fa-download"></i>
       </a>
+
+      <div class="app-download" style="background:linear-gradient(135deg,rgba(37,211,102,.12),rgba(10,127,90,.08));border-color:rgba(37,211,102,.35);cursor:default">
+        <div class="app-download-icon" style="background:linear-gradient(135deg,#0a7f5a,#25D366)"><i class="fas fa-wifi"></i></div>
+        <div class="app-download-info">
+          <div class="ad-title" style="color:#25D366">Works Offline</div>
+          <div class="ad-sub">Tap ⬇️ on any song to save it for offline play</div>
+        </div>
+      </div>
 
       <div class="hero">
         <h3>Hello Yungee 👋</h3>
@@ -547,14 +548,30 @@ var ARTIST_OF_WEEK = {
   name: "Yungee",
   tagline: "Afrobeats Producer & Artist · Kumasi",
   bio: "Blending traditional Ghanaian rhythms with modern Afro vibes. Every track tells a story of home, love, and hustle.",
-  photo: "logo.png",  // ← Replace with artist photo URL later
-  featuredTrack: "",  // ← Leave empty to play first matching song
+  photo: "logo.png",
+  featuredTrack: "",
   socials: {
-    instagram: "",    // ← Instagram URL or leave empty
-    tiktok: "",       // ← TikTok URL or leave empty
-    youtube: ""       // ← YouTube URL or leave empty
+    instagram: "",
+    tiktok: "",
+    youtube: ""
   }
 };
+// ═══════════════════════════════════════════════════════════════
+
+// ═══════════════════════════════════════════════════════════════
+// 🎵 GENRE FILTERING ⭐
+// ═══════════════════════════════════════════════════════════════
+var activeGenre = "All";
+var GENRES = ["Afrobeats", "Gospel", "Hip-Hop", "Amapiano", "Afropop", "Dancehall"];
+
+function getGenre(s){
+  return (s && s.genre) ? s.genre : "Afrobeats";
+}
+
+function filterByGenre(list){
+  if(activeGenre === "All") return list;
+  return list.filter(function(s){ return getGenre(s) === activeGenre; });
+}
 // ═══════════════════════════════════════════════════════════════
 
 var CLOUDINARY_CLOUD   = "lzgtyuhq";
@@ -598,7 +615,6 @@ function loadOfflineCache(){
     cache.keys().then(function(requests){
       offlineCache = {};
       requests.forEach(function(req){ offlineCache[req.url] = true; });
-      console.log('Offline songs cached:', Object.keys(offlineCache).length);
       render();
     });
   }).catch(function(){});
@@ -654,13 +670,44 @@ function getCover(s){
 }
 
 // ═══════════════════════════════════════════════════════════════
+// GENRE FILTER PILLS RENDER
+// ═══════════════════════════════════════════════════════════════
+function renderFilterPills(){
+  var container = $('filterBar');
+  if(!container) return;
+  
+  var counts = {};
+  songs.forEach(function(s){
+    var g = getGenre(s);
+    counts[g] = (counts[g] || 0) + 1;
+  });
+  
+  var html = '<span class="filter-pill' + (activeGenre === 'All' ? ' active' : '') + '" data-f="All">All <span class="pill-count">' + songs.length + '</span></span>';
+  
+  GENRES.forEach(function(g){
+    if(counts[g]){
+      html += '<span class="filter-pill' + (activeGenre === g ? ' active' : '') + '" data-f="' + g + '">' + g + ' <span class="pill-count">' + counts[g] + '</span></span>';
+    }
+  });
+  
+  container.innerHTML = html;
+  
+  container.querySelectorAll('.filter-pill').forEach(function(pill){
+    pill.addEventListener('click', function(){
+      activeGenre = pill.dataset.f;
+      render();
+    });
+  });
+}
+// ═══════════════════════════════════════════════════════════════
+
+// ═══════════════════════════════════════════════════════════════
 // ARTIST OF THE WEEK RENDER
 // ═══════════════════════════════════════════════════════════════
 function renderArtistOfWeek(){
   var a = ARTIST_OF_WEEK;
   if(!a || !a.name){ return; }
 
-  // Photo
   var photoEl = $('aotwPhoto');
   if(photoEl){
     if(a.photo){
@@ -670,12 +717,10 @@ function renderArtistOfWeek(){
     }
   }
 
-  // Name + Tagline + Bio
   if($('aotwName')) $('aotwName').textContent = a.name;
   if($('aotwTagline')) $('aotwTagline').textContent = a.tagline || '';
   if($('aotwBio')) $('aotwBio').textContent = a.bio || '';
 
-  // Socials
   var socialEl = $('aotwSocial');
   if(socialEl){
     var s = '';
@@ -685,19 +730,15 @@ function renderArtistOfWeek(){
     socialEl.innerHTML = s;
   }
 
-  // Featured song — find songs by this artist
   var artistSongs = songs.filter(function(s){
     return s.artist && s.artist.toLowerCase() === a.name.toLowerCase();
   });
-
-  // If no exact match, try partial match
   if(!artistSongs.length){
     artistSongs = songs.filter(function(s){
       return s.artist && s.artist.toLowerCase().indexOf(a.name.toLowerCase()) !== -1;
     });
   }
 
-  // Featured play button
   var playBtn = $('aotwPlay');
   if(playBtn){
     if(artistSongs.length){
@@ -715,7 +756,6 @@ function renderArtistOfWeek(){
     }
   }
 
-  // Songs list
   var songsEl = $('aotwSongs');
   if(songsEl){
     if(artistSongs.length){
@@ -730,7 +770,6 @@ function renderArtistOfWeek(){
         '</div>';
       }).join('');
       songsEl.innerHTML = '<div class="aotw-songs-title"><i class="fas fa-headphones"></i> Featured Tracks</div>' + list;
-      // Wire up clicks
       songsEl.querySelectorAll('.aotw-song').forEach(function(el){
         el.addEventListener('click', function(){
           play(parseInt(el.dataset.aid, 10));
@@ -753,7 +792,7 @@ function cardHtml(s){
     '<div class="cv" onclick="play(' + s.id + ')">' + cover + '</div>' +
     '<div class="ti">' + esc(s.title) + offlineBadge + '</div>' +
     '<div class="ar">' + esc(s.artist) + '</div>' +
-    '<div class="tag">Afrobeats</div>' +
+    '<div class="tag">' + esc(getGenre(s)) + '</div>' +
     '<div class="acts">' +
       '<button class="ibtn" onclick="play(' + s.id + ')"><i class="fas fa-play"></i></button>' +
       '<button class="' + favClass + '" onclick="toggleFav(' + s.id + ')">' + heartIcon + '</button>' +
@@ -773,7 +812,7 @@ function itemHtml(s, opts){
     '<div class="ic">' + cover + '</div>' +
     '<div class="info">' +
       '<div class="t">' + esc(s.title) + offlineBadge + '</div>' +
-      '<div class="a">' + esc(s.artist) + '</div>' +
+      '<div class="a">' + esc(s.artist) + ' · ' + esc(getGenre(s)) + '</div>' +
     '</div>' +
     '<button class="ibtn" onclick="play(' + s.id + ')"><i class="fas fa-play"></i></button>' +
     '<button class="' + favClass + '" onclick="toggleFav(' + s.id + ')">' + heartIcon + '</button>';
@@ -841,8 +880,12 @@ function renderQueue(){
 function render(){
   rebuildSongs();
   renderArtistOfWeek();
-  if($('uc')) $('uc').textContent = ups.length + ' songs';
-  if($('uc2')) $('uc2').textContent = songs.length + ' songs';
+  renderFilterPills();
+  
+  var visibleSongs = filterByGenre(songs);
+  
+  if($('uc')) $('uc').textContent = visibleSongs.length + ' songs';
+  if($('uc2')) $('uc2').textContent = visibleSongs.length + ' songs';
   if($('ht')) $('ht').textContent = songs.length + ' tracks';
   if($('pu')) $('pu').textContent = ups.length;
   if($('pf')) $('pf').textContent = favs.length;
@@ -850,8 +893,10 @@ function render(){
 
   var ur = $('ur');
   if(ur){
-    if(songs.length){
-      ur.innerHTML = songs.map(cardHtml).join('');
+    if(visibleSongs.length){
+      ur.innerHTML = visibleSongs.map(cardHtml).join('');
+    } else if(songs.length && activeGenre !== 'All'){
+      ur.innerHTML = '<div class="empty-state"><div class="icon">🎵</div><div class="title">No ' + esc(activeGenre) + ' songs yet</div><div class="sub">Try a different genre or upload more music</div></div>';
     } else {
       ur.innerHTML = '<div class="empty-state"><div class="icon">🎵</div><div class="title">Music coming soon</div><div class="sub">' +
         (isFounder ? 'Tap the upload box above to add songs' : 'Check back soon for new releases') +
@@ -861,10 +906,10 @@ function render(){
 
   var al = $('allLib');
   if(al){
-    if(songs.length){
-      al.innerHTML = songs.map(function(s){ return itemHtml(s, {download:true, del:isFounder?'askDelU':null}); }).join('');
+    if(visibleSongs.length){
+      al.innerHTML = visibleSongs.map(function(s){ return itemHtml(s, {download:true, del:isFounder?'askDelU':null}); }).join('');
     } else {
-      al.innerHTML = '<div class="empty-state"><div class="icon">📚</div><div class="title">Library is empty</div><div class="sub">Songs will appear here</div></div>';
+      al.innerHTML = '<div class="empty-state"><div class="icon">📚</div><div class="title">No songs here</div><div class="sub">Try selecting a different genre</div></div>';
     }
   }
 
@@ -1079,14 +1124,6 @@ function init(){
 
   var pinInput = $('pinInput');
   if(pinInput) pinInput.addEventListener('keypress', function(e){ if(e.key === 'Enter') tryUnlock(); });
-
-  var filterPills = document.querySelectorAll('.filter-pill');
-  filterPills.forEach(function(pill){
-    pill.addEventListener('click', function(){
-      filterPills.forEach(function(p){ p.classList.remove('active'); });
-      pill.classList.add('active');
-    });
-  });
 
   var navItems = document.querySelectorAll('.ni');
   navItems.forEach(function(el){
@@ -1325,7 +1362,7 @@ function init(){
             if($('upStatus')) $('upStatus').textContent = 'Uploading ' + (index + 1) + ' of ' + total + ' (' + pct + '%)';
           },
           function(result){
-            var ns = { id: Date.now() + index, title: f.name.replace(/\.[^/.]+$/, ''), artist: 'Yungee', cover: '💿', coverImg: '', audio: result.secure_url, publicId: result.public_id, isU: true };
+            var ns = { id: Date.now() + index, title: f.name.replace(/\.[^/.]+$/, ''), artist: 'Yungee', cover: '💿', coverImg: '', genre: 'Afrobeats', audio: result.secure_url, publicId: result.public_id, isU: true };
             ups.unshift(ns);
             localStorage.setItem('afro_yellow_ups', JSON.stringify(ups));
             completed++;
