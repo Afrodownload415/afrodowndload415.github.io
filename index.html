@@ -20,7 +20,7 @@ body{font-family:'Outfit',sans-serif;background:#08060a;color:#fff;min-height:10
 @keyframes drift2{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(-50px,-60px) scale(1.1)}}
 .bg-glow .grain{position:absolute;inset:0;opacity:.035;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");mix-blend-mode:overlay}
 
-.app{width:100%;max-width:440px;background:linear-gradient(180deg,rgba(12,10,6,.98) 0%,rgba(8,6,3,.98) 100%);backdrop-filter:blur(30px);min-height:100vh;display:flex;flex-direction:column;position:relative;z-index:1;border-left:1px solid rgba(255,215,0,.12);border-right:1px solid rgba(255,215,0,.12);box-shadow:0 0 80px rgba(255,180,0,.08);overflow-x:hidden}
+.app{width:100%;max-width:440px;background:linear-gradient(180deg,rgba(12,10,6,.98) 0%,rgba(8,6,3,.98) 100%);min-height:100vh;display:flex;flex-direction:column;position:relative;z-index:1;border-left:1px solid rgba(255,215,0,.12);border-right:1px solid rgba(255,215,0,.12);box-shadow:0 0 80px rgba(255,180,0,.08);overflow-x:hidden}
 
 .top{padding:20px 22px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:40;background:linear-gradient(180deg,rgba(8,6,3,.98) 0%,rgba(8,6,3,.85) 70%,transparent 100%);backdrop-filter:blur(20px)}
 .top-left{display:flex;align-items:center;gap:12px}
@@ -125,7 +125,6 @@ body{font-family:'Outfit',sans-serif;background:#08060a;color:#fff;min-height:10
 .info .t{font-weight:800;font-size:1rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#fff;letter-spacing:-.2px}
 .info .a{font-size:.78rem;color:#b8a87a;font-weight:600;margin-top:2px}
 
-/* ============ BOTTOM NAV — FIXED, ALWAYS VISIBLE ============ */
 .nav{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);width:calc(100% - 32px);max-width:406px;background:rgba(14,11,5,.95);border:1.5px solid rgba(255,215,0,.28);border-radius:30px;display:flex;justify-content:space-around;padding:8px 6px;z-index:9999;backdrop-filter:blur(24px);box-shadow:0 8px 32px rgba(0,0,0,.6),0 0 0 1px rgba(255,215,0,.05) inset;pointer-events:auto;will-change:transform}
 .ni{flex:1;display:flex;flex-direction:column;align-items:center;padding:9px 4px;border-radius:22px;color:#a08c4a;cursor:pointer;gap:4px;transition:all .25s;position:relative}
 .ni i{font-size:1.4rem;transition:transform .25s}
@@ -134,7 +133,6 @@ body{font-family:'Outfit',sans-serif;background:#08060a;color:#fff;min-height:10
 .ni.active i{transform:scale(1.05)}
 .ni:not(.active):hover{color:#ffd966;background:rgba(255,215,0,.06)}
 
-/* ============ MINI PLAYER — FIXED ============ */
 .mini-player{position:fixed;bottom:92px;left:50%;transform:translateX(-50%) translateY(20px);width:calc(100% - 32px);max-width:406px;background:rgba(20,16,8,.96);border:1.5px solid rgba(255,215,0,.32);border-radius:22px;display:none;align-items:center;gap:12px;padding:11px 14px;z-index:9998;backdrop-filter:blur(24px);box-shadow:0 -8px 40px rgba(255,180,0,.12),0 8px 24px rgba(0,0,0,.5);opacity:0;transition:all .35s cubic-bezier(.4,0,.2,1);pointer-events:auto}
 .mini-player.on{display:flex;opacity:1;transform:translateX(-50%) translateY(0)}
 .mini-cover{width:46px;height:46px;border-radius:14px;background:linear-gradient(145deg,#221b0a,#1a1508);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;overflow:hidden;border:1px solid rgba(255,215,0,.2)}
@@ -230,6 +228,8 @@ body{font-family:'Outfit',sans-serif;background:#08060a;color:#fff;min-height:10
 .empty-state .icon{font-size:52px;margin-bottom:16px;opacity:.7}
 .empty-state .title{font-weight:900;font-size:1.1rem;color:#fff;letter-spacing:-.3px}
 .empty-state .sub{font-size:.85rem;color:#7a6e4a;margin-top:6px;line-height:1.5;font-weight:500}
+
+.offline-check{color:#25D366;font-size:.7rem;margin-left:4px;vertical-align:middle}
 </style>
 </head>
 <body>
@@ -276,6 +276,14 @@ body{font-family:'Outfit',sans-serif;background:#08060a;color:#fff;min-height:10
         </div>
         <i class="fas fa-download"></i>
       </a>
+
+      <div class="app-download" style="background:linear-gradient(135deg,rgba(37,211,102,.12),rgba(10,127,90,.08));border-color:rgba(37,211,102,.35);cursor:default">
+        <div class="app-download-icon" style="background:linear-gradient(135deg,#0a7f5a,#25D366)"><i class="fas fa-wifi"></i></div>
+        <div class="app-download-info">
+          <div class="ad-title" style="color:#25D366">Works Offline</div>
+          <div class="ad-sub">Tap ⬇️ on any song to save it for offline play</div>
+        </div>
+      </div>
 
       <div class="hero">
         <h3>Hello Yungee 👋</h3>
@@ -361,6 +369,11 @@ body{font-family:'Outfit',sans-serif;background:#08060a;color:#fff;min-height:10
           <div class="info"><div class="t">Share App</div><div class="a">afrodownload.site</div></div>
           <i class="fas fa-chevron-right" style="color:#7a6e4a"></i>
         </div>
+        <div class="item" id="clearCacheBtn" style="cursor:pointer">
+          <div class="ic"><i class="fas fa-broom" style="color:#25D366"></i></div>
+          <div class="info"><div class="t">Clear Offline Songs</div><div class="a">Free up storage space</div></div>
+          <i class="fas fa-chevron-right" style="color:#7a6e4a"></i>
+        </div>
         <div class="item" id="cloudSyncBtn" style="cursor:pointer;display:none">
           <div class="ic"><i class="fas fa-file-export" style="color:#66d9ff"></i></div>
           <div class="info"><div class="t">Update Public List</div><div class="a">Make songs visible to everyone</div></div>
@@ -374,11 +387,8 @@ body{font-family:'Outfit',sans-serif;background:#08060a;color:#fff;min-height:10
       </div>
     </div>
   </div>
-
-  <!-- NAV is now at the end of body (see bottom of file) -->
 </div>
 
-<!-- Mini Player moved OUTSIDE .app so it stays fixed -->
 <div class="mini-player" id="miniPlayer">
   <div class="mini-cover" id="miniCover">🎵</div>
   <div class="mini-info">
@@ -389,7 +399,6 @@ body{font-family:'Outfit',sans-serif;background:#08060a;color:#fff;min-height:10
   <button class="mini-btn" id="miniNext"><i class="fas fa-forward"></i></button>
 </div>
 
-<!-- Nav bar moved OUTSIDE .app so it stays fixed -->
 <div class="nav">
   <div class="ni active" data-s="home"><i class="fas fa-house"></i><span>Home</span></div>
   <div class="ni" data-s="search"><i class="fas fa-magnifying-glass"></i><span>Search</span></div>
@@ -494,6 +503,7 @@ var CLOUDINARY_CLOUD   = "lzgtyuhq";
 var CLOUDINARY_PRESET  = "YungeeFounder";
 var FOUNDER_PIN        = "4698";
 var REMOTE_LIBRARY_URL = "https://gist.githubusercontent.com/Afrodownload415/6faabc97ec5e5d983a7658ad75508a58/raw/Songs.json";
+var AUDIO_CACHE_NAME   = "afrodownload-audio-v1";
 
 var isFounder = sessionStorage.getItem('afro_founder') === 'true';
 var remoteSongs = [];
@@ -504,6 +514,7 @@ var songs = [];
 var cur = null, dTarget = null, delAct = null, isPlay = false, curIndex = 0;
 var isShuffle = false;
 var repeatMode = 0;
+var offlineCache = {};
 var aud = new Audio();
 var $ = function(id){ return document.getElementById(id); };
 
@@ -521,6 +532,35 @@ function esc(t){
   var d = document.createElement('div');
   d.textContent = t;
   return d.innerHTML;
+}
+
+function loadOfflineCache(){
+  if(!('caches' in window)) return;
+  caches.open(AUDIO_CACHE_NAME).then(function(cache){
+    cache.keys().then(function(requests){
+      offlineCache = {};
+      requests.forEach(function(req){
+        offlineCache[req.url] = true;
+      });
+      console.log('Offline songs cached:', Object.keys(offlineCache).length);
+      render();
+    });
+  }).catch(function(){});
+}
+
+function cacheAudio(url){
+  if(!('caches' in window) || !url || url.indexOf('http') !== 0) return;
+  caches.open(AUDIO_CACHE_NAME).then(function(cache){
+    cache.match(url).then(function(existing){
+      if(existing){ offlineCache[url] = true; return; }
+      fetch(url).then(function(response){
+        if(response && response.ok){
+          cache.put(url, response.clone());
+          offlineCache[url] = true;
+        }
+      }).catch(function(){});
+    });
+  }).catch(function(){});
 }
 
 function loadRemoteLibrary(cb){
@@ -561,9 +601,10 @@ function cardHtml(s){
   var cover = getCover(s);
   var favClass = isFav(s.id) ? 'ibtn fav-on' : 'ibtn';
   var heartIcon = isFav(s.id) ? '<i class="fas fa-heart"></i>' : '<i class="far fa-heart"></i>';
+  var offlineBadge = offlineCache[s.audio] ? ' <i class="fas fa-check-circle offline-check" title="Available offline"></i>' : '';
   return '<div class="card">' +
     '<div class="cv" onclick="play(' + s.id + ')">' + cover + '</div>' +
-    '<div class="ti">' + esc(s.title) + '</div>' +
+    '<div class="ti">' + esc(s.title) + offlineBadge + '</div>' +
     '<div class="ar">' + esc(s.artist) + '</div>' +
     '<div class="tag">Afrobeats</div>' +
     '<div class="acts">' +
@@ -580,10 +621,11 @@ function itemHtml(s, opts){
   var cover = getCover(s);
   var favClass = isFav(s.id) ? 'ibtn fav-on' : 'ibtn';
   var heartIcon = isFav(s.id) ? '<i class="fas fa-heart"></i>' : '<i class="far fa-heart"></i>';
+  var offlineBadge = offlineCache[s.audio] ? ' <i class="fas fa-check-circle offline-check" title="Available offline"></i>' : '';
   var html = '<div class="item">' +
     '<div class="ic">' + cover + '</div>' +
     '<div class="info">' +
-      '<div class="t">' + esc(s.title) + '</div>' +
+      '<div class="t">' + esc(s.title) + offlineBadge + '</div>' +
       '<div class="a">' + esc(s.artist) + '</div>' +
     '</div>' +
     '<button class="ibtn" onclick="play(' + s.id + ')"><i class="fas fa-play"></i></button>' +
@@ -724,6 +766,7 @@ window.play = function(id){
   aud.src = s.audio;
   aud.play().catch(function(){ toast('Tap play to start'); });
   isPlay = true;
+  cacheAudio(s.audio);
   if($('pt')) $('pt').textContent = s.title;
   if($('pr')) $('pr').textContent = s.artist;
   if($('pa')) $('pa').innerHTML = getCover(s);
@@ -933,6 +976,20 @@ function init(){
     });
   }
 
+  if($('clearCacheBtn')){
+    $('clearCacheBtn').addEventListener('click', function(){
+      if('caches' in window){
+        caches.delete(AUDIO_CACHE_NAME).then(function(){
+          offlineCache = {};
+          toast('Offline songs cleared');
+          render();
+        });
+      } else {
+        toast('Cache not available');
+      }
+    });
+  }
+
   if($('logoutBtn')){
     $('logoutBtn').addEventListener('click', function(){
       isFounder = false;
@@ -978,6 +1035,7 @@ function init(){
       if(!dTarget) return;
       if(downs.indexOf(dTarget.id) === -1){ downs.push(dTarget.id); localStorage.setItem('afro_downs', JSON.stringify(downs)); }
       if(dTarget.audio){
+        cacheAudio(dTarget.audio);
         toast('Starting download...');
         var a = document.createElement('a');
         a.href = dTarget.audio;
@@ -1159,6 +1217,7 @@ function init(){
 }
 
 function boot(){
+  loadOfflineCache();
   loadRemoteLibrary(function(){
     init();
     updateFounderUI();
@@ -1174,6 +1233,18 @@ if(document.readyState === 'loading'){
 }
 
 })();
+</script>
+
+<script>
+if('serviceWorker' in navigator){
+  window.addEventListener('load', function(){
+    navigator.serviceWorker.register('/sw.js').then(function(reg){
+      console.log('Service Worker registered:', reg.scope);
+    }).catch(function(err){
+      console.log('Service Worker failed:', err);
+    });
+  });
+}
 </script>
 
 <!-- Cloudflare Web Analytics -->
