@@ -38,6 +38,37 @@ body{font-family:'Outfit',sans-serif;background:#08060a;color:#fff;min-height:10
 .screen.on{display:block;animation:screenIn .35s cubic-bezier(.4,0,.2,1)}
 @keyframes screenIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
 
+/* ===== ARTIST OF THE WEEK ===== */
+.aotw{position:relative;background:linear-gradient(145deg,#2a1f0a 0%,#1a1408 50%,#221a08 100%);border:1.5px solid rgba(255,215,0,.4);border-radius:28px;padding:24px 20px;margin:6px 0 20px;overflow:hidden;box-shadow:0 12px 40px rgba(255,180,0,.15)}
+.aotw::before{content:'';position:absolute;top:-40%;right:-20%;width:220px;height:220px;background:radial-gradient(circle,rgba(255,215,0,.25),transparent 65%);border-radius:50%;pointer-events:none}
+.aotw::after{content:'';position:absolute;bottom:-50%;left:-15%;width:200px;height:200px;background:radial-gradient(circle,rgba(255,140,0,.15),transparent 70%);border-radius:50%;pointer-events:none}
+.aotw-label{display:inline-flex;align-items:center;gap:6px;background:linear-gradient(135deg,#f5b400,#ffd966);color:#0a0806;font-weight:900;font-size:.65rem;padding:5px 12px;border-radius:100px;letter-spacing:.6px;text-transform:uppercase;margin-bottom:16px;position:relative;z-index:1;box-shadow:0 4px 12px rgba(255,180,0,.4)}
+.aotw-top{display:flex;align-items:center;gap:16px;position:relative;z-index:1;margin-bottom:16px}
+.aotw-photo{width:90px;height:90px;border-radius:50%;background:linear-gradient(135deg,#f5b400,#ffd966);flex-shrink:0;overflow:hidden;border:3px solid rgba(255,215,0,.5);box-shadow:0 8px 24px rgba(255,180,0,.4)}
+.aotw-photo img{width:100%;height:100%;object-fit:cover}
+.aotw-photo-fallback{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:40px;font-weight:900;color:#0a0806}
+.aotw-info{flex:1;min-width:0}
+.aotw-name{font-size:1.4rem;font-weight:900;color:#fff;letter-spacing:-.5px;line-height:1.1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.aotw-tagline{color:#ffd966;font-size:.85rem;font-weight:700;margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.aotw-bio{color:rgba(255,255,255,.7);font-size:.85rem;font-weight:500;line-height:1.5;margin-bottom:16px;position:relative;z-index:1}
+.aotw-actions{display:flex;gap:10px;position:relative;z-index:1;flex-wrap:wrap}
+.aotw-play{display:flex;align-items:center;gap:8px;background:linear-gradient(135deg,#f5b400,#ffd966);color:#0a0806;font-weight:900;padding:12px 22px;border-radius:100px;border:none;cursor:pointer;font-size:.9rem;font-family:'Outfit',sans-serif;box-shadow:0 6px 20px rgba(255,180,0,.4);transition:all .2s;flex:1;justify-content:center;min-width:140px}
+.aotw-play:hover{transform:scale(1.03);box-shadow:0 8px 28px rgba(255,180,0,.6)}
+.aotw-play i{font-size:.85rem}
+.aotw-social{display:flex;gap:8px}
+.aotw-social a{width:42px;height:42px;border-radius:50%;background:rgba(255,215,0,.1);border:1.5px solid rgba(255,215,0,.25);color:#ffd966;display:flex;align-items:center;justify-content:center;font-size:1rem;transition:all .2s;text-decoration:none}
+.aotw-social a:hover{background:rgba(255,215,0,.22);transform:scale(1.08)}
+.aotw-songs{margin-top:20px;padding-top:18px;border-top:1px solid rgba(255,215,0,.12);position:relative;z-index:1}
+.aotw-songs-title{font-size:.7rem;color:#b8a87a;font-weight:800;letter-spacing:1px;text-transform:uppercase;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.aotw-song{display:flex;align-items:center;gap:12px;padding:10px;border-radius:14px;margin-bottom:6px;cursor:pointer;transition:all .2s;background:rgba(0,0,0,.25);border:1px solid rgba(255,215,0,.08)}
+.aotw-song:hover{background:rgba(255,215,0,.1);border-color:rgba(255,215,0,.3);transform:translateX(4px)}
+.aotw-song .as-cover{width:40px;height:40px;border-radius:10px;background:#221b0a;display:flex;align-items:center;justify-content:center;font-size:18px;overflow:hidden;flex-shrink:0}
+.aotw-song .as-cover img{width:100%;height:100%;object-fit:cover}
+.aotw-song .as-info{flex:1;min-width:0}
+.aotw-song .as-title{font-weight:700;font-size:.88rem;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.aotw-song .as-play{color:#ffd966;font-size:1rem}
+
+/* ===== DOWNLOAD APP BANNER ===== */
 .app-download{display:flex;align-items:center;gap:14px;background:linear-gradient(135deg,rgba(245,180,0,.12),rgba(255,217,102,.08));border:1.5px solid rgba(255,215,0,.35);border-radius:22px;padding:16px 18px;margin:6px 0 18px;text-decoration:none;color:#fff;transition:all .25s;position:relative;overflow:hidden}
 .app-download::before{content:'';position:absolute;top:-50%;right:-20%;width:150px;height:150px;background:radial-gradient(circle,rgba(255,215,0,.2),transparent 70%);border-radius:50%;pointer-events:none}
 .app-download:hover{background:linear-gradient(135deg,rgba(245,180,0,.2),rgba(255,217,102,.15));transform:translateY(-2px);box-shadow:0 8px 24px rgba(255,180,0,.2)}
@@ -267,6 +298,24 @@ body{font-family:'Outfit',sans-serif;background:#08060a;color:#fff;min-height:10
         <span class="filter-pill" data-f="amapiano">Amapiano</span>
       </div>
 
+      <!-- ARTIST OF THE WEEK -->
+      <div class="aotw" id="aotwContainer">
+        <span class="aotw-label">⭐ Artist of the Week</span>
+        <div class="aotw-top">
+          <div class="aotw-photo" id="aotwPhoto"></div>
+          <div class="aotw-info">
+            <div class="aotw-name" id="aotwName">Featured Artist</div>
+            <div class="aotw-tagline" id="aotwTagline"></div>
+          </div>
+        </div>
+        <p class="aotw-bio" id="aotwBio"></p>
+        <div class="aotw-actions">
+          <button class="aotw-play" id="aotwPlay"><i class="fas fa-play"></i> Play Featured</button>
+          <div class="aotw-social" id="aotwSocial"></div>
+        </div>
+        <div class="aotw-songs" id="aotwSongs"></div>
+      </div>
+
       <a href="/app-release.apk" download class="app-download">
         <div class="app-download-icon"><i class="fas fa-mobile-screen-button"></i></div>
         <div class="app-download-info">
@@ -276,14 +325,6 @@ body{font-family:'Outfit',sans-serif;background:#08060a;color:#fff;min-height:10
         </div>
         <i class="fas fa-download"></i>
       </a>
-
-      <div class="app-download" style="background:linear-gradient(135deg,rgba(37,211,102,.12),rgba(10,127,90,.08));border-color:rgba(37,211,102,.35);cursor:default">
-        <div class="app-download-icon" style="background:linear-gradient(135deg,#0a7f5a,#25D366)"><i class="fas fa-wifi"></i></div>
-        <div class="app-download-info">
-          <div class="ad-title" style="color:#25D366">Works Offline</div>
-          <div class="ad-sub">Tap ⬇️ on any song to save it for offline play</div>
-        </div>
-      </div>
 
       <div class="hero">
         <h3>Hello Yungee 👋</h3>
@@ -499,6 +540,23 @@ body{font-family:'Outfit',sans-serif;background:#08060a;color:#fff;min-height:10
 (function(){
 "use strict";
 
+// ═══════════════════════════════════════════════════════════════
+// ⭐ ARTIST OF THE WEEK — CHANGE THIS EVERY WEEK ⭐
+// ═══════════════════════════════════════════════════════════════
+var ARTIST_OF_WEEK = {
+  name: "Yungee",
+  tagline: "Afrobeats Producer & Artist · Kumasi",
+  bio: "Blending traditional Ghanaian rhythms with modern Afro vibes. Every track tells a story of home, love, and hustle.",
+  photo: "logo.png",  // ← Replace with artist photo URL later
+  featuredTrack: "",  // ← Leave empty to play first matching song
+  socials: {
+    instagram: "",    // ← Instagram URL or leave empty
+    tiktok: "",       // ← TikTok URL or leave empty
+    youtube: ""       // ← YouTube URL or leave empty
+  }
+};
+// ═══════════════════════════════════════════════════════════════
+
 var CLOUDINARY_CLOUD   = "lzgtyuhq";
 var CLOUDINARY_PRESET  = "YungeeFounder";
 var FOUNDER_PIN        = "4698";
@@ -539,9 +597,7 @@ function loadOfflineCache(){
   caches.open(AUDIO_CACHE_NAME).then(function(cache){
     cache.keys().then(function(requests){
       offlineCache = {};
-      requests.forEach(function(req){
-        offlineCache[req.url] = true;
-      });
+      requests.forEach(function(req){ offlineCache[req.url] = true; });
       console.log('Offline songs cached:', Object.keys(offlineCache).length);
       render();
     });
@@ -596,6 +652,97 @@ function getCover(s){
   if(s.coverImg) return '<img src="' + esc(s.coverImg) + '" onerror="this.src=\'logo.png\'">';
   return '<img src="logo.png">';
 }
+
+// ═══════════════════════════════════════════════════════════════
+// ARTIST OF THE WEEK RENDER
+// ═══════════════════════════════════════════════════════════════
+function renderArtistOfWeek(){
+  var a = ARTIST_OF_WEEK;
+  if(!a || !a.name){ return; }
+
+  // Photo
+  var photoEl = $('aotwPhoto');
+  if(photoEl){
+    if(a.photo){
+      photoEl.innerHTML = '<img src="' + esc(a.photo) + '" onerror="this.parentElement.innerHTML=\'<div class=&quot;aotw-photo-fallback&quot;>' + esc(a.name.charAt(0).toUpperCase()) + '</div>\'">';
+    } else {
+      photoEl.innerHTML = '<div class="aotw-photo-fallback">' + esc(a.name.charAt(0).toUpperCase()) + '</div>';
+    }
+  }
+
+  // Name + Tagline + Bio
+  if($('aotwName')) $('aotwName').textContent = a.name;
+  if($('aotwTagline')) $('aotwTagline').textContent = a.tagline || '';
+  if($('aotwBio')) $('aotwBio').textContent = a.bio || '';
+
+  // Socials
+  var socialEl = $('aotwSocial');
+  if(socialEl){
+    var s = '';
+    if(a.socials && a.socials.instagram) s += '<a href="' + esc(a.socials.instagram) + '" target="_blank" title="Instagram"><i class="fab fa-instagram"></i></a>';
+    if(a.socials && a.socials.tiktok) s += '<a href="' + esc(a.socials.tiktok) + '" target="_blank" title="TikTok"><i class="fab fa-tiktok"></i></a>';
+    if(a.socials && a.socials.youtube) s += '<a href="' + esc(a.socials.youtube) + '" target="_blank" title="YouTube"><i class="fab fa-youtube"></i></a>';
+    socialEl.innerHTML = s;
+  }
+
+  // Featured song — find songs by this artist
+  var artistSongs = songs.filter(function(s){
+    return s.artist && s.artist.toLowerCase() === a.name.toLowerCase();
+  });
+
+  // If no exact match, try partial match
+  if(!artistSongs.length){
+    artistSongs = songs.filter(function(s){
+      return s.artist && s.artist.toLowerCase().indexOf(a.name.toLowerCase()) !== -1;
+    });
+  }
+
+  // Featured play button
+  var playBtn = $('aotwPlay');
+  if(playBtn){
+    if(artistSongs.length){
+      playBtn.style.display = 'flex';
+      playBtn.onclick = function(){
+        var targetSong = artistSongs[0];
+        if(a.featuredTrack){
+          var found = artistSongs.find(function(s){ return s.title.indexOf(a.featuredTrack) !== -1; });
+          if(found) targetSong = found;
+        }
+        play(targetSong.id);
+      };
+    } else {
+      playBtn.style.display = 'none';
+    }
+  }
+
+  // Songs list
+  var songsEl = $('aotwSongs');
+  if(songsEl){
+    if(artistSongs.length){
+      var list = artistSongs.slice(0, 5).map(function(s){
+        var cover = getCover(s);
+        return '<div class="aotw-song" data-aid="' + s.id + '">' +
+          '<div class="as-cover">' + cover + '</div>' +
+          '<div class="as-info">' +
+            '<div class="as-title">' + esc(s.title) + '</div>' +
+          '</div>' +
+          '<i class="fas fa-play as-play"></i>' +
+        '</div>';
+      }).join('');
+      songsEl.innerHTML = '<div class="aotw-songs-title"><i class="fas fa-headphones"></i> Featured Tracks</div>' + list;
+      // Wire up clicks
+      songsEl.querySelectorAll('.aotw-song').forEach(function(el){
+        el.addEventListener('click', function(){
+          play(parseInt(el.dataset.aid, 10));
+        });
+      });
+    } else {
+      songsEl.innerHTML = '<div class="aotw-songs-title"><i class="fas fa-headphones"></i> Featured Tracks</div>' +
+        '<div style="color:#7a6e4a;font-size:.85rem;padding:8px 0;text-align:center">No tracks found for this artist</div>';
+    }
+  }
+}
+// ═══════════════════════════════════════════════════════════════
 
 function cardHtml(s){
   var cover = getCover(s);
@@ -693,6 +840,7 @@ function renderQueue(){
 
 function render(){
   rebuildSongs();
+  renderArtistOfWeek();
   if($('uc')) $('uc').textContent = ups.length + ' songs';
   if($('uc2')) $('uc2').textContent = songs.length + ' songs';
   if($('ht')) $('ht').textContent = songs.length + ' tracks';
@@ -1238,11 +1386,7 @@ if(document.readyState === 'loading'){
 <script>
 if('serviceWorker' in navigator){
   window.addEventListener('load', function(){
-    navigator.serviceWorker.register('/sw.js').then(function(reg){
-      console.log('Service Worker registered:', reg.scope);
-    }).catch(function(err){
-      console.log('Service Worker failed:', err);
-    });
+    navigator.serviceWorker.register('/sw.js').catch(function(){});
   });
 }
 </script>
