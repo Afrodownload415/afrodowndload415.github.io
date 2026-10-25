@@ -1,1436 +1,377 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-<title>AfroDownload · Yellow Gold</title>
-<link rel="icon" type="image/png" href="logo.png">
-<link rel="manifest" href="manifest.json">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700;800;900&display=swap" rel="stylesheet">
-<style>
-*{margin:0;padding:0;box-sizing:border-box}
-html,body{overflow-x:clip!important}
-body{font-family:'Outfit',sans-serif;background:#08060a;color:#fff;min-height:100vh;display:flex;justify-content:center;-webkit-tap-highlight-color:transparent}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Music Player Redesign</title>
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-dark: #0a0a0a;
+            --surface: #1a1a1a;
+            --primary-yellow: #ffd000;
+            --text-main: #ffffff;
+            --text-muted: #a0a0a0;
+            --slider-bg: #333333;
+        }
 
-.bg-glow{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
-.bg-glow::before{content:'';position:absolute;top:-30%;left:-20%;width:70vw;height:70vw;max-width:600px;max-height:600px;background:radial-gradient(circle,rgba(255,215,0,.28),transparent 65%);filter:blur(80px);animation:drift1 22s ease-in-out infinite}
-.bg-glow::after{content:'';position:absolute;bottom:-30%;right:-20%;width:70vw;height:70vw;max-width:600px;max-height:600px;background:radial-gradient(circle,rgba(245,140,0,.22),transparent 65%);filter:blur(80px);animation:drift2 26s ease-in-out infinite}
-@keyframes drift1{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(60px,40px) scale(1.15)}}
-@keyframes drift2{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(-50px,-60px) scale(1.1)}}
-.bg-glow .grain{position:absolute;inset:0;opacity:.035;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");mix-blend-mode:overlay}
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
 
-.app{width:100%;max-width:440px;background:linear-gradient(180deg,rgba(12,10,6,.98) 0%,rgba(8,6,3,.98) 100%);min-height:100vh;display:flex;flex-direction:column;position:relative;z-index:1;border-left:1px solid rgba(255,215,0,.12);border-right:1px solid rgba(255,215,0,.12);box-shadow:0 0 80px rgba(255,180,0,.08);overflow-x:hidden}
+        body {
+            background-color: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            color: var(--text-main);
+        }
 
-.top{padding:20px 22px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:40;background:linear-gradient(180deg,rgba(8,6,3,.98) 0%,rgba(8,6,3,.85) 70%,transparent 100%);backdrop-filter:blur(20px)}
-.top-left{display:flex;align-items:center;gap:12px}
-.top-left img{width:44px;height:44px;border-radius:14px;object-fit:cover;border:1.5px solid rgba(255,215,0,.35);box-shadow:0 4px 16px rgba(255,180,0,.2)}
-.top h2{font-weight:900;font-size:1.6rem;letter-spacing:-.5px;background:linear-gradient(135deg,#fff 0%,#ffd966 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.top-right{display:flex;align-items:center;gap:10px}
-.founder-badge{background:linear-gradient(135deg,#f5b400,#ffd966);color:#0a0806;font-weight:900;font-size:.65rem;padding:5px 11px;border-radius:20px;letter-spacing:.6px;display:none;text-transform:uppercase;box-shadow:0 4px 12px rgba(255,180,0,.4)}
-.founder-badge.on{display:inline-block}
-.icon-btn{width:44px;height:44px;border-radius:14px;background:rgba(255,215,0,.08);border:1px solid rgba(255,215,0,.2);color:#ffd966;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:1rem;transition:all .2s}
-.icon-btn:hover{background:rgba(255,215,0,.18);transform:scale(1.05)}
+        /* Mobile App Container */
+        .app-container {
+            width: 100%;
+            max-width: 400px;
+            height: 100vh;
+            max-height: 850px;
+            background-color: var(--bg-dark);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+            /* Optional: subtle border to show device bounds on desktop */
+            border: 1px solid #333; 
+        }
 
-.screens{flex:1;overflow-y:auto;overflow-x:hidden;padding:0 20px 220px;scroll-behavior:smooth;-webkit-overflow-scrolling:touch}
-.screens::-webkit-scrollbar{display:none}
-.screen{display:none}
-.screen.on{display:block;animation:screenIn .35s cubic-bezier(.4,0,.2,1)}
-@keyframes screenIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+        /* --- Header --- */
+        .header {
+            display: flex;
+            justify-content: flex-end;
+            padding: 24px;
+            z-index: 10;
+        }
 
-.aotw{position:relative;background:linear-gradient(145deg,#2a1f0a 0%,#1a1408 50%,#221a08 100%);border:1.5px solid rgba(255,215,0,.4);border-radius:28px;padding:24px 20px;margin:6px 0 20px;overflow:hidden;box-shadow:0 12px 40px rgba(255,180,0,.15)}
-.aotw::before{content:'';position:absolute;top:-40%;right:-20%;width:220px;height:220px;background:radial-gradient(circle,rgba(255,215,0,.25),transparent 65%);border-radius:50%;pointer-events:none}
-.aotw::after{content:'';position:absolute;bottom:-50%;left:-15%;width:200px;height:200px;background:radial-gradient(circle,rgba(255,140,0,.15),transparent 70%);border-radius:50%;pointer-events:none}
-.aotw-label{display:inline-flex;align-items:center;gap:6px;background:linear-gradient(135deg,#f5b400,#ffd966);color:#0a0806;font-weight:900;font-size:.65rem;padding:5px 12px;border-radius:100px;letter-spacing:.6px;text-transform:uppercase;margin-bottom:16px;position:relative;z-index:1;box-shadow:0 4px 12px rgba(255,180,0,.4)}
-.aotw-top{display:flex;align-items:center;gap:16px;position:relative;z-index:1;margin-bottom:16px}
-.aotw-photo{width:90px;height:90px;border-radius:50%;background:linear-gradient(135deg,#f5b400,#ffd966);flex-shrink:0;overflow:hidden;border:3px solid rgba(255,215,0,.5);box-shadow:0 8px 24px rgba(255,180,0,.4)}
-.aotw-photo img{width:100%;height:100%;object-fit:cover}
-.aotw-photo-fallback{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:40px;font-weight:900;color:#0a0806}
-.aotw-info{flex:1;min-width:0}
-.aotw-name{font-size:1.4rem;font-weight:900;color:#fff;letter-spacing:-.5px;line-height:1.1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.aotw-tagline{color:#ffd966;font-size:.85rem;font-weight:700;margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.aotw-bio{color:rgba(255,255,255,.7);font-size:.85rem;font-weight:500;line-height:1.5;margin-bottom:16px;position:relative;z-index:1}
-.aotw-actions{display:flex;gap:10px;position:relative;z-index:1;flex-wrap:wrap}
-.aotw-play{display:flex;align-items:center;gap:8px;background:linear-gradient(135deg,#f5b400,#ffd966);color:#0a0806;font-weight:900;padding:12px 22px;border-radius:100px;border:none;cursor:pointer;font-size:.9rem;font-family:'Outfit',sans-serif;box-shadow:0 6px 20px rgba(255,180,0,.4);transition:all .2s;flex:1;justify-content:center;min-width:140px}
-.aotw-play:hover{transform:scale(1.03);box-shadow:0 8px 28px rgba(255,180,0,.6)}
-.aotw-play i{font-size:.85rem}
-.aotw-social{display:flex;gap:8px}
-.aotw-social a{width:42px;height:42px;border-radius:50%;background:rgba(255,215,0,.1);border:1.5px solid rgba(255,215,0,.25);color:#ffd966;display:flex;align-items:center;justify-content:center;font-size:1rem;transition:all .2s;text-decoration:none}
-.aotw-social a:hover{background:rgba(255,215,0,.22);transform:scale(1.08)}
-.aotw-songs{margin-top:20px;padding-top:18px;border-top:1px solid rgba(255,215,0,.12);position:relative;z-index:1}
-.aotw-songs-title{font-size:.7rem;color:#b8a87a;font-weight:800;letter-spacing:1px;text-transform:uppercase;margin-bottom:12px;display:flex;align-items:center;gap:8px}
-.aotw-song{display:flex;align-items:center;gap:12px;padding:10px;border-radius:14px;margin-bottom:6px;cursor:pointer;transition:all .2s;background:rgba(0,0,0,.25);border:1px solid rgba(255,215,0,.08)}
-.aotw-song:hover{background:rgba(255,215,0,.1);border-color:rgba(255,215,0,.3);transform:translateX(4px)}
-.aotw-song .as-cover{width:40px;height:40px;border-radius:10px;background:#221b0a;display:flex;align-items:center;justify-content:center;font-size:18px;overflow:hidden;flex-shrink:0}
-.aotw-song .as-cover img{width:100%;height:100%;object-fit:cover}
-.aotw-song .as-info{flex:1;min-width:0}
-.aotw-song .as-title{font-weight:700;font-size:.88rem;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.aotw-song .as-play{color:#ffd966;font-size:1rem}
+        .close-btn {
+            background: rgba(255, 208, 0, 0.1);
+            color: var(--primary-yellow);
+            border: 1px solid rgba(255, 208, 0, 0.3);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: 0.2s ease;
+        }
 
-.app-download{display:flex;align-items:center;gap:14px;background:linear-gradient(135deg,rgba(245,180,0,.12),rgba(255,217,102,.08));border:1.5px solid rgba(255,215,0,.35);border-radius:22px;padding:16px 18px;margin:6px 0 18px;text-decoration:none;color:#fff;transition:all .25s;position:relative;overflow:hidden}
-.app-download::before{content:'';position:absolute;top:-50%;right:-20%;width:150px;height:150px;background:radial-gradient(circle,rgba(255,215,0,.2),transparent 70%);border-radius:50%;pointer-events:none}
-.app-download:hover{background:linear-gradient(135deg,rgba(245,180,0,.2),rgba(255,217,102,.15));transform:translateY(-2px);box-shadow:0 8px 24px rgba(255,180,0,.2)}
-.app-download-icon{width:52px;height:52px;border-radius:16px;background:linear-gradient(135deg,#f5b400,#ffd966);color:#0a0806;display:flex;align-items:center;justify-content:center;font-size:1.5rem;flex-shrink:0;box-shadow:0 4px 16px rgba(255,180,0,.4);position:relative;z-index:1}
-.app-download-info{flex:1;position:relative;z-index:1}
-.app-download-info .ad-title{font-weight:900;font-size:1rem;color:#ffd966;letter-spacing:-.2px}
-.app-download-info .ad-sub{font-size:.78rem;color:#b8a87a;font-weight:600;margin-top:3px}
-.app-download-info .ad-badge{display:inline-block;background:linear-gradient(135deg,#0a7f5a,#25D366);color:#fff;font-weight:800;font-size:.6rem;padding:3px 8px;border-radius:100px;letter-spacing:.4px;margin-top:5px;text-transform:uppercase}
-.app-download > i{color:#ffd966;font-size:1.1rem;position:relative;z-index:1}
+        .close-btn:hover {
+            background: rgba(255, 208, 0, 0.2);
+        }
 
-.hero{position:relative;background:linear-gradient(145deg,#1c1608 0%,#251c0a 60%,#1a1408 100%);border:1px solid rgba(255,215,0,.22);border-radius:28px;padding:26px 24px;margin:6px 0 22px;overflow:hidden}
-.hero::before{content:'';position:absolute;top:-50%;right:-30%;width:280px;height:280px;background:radial-gradient(circle,rgba(255,215,0,.22),transparent 65%);border-radius:50%;pointer-events:none}
-.hero::after{content:'';position:absolute;bottom:-60%;left:-20%;width:220px;height:220px;background:radial-gradient(circle,rgba(255,140,0,.12),transparent 70%);border-radius:50%;pointer-events:none}
-.hero h3{font-size:1.75rem;font-weight:900;color:#ffd966;letter-spacing:-.5px;position:relative;z-index:1}
-.hero p{color:rgba(255,255,255,.7);margin-top:6px;font-size:.92rem;position:relative;z-index:1;font-weight:500}
-.hero .badges{margin-top:16px;display:flex;gap:10px;flex-wrap:wrap;position:relative;z-index:1}
-.hero .badge{background:rgba(0,0,0,.45);border:1px solid rgba(255,215,0,.25);padding:8px 16px;border-radius:100px;font-size:.82rem;font-weight:700;color:#ffd966;display:inline-flex;align-items:center;gap:7px;backdrop-filter:blur(8px)}
-.hero .badge i{font-size:.75rem}
+        /* --- Main Player Area --- */
+        .player-main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 0 24px;
+            overflow-y: auto;
+        }
 
-.filters{display:flex;gap:8px;overflow-x:auto;padding:2px 0 16px;scrollbar-width:none}
-.filters::-webkit-scrollbar{display:none}
-.filter-pill{background:rgba(255,215,0,.06);border:1px solid rgba(255,215,0,.15);color:#a08c4a;font-weight:700;font-size:.82rem;padding:9px 18px;border-radius:100px;white-space:nowrap;cursor:pointer;transition:all .25s;flex-shrink:0;display:inline-flex;align-items:center;gap:6px}
-.filter-pill.active{background:linear-gradient(135deg,#f5b400,#ffd966);color:#0a0806;border-color:transparent;box-shadow:0 4px 16px rgba(255,180,0,.35)}
-.pill-count{font-size:.7rem;opacity:.7;margin-left:2px;font-weight:700}
-.filter-pill.active .pill-count{opacity:1}
+        /* Artwork */
+        .artwork-container {
+            display: flex;
+            justify-content: center;
+            margin: 10px 0 30px;
+        }
 
-.upload{position:relative;border:2px dashed rgba(255,215,0,.4);background:linear-gradient(145deg,rgba(255,215,0,.05),rgba(255,215,0,.02));border-radius:24px;padding:26px 20px;text-align:center;cursor:pointer;margin-bottom:18px;transition:all .25s;overflow:hidden}
-.upload::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at center,rgba(255,215,0,.08),transparent 70%);pointer-events:none}
-.upload:hover{background:linear-gradient(145deg,rgba(255,215,0,.1),rgba(255,215,0,.04));border-color:rgba(255,215,0,.6);transform:translateY(-2px)}
-.upload i{font-size:42px;color:#ffd966;position:relative;z-index:1;filter:drop-shadow(0 4px 12px rgba(255,180,0,.4))}
-.upload .ut{font-weight:900;font-size:1.15rem;margin-top:10px;color:#fff;position:relative;z-index:1}
-.upload .us{font-size:.82rem;color:#b8a87a;font-weight:500;margin-top:4px;position:relative;z-index:1}
-.upload.locked{border-color:rgba(255,107,107,.45);background:linear-gradient(145deg,rgba(255,107,107,.05),rgba(255,107,107,.02))}
-.upload.locked i{color:#ff6b6b}
-.upload.locked .ut{color:#ff6b6b}
+        .artwork {
+            width: 260px;
+            height: 260px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid rgba(255, 208, 0, 0.3);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            /* Placeholder gradient if image fails */
+            background: linear-gradient(45deg, #444, #888);
+        }
 
-.upload-progress{display:none;margin-top:14px;background:rgba(0,0,0,.6);border:1px solid rgba(255,215,0,.2);border-radius:20px;padding:14px 18px}
-.upload-progress.on{display:block}
-.upload-progress .status{display:flex;align-items:center;gap:10px;font-size:.85rem;color:#ffd966;font-weight:700}
-.upload-progress .bar{height:6px;background:rgba(255,215,0,.15);border-radius:10px;overflow:hidden;margin-top:10px}
-.upload-progress .bar-fill{height:100%;background:linear-gradient(90deg,#f5b400,#ffd966);width:0%;transition:width .3s;border-radius:10px;box-shadow:0 0 12px rgba(255,180,0,.6)}
-.spinner{display:inline-block;width:16px;height:16px;border:2px solid rgba(255,215,0,.3);border-top-color:#ffd966;border-radius:50%;animation:spin .8s linear infinite}
-@keyframes spin{to{transform:rotate(360deg)}}
+        /* Track Info */
+        .track-info {
+            text-align: center;
+            margin-bottom: 25px;
+        }
 
-.sec{display:flex;justify-content:space-between;align-items:center;margin:26px 0 14px}
-.sec h4{font-weight:900;font-size:1.2rem;color:#fff;display:flex;align-items:center;gap:8px;letter-spacing:-.3px}
-.sec h4 i{color:#ffd966;font-size:1rem}
-.sec span{color:#ffd966;font-size:.8rem;font-weight:800;cursor:pointer;background:rgba(255,215,0,.08);padding:7px 14px;border-radius:100px;border:1px solid rgba(255,215,0,.18);transition:all .2s}
-.sec span:hover{background:rgba(255,215,0,.18)}
+        .track-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 6px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
 
-.album-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;padding:2px 0 12px}
-.card{background:linear-gradient(160deg,#141008 0%,#1a1408 100%);border:1px solid rgba(255,215,0,.15);border-radius:22px;padding:12px;position:relative;transition:all .28s cubic-bezier(.4,0,.2,1);overflow:hidden}
-.card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,215,0,.4),transparent);opacity:0;transition:opacity .3s}
-.card:hover{border-color:rgba(255,215,0,.4);box-shadow:0 12px 32px rgba(255,180,0,.15);transform:translateY(-4px)}
-.card:hover::before{opacity:1}
-.card:active{transform:scale(.98)}
-.card .cv{width:100%;aspect-ratio:1;border-radius:16px;background:linear-gradient(145deg,#221b0a,#1a1508);display:flex;align-items:center;justify-content:center;font-size:44px;border:1px solid rgba(255,215,0,.12);cursor:pointer;overflow:hidden;position:relative}
-.card .cv img{width:100%;height:100%;object-fit:cover;transition:transform .5s}
-.card:hover .cv img{transform:scale(1.06)}
-.card .ti{font-weight:800;font-size:.95rem;margin-top:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#fff;letter-spacing:-.2px}
-.card .ar{font-size:.78rem;color:#b8a87a;font-weight:600;margin-top:2px}
-.card .tag{display:inline-block;background:linear-gradient(135deg,#f5b400,#ffd966);color:#0a0806;font-weight:800;font-size:.55rem;padding:3px 9px;border-radius:100px;margin-top:8px;letter-spacing:.6px;text-transform:uppercase;box-shadow:0 2px 8px rgba(255,180,0,.3)}
-.acts{display:flex;justify-content:space-between;margin-top:12px;gap:6px}
+        .track-artist {
+            font-size: 1rem;
+            color: var(--primary-yellow);
+            font-weight: 500;
+        }
 
-.ibtn{background:rgba(255,215,0,.08);border:1px solid rgba(255,215,0,.15);color:#ffd966;width:36px;height:36px;border-radius:12px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .2s;font-size:.9rem;flex-shrink:0}
-.ibtn:hover{background:rgba(255,215,0,.2);transform:scale(1.08)}
-.ibtn:active{transform:scale(.95)}
-.ibtn.del{color:#ff6b6b;border-color:rgba(255,107,107,.2)}
-.ibtn.del:hover{background:rgba(255,107,107,.15)}
-.ibtn.fav-on{color:#ff6b6b;background:rgba(255,107,107,.15);border-color:rgba(255,107,107,.4)}
-.ibtn.active-mode{color:#0a0806;background:linear-gradient(135deg,#f5b400,#ffd966);border-color:transparent}
+        /* --- Secondary Controls (Like, Shuffle, Repeat) --- */
+        .secondary-controls {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: 0 20px;
+            margin-bottom: 20px;
+            color: var(--text-muted);
+        }
 
-.search{background:linear-gradient(160deg,#141008,#1a1408);border:1.5px solid rgba(255,215,0,.22);border-radius:22px;padding:16px 22px;display:flex;gap:14px;align-items:center;margin:8px 0 20px;transition:all .25s}
-.search:focus-within{border-color:rgba(255,215,0,.55);box-shadow:0 0 0 4px rgba(255,180,0,.08)}
-.search i{color:#ffd966;font-size:1.15rem}
-.search input{flex:1;background:transparent;border:none;color:#fff;outline:none;font-size:1rem;font-family:'Outfit',sans-serif;font-weight:500}
-.search input::placeholder{color:#7a6e4a}
+        .secondary-controls i {
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        
+        .secondary-controls i.active {
+            color: var(--primary-yellow);
+        }
 
-.item{display:flex;align-items:center;gap:14px;padding:14px;background:linear-gradient(160deg,#141008,#1a1408);border-radius:20px;margin-bottom:10px;border:1px solid rgba(255,215,0,.1);transition:all .25s;position:relative;overflow:hidden}
-.item::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:linear-gradient(180deg,#f5b400,#ffd966);opacity:0;transition:opacity .3s}
-.item:hover{border-color:rgba(255,215,0,.4);background:linear-gradient(160deg,#1a1408,#211a0c)}
-.item:hover::before{opacity:1}
-.item:active{transform:scale(.995)}
-.item .ic{width:56px;height:56px;border-radius:16px;background:linear-gradient(145deg,#221b0a,#1a1508);display:flex;align-items:center;justify-content:center;font-size:26px;border:1px solid rgba(255,215,0,.18);flex-shrink:0;overflow:hidden}
-.item .ic img{width:100%;height:100%;object-fit:cover}
-.info{flex:1;min-width:0}
-.info .t{font-weight:800;font-size:1rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#fff;letter-spacing:-.2px}
-.info .a{font-size:.78rem;color:#b8a87a;font-weight:600;margin-top:2px}
+        /* --- Progress Bar --- */
+        .progress-section {
+            margin-bottom: 25px;
+        }
 
-.nav{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);width:calc(100% - 32px);max-width:406px;background:rgba(14,11,5,.95);border:1.5px solid rgba(255,215,0,.28);border-radius:30px;display:flex;justify-content:space-around;padding:8px 6px;z-index:9999;backdrop-filter:blur(24px);box-shadow:0 8px 32px rgba(0,0,0,.6),0 0 0 1px rgba(255,215,0,.05) inset;pointer-events:auto;will-change:transform}
-.ni{flex:1;display:flex;flex-direction:column;align-items:center;padding:9px 4px;border-radius:22px;color:#a08c4a;cursor:pointer;gap:4px;transition:all .25s;position:relative}
-.ni i{font-size:1.4rem;transition:transform .25s}
-.ni span{font-size:.68rem;font-weight:800;letter-spacing:.3px}
-.ni.active{background:linear-gradient(135deg,#f5b400,#ffd966);color:#0a0806;box-shadow:0 4px 20px rgba(255,180,0,.45)}
-.ni.active i{transform:scale(1.05)}
-.ni:not(.active):hover{color:#ffd966;background:rgba(255,215,0,.06)}
+        .progress-bar-container {
+            width: 100%;
+            height: 6px;
+            background-color: var(--slider-bg);
+            border-radius: 3px;
+            position: relative;
+            cursor: pointer;
+            margin-bottom: 8px;
+        }
 
-.mini-player{position:fixed;bottom:92px;left:50%;transform:translateX(-50%) translateY(20px);width:calc(100% - 32px);max-width:406px;background:rgba(20,16,8,.96);border:1.5px solid rgba(255,215,0,.32);border-radius:22px;display:none;align-items:center;gap:12px;padding:11px 14px;z-index:9998;backdrop-filter:blur(24px);box-shadow:0 -8px 40px rgba(255,180,0,.12),0 8px 24px rgba(0,0,0,.5);opacity:0;transition:all .35s cubic-bezier(.4,0,.2,1);pointer-events:auto}
-.mini-player.on{display:flex;opacity:1;transform:translateX(-50%) translateY(0)}
-.mini-cover{width:46px;height:46px;border-radius:14px;background:linear-gradient(145deg,#221b0a,#1a1508);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;overflow:hidden;border:1px solid rgba(255,215,0,.2)}
-.mini-cover img{width:100%;height:100%;object-fit:cover}
-.mini-info{flex:1;min-width:0}
-.mini-title{font-weight:800;font-size:.88rem;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:-.2px}
-.mini-artist{font-size:.72rem;color:#b8a87a;font-weight:600;margin-top:1px}
-.mini-btn{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,#f5b400,#ffd966);border:none;color:#0a0806;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:.92rem;flex-shrink:0;transition:all .2s;box-shadow:0 4px 12px rgba(255,180,0,.35)}
-.mini-btn:hover{transform:scale(1.08)}
-.mini-btn:active{transform:scale(.95)}
+        .progress-fill {
+            height: 100%;
+            width: 45%; /* Set current progress here */
+            background-color: var(--primary-yellow);
+            border-radius: 3px;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
 
-.player{position:fixed;inset:0;z-index:500;background:linear-gradient(180deg,rgba(12,9,4,.99) 0%,rgba(6,4,2,.99) 100%);display:none;flex-direction:column;align-items:center;justify-content:center;padding:28px 22px;overflow-y:auto}
-.player.on{display:flex;animation:playerIn .35s cubic-bezier(.4,0,.2,1)}
-@keyframes playerIn{from{opacity:0}to{opacity:1}}
-.player::before{content:'';position:absolute;top:10%;left:50%;transform:translateX(-50%);width:500px;height:500px;background:radial-gradient(circle,rgba(255,180,0,.15),transparent 60%);pointer-events:none;filter:blur(40px)}
-.player .close-btn{position:absolute;top:22px;right:22px;width:48px;height:48px;border-radius:50%;background:rgba(255,215,0,.12);border:1px solid rgba(255,215,0,.28);color:#ffd966;font-size:1.3rem;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .2s;z-index:10}
-.player .close-btn:hover{background:rgba(255,215,0,.25);transform:scale(1.08)}
-.art-wrap{position:relative;width:260px;height:260px;margin-bottom:28px;z-index:1}
-.art{width:100%;height:100%;border-radius:50%;background:linear-gradient(145deg,#1f190a,#141008);border:3px solid rgba(255,215,0,.35);display:flex;align-items:center;justify-content:center;font-size:90px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.6),0 0 60px rgba(255,180,0,.15);position:relative}
-.art::after{content:'';position:absolute;inset:14px;border-radius:50%;border:2px dashed rgba(255,215,0,.2);opacity:.5}
-.art img{width:100%;height:100%;object-fit:cover}
-.player.playing .art{animation:spin-slow 24s linear infinite}
-@keyframes spin-slow{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
-.player .ptitle{margin-top:8px;font-weight:900;font-size:1.5rem;color:#fff;text-align:center;max-width:340px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;letter-spacing:-.5px;z-index:1}
-.player .partist{color:#ffd966;font-size:1rem;font-weight:700;margin-top:4px;z-index:1}
-.prog{width:100%;max-width:340px;height:6px;background:rgba(255,215,0,.12);border-radius:100px;margin-top:26px;overflow:hidden;cursor:pointer;z-index:1;position:relative}
-.fill{height:100%;background:linear-gradient(90deg,#f5b400,#ffd966);width:0%;border-radius:100px;transition:width .1s;box-shadow:0 0 12px rgba(255,180,0,.5)}
-.time-row{display:flex;justify-content:space-between;width:100%;max-width:340px;margin-top:10px;color:#b8a87a;font-size:.82rem;font-weight:700;z-index:1}
-.volume-row{display:flex;align-items:center;gap:14px;width:100%;max-width:340px;margin-top:18px;z-index:1}
-.volume-row i{color:#ffd966;font-size:.9rem}
-.volume-row input{flex:1;height:5px;border-radius:100px;background:rgba(255,215,0,.12);outline:none;cursor:pointer;-webkit-appearance:none;appearance:none;accent-color:#ffd966}
-.volume-row input::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:18px;height:18px;border-radius:50%;background:linear-gradient(135deg,#f5b400,#ffd966);cursor:pointer;box-shadow:0 2px 8px rgba(255,180,0,.5)}
-.volume-row input::-moz-range-thumb{width:18px;height:18px;border-radius:50%;background:linear-gradient(135deg,#f5b400,#ffd966);cursor:pointer;border:none;box-shadow:0 2px 8px rgba(255,180,0,.5)}
+        .progress-knob {
+            width: 14px;
+            height: 14px;
+            background-color: var(--primary-yellow);
+            border-radius: 50%;
+            position: absolute;
+            top: 50%;
+            left: 45%; /* Match fill width */
+            transform: translate(-50%, -50%);
+            box-shadow: 0 0 10px rgba(255, 208, 0, 0.5);
+        }
 
-.ctrls{display:flex;gap:26px;margin-top:24px;align-items:center;z-index:1}
-.cbtn2{width:56px;height:56px;border-radius:50%;background:rgba(255,215,0,.1);border:1.5px solid rgba(255,215,0,.25);color:#ffd966;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:1.3rem;transition:all .2s}
-.cbtn2:hover{background:rgba(255,215,0,.2);transform:scale(1.06)}
-.cbtn2:active{transform:scale(.94)}
-.cbtn2.play{width:80px;height:80px;background:linear-gradient(135deg,#f5b400,#ffd966);border:none;color:#0a0806;font-size:1.9rem;box-shadow:0 8px 32px rgba(255,180,0,.5)}
-.cbtn2.play:hover{transform:scale(1.08)}
-.player.playing .cbtn2.play{animation:pulse-glow 2s ease-in-out infinite}
-@keyframes pulse-glow{0%,100%{box-shadow:0 8px 32px rgba(255,180,0,.4)}50%{box-shadow:0 8px 48px rgba(255,180,0,.7)}}
+        .time-info {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
 
-.player .extra-actions{display:flex;gap:14px;margin-top:22px;align-items:center;z-index:1;flex-wrap:wrap;justify-content:center}
-.player .extra-actions .ibtn{width:46px;height:46px;border-radius:14px;font-size:1.15rem}
+        /* --- Primary Controls (Play, Skip) --- */
+        .primary-controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 35px;
+            margin-bottom: 30px;
+        }
 
-.queue-panel{position:fixed;inset:0;background:linear-gradient(180deg,rgba(12,9,4,.99) 0%,rgba(6,4,2,.99) 100%);z-index:700;display:none;flex-direction:column;padding:24px 22px}
-.queue-panel.on{display:flex;animation:playerIn .35s}
-.queue-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}
-.queue-header h3{color:#ffd966;font-weight:900;font-size:1.25rem;display:flex;align-items:center;gap:10px}
-.queue-list{flex:1;overflow-y:auto;padding-bottom:20px}
-.queue-list::-webkit-scrollbar{display:none}
-.queue-item{display:flex;align-items:center;gap:12px;padding:12px;background:linear-gradient(160deg,#141008,#1a1408);border-radius:16px;margin-bottom:8px;cursor:pointer;border:1px solid rgba(255,215,0,.1);transition:all .2s}
-.queue-item:hover{background:linear-gradient(160deg,#1a1408,#211a0c);border-color:rgba(255,215,0,.4);transform:translateX(3px)}
-.queue-item.active{background:linear-gradient(135deg,rgba(245,180,0,.18),rgba(255,217,102,.12));border-color:#ffd966;box-shadow:0 4px 16px rgba(255,180,0,.2)}
-.queue-item .qi-cover{width:44px;height:44px;border-radius:12px;background:linear-gradient(145deg,#221b0a,#1a1508);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;overflow:hidden}
-.queue-item .qi-cover img{width:100%;height:100%;object-fit:cover}
-.queue-item .qi-info{flex:1;min-width:0}
-.queue-item .qi-title{font-weight:800;font-size:.9rem;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:-.2px}
-.queue-item .qi-artist{font-size:.72rem;color:#b8a87a;font-weight:600;margin-top:1px}
+        .control-btn {
+            background: none;
+            border: none;
+            color: var(--text-main);
+            font-size: 1.8rem;
+            cursor: pointer;
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
 
-.modal{position:fixed;inset:0;background:rgba(0,0,0,.75);backdrop-filter:blur(16px);z-index:1000;display:none;align-items:center;justify-content:center;padding:20px}
-.modal.on{display:flex;animation:playerIn .25s}
-.box{background:linear-gradient(160deg,#151005,#1a1408);border:1.5px solid rgba(255,215,0,.35);border-radius:28px;padding:28px;width:100%;max-width:360px;box-shadow:0 24px 80px rgba(0,0,0,.7)}
-.box h3{font-weight:900;font-size:1.4rem;color:#ffd966;letter-spacing:-.3px}
-.box p{color:#c9b582;margin:10px 0 18px;font-weight:500;line-height:1.5}
-.box input{width:100%;background:rgba(0,0,0,.4);border:1.5px solid rgba(255,215,0,.28);border-radius:16px;padding:15px 18px;color:#fff;font-size:1.1rem;font-family:'Outfit',sans-serif;outline:none;margin-bottom:16px;text-align:center;letter-spacing:5px;font-weight:700}
-.box input:focus{border-color:#ffd966;box-shadow:0 0 0 4px rgba(255,180,0,.1)}
-.btn{border:none;padding:14px 24px;border-radius:100px;font-weight:800;font-size:.95rem;cursor:pointer;font-family:'Outfit',sans-serif;transition:all .2s;letter-spacing:.2px}
-.btn:hover{transform:translateY(-1px)}
-.btn-p{background:linear-gradient(135deg,#f5b400,#ffd966);color:#0a0806;box-shadow:0 6px 20px rgba(255,180,0,.35)}
-.btn-p:hover{box-shadow:0 8px 28px rgba(255,180,0,.5)}
-.btn-g{background:rgba(255,215,0,.06);color:#ffd966;border:1.5px solid rgba(255,215,0,.22)}
-.btn-g:hover{background:rgba(255,215,0,.14)}
+        .control-btn:active {
+            transform: scale(0.9);
+        }
 
-.profile-header{text-align:center;padding:20px 0 12px}
-.profile-avatar{width:110px;height:110px;border-radius:36px;background:linear-gradient(135deg,#f5b400,#ffd966);margin:0 auto;display:flex;align-items:center;justify-content:center;font-size:48px;font-weight:900;color:#0a0806;overflow:hidden;border:3px solid rgba(255,215,0,.35);box-shadow:0 12px 40px rgba(255,180,0,.3)}
-.profile-avatar img{width:100%;height:100%;object-fit:cover}
-.profile-name{margin-top:20px;font-size:1.7rem;font-weight:900;letter-spacing:-.5px}
-.profile-role{color:#b8a87a;font-size:.9rem;font-weight:600;margin-top:4px}
-.stats{display:flex;gap:36px;justify-content:center;margin-top:24px}
-.stat{text-align:center}
-.stat-number{font-weight:900;font-size:1.5rem;color:#ffd966;letter-spacing:-.5px}
-.stat-label{font-size:.7rem;color:#b8a87a;font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-top:2px}
-.support-btn{display:block;max-width:260px;margin:20px auto 0;background:linear-gradient(135deg,#f5b400,#ffd966);color:#0a0806;font-weight:900;padding:14px 24px;border-radius:100px;text-decoration:none;font-size:.95rem;text-align:center;box-shadow:0 8px 24px rgba(255,180,0,.35);transition:all .2s}
-.support-btn:hover{transform:translateY(-2px);box-shadow:0 12px 32px rgba(255,180,0,.5)}
+        .play-pause-btn {
+            width: 75px;
+            height: 75px;
+            background-color: var(--primary-yellow);
+            color: var(--bg-dark);
+            border-radius: 50%;
+            font-size: 2rem;
+            box-shadow: 0 8px 20px rgba(255, 208, 0, 0.3);
+        }
 
-.toast{position:fixed;bottom:200px;left:50%;transform:translate(-50%,30px);background:linear-gradient(160deg,#1f190a,#251c0a);border:1.5px solid #ffd966;color:#ffd966;font-weight:800;padding:14px 26px;border-radius:100px;opacity:0;transition:all .35s cubic-bezier(.4,0,.2,1);z-index:2000;pointer-events:none;white-space:nowrap;max-width:90vw;overflow:hidden;text-overflow:ellipsis;font-size:.85rem;box-shadow:0 12px 40px rgba(0,0,0,.6)}
-.toast.on{opacity:1;transform:translate(-50%,0)}
+        /* --- Utility Controls (Bottom Row) --- */
+        .utility-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 10px;
+            color: var(--text-muted);
+            margin-bottom: 15px;
+        }
 
-.empty-msg{color:#7a6e4a;padding:16px 12px;font-weight:600;font-size:.92rem;text-align:center;line-height:1.5}
-.empty-state{grid-column:1/-1;border:2px dashed rgba(255,215,0,.15);border-radius:24px;padding:40px 24px;text-align:center;background:linear-gradient(160deg,rgba(255,215,0,.03),transparent)}
-.empty-state .icon{font-size:52px;margin-bottom:16px;opacity:.7}
-.empty-state .title{font-weight:900;font-size:1.1rem;color:#fff;letter-spacing:-.3px}
-.empty-state .sub{font-size:.85rem;color:#7a6e4a;margin-top:6px;line-height:1.5;font-weight:500}
+        .utility-controls i {
+            font-size: 1.1rem;
+            cursor: pointer;
+        }
 
-.offline-check{color:#25D366;font-size:.7rem;margin-left:4px;vertical-align:middle}
-</style>
+        /* --- Bottom Navigation --- */
+        .bottom-nav {
+            background-color: var(--surface);
+            display: flex;
+            justify-content: space-around;
+            padding: 15px 10px;
+            border-top: 1px solid #2a2a2a;
+            border-radius: 20px 20px 0 0;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.75rem;
+            font-weight: 600;
+            gap: 4px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .nav-item i {
+            font-size: 1.2rem;
+        }
+
+        .nav-item.active {
+            color: var(--primary-yellow);
+        }
+
+        .nav-item:hover {
+            color: var(--text-main);
+        }
+
+        /* Hide scrollbar for clean UI */
+        .player-main::-webkit-scrollbar {
+            display: none;
+        }
+        .player-main {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
 </head>
 <body>
 
-<div class="bg-glow"><div class="grain"></div></div>
-
-<div class="splash" id="sp" style="position:fixed;inset:0;z-index:999;background:#08060a;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity .5s">
-<img src="logo.png" id="logoBtn" style="width:220px;height:220px;object-fit:contain;cursor:pointer;user-select:none;margin-bottom:8px;filter:drop-shadow(0 8px 32px rgba(255,180,0,.4))" alt="AfroDownload">
-<div style="color:#ffd966;letter-spacing:6px;font-size:.95rem;margin-top:8px;font-weight:700">THE HOME OF AFROBEATS</div>
-<button class="run" id="runBtn" style="margin-top:28px;background:linear-gradient(135deg,#f5b400,#ffd966);border:none;padding:20px 58px;border-radius:120px;color:#0a0806;font-weight:900;font-size:1.35rem;cursor:pointer;box-shadow:0 0 60px rgba(255,200,0,.5);font-family:'Outfit',sans-serif;transition:all .2s"><i class="fas fa-bolt"></i> Launch App</button>
-<div style="color:#7a6e4a;font-size:.8rem;margin-top:18px;font-weight:600">415 FAMILY • GHANA</div>
-</div>
-
-<div class="app" id="app" style="display:none">
-
-  <div class="top">
-    <div class="top-left">
-      <img src="logo.png" alt="AfroDownload">
-      <h2 id="tt">Discover</h2>
-    </div>
-    <div class="top-right">
-      <span class="founder-badge" id="founderBadge">👑 Founder</span>
-      <button class="icon-btn" id="profileBtn"><i class="fas fa-user"></i></button>
-    </div>
-  </div>
-
-  <div class="screens">
-
-    <div class="screen on" id="home">
-      <div class="filters" id="filterBar"></div>
-
-      <div class="aotw" id="aotwContainer">
-        <span class="aotw-label">⭐ Artist of the Week</span>
-        <div class="aotw-top">
-          <div class="aotw-photo" id="aotwPhoto"></div>
-          <div class="aotw-info">
-            <div class="aotw-name" id="aotwName">Featured Artist</div>
-            <div class="aotw-tagline" id="aotwTagline"></div>
-          </div>
+    <div class="app-container">
+        
+        <!-- Header -->
+        <div class="header">
+            <div class="close-btn">
+                <i class="fa-solid fa-xmark"></i>
+            </div>
         </div>
-        <p class="aotw-bio" id="aotwBio"></p>
-        <div class="aotw-actions">
-          <button class="aotw-play" id="aotwPlay"><i class="fas fa-play"></i> Play Featured</button>
-          <div class="aotw-social" id="aotwSocial"></div>
+
+        <!-- Main Player Content -->
+        <div class="player-main">
+            
+            <!-- Artwork -->
+            <div class="artwork-container">
+                <!-- Using a placeholder image -->
+                <img src="https://images.unsplash.com/photo-1614613535308-eb5fbd3d2c17?q=80&w=500&auto=format&fit=crop" alt="Album Artwork" class="artwork">
+            </div>
+
+            <!-- Track Info -->
+            <div class="track-info">
+                <div class="track-title">Waiting for you (feat. Naledi)</div>
+                <div class="track-artist">Yungee</div>
+            </div>
+
+            <!-- Secondary Controls -->
+            <div class="secondary-controls">
+                <i class="fa-regular fa-heart"></i>
+                <i class="fa-solid fa-shuffle active"></i>
+                <i class="fa-solid fa-repeat"></i>
+            </div>
+
+            <!-- Progress Bar -->
+            <div class="progress-section">
+                <div class="progress-bar-container">
+                    <div class="progress-fill"></div>
+                    <div class="progress-knob"></div>
+                </div>
+                <div class="time-info">
+                    <span>1:04</span>
+                    <span>2:06</span>
+                </div>
+            </div>
+
+            <!-- Primary Controls -->
+            <div class="primary-controls">
+                <button class="control-btn">
+                    <i class="fa-solid fa-backward-step"></i>
+                </button>
+                <button class="control-btn play-pause-btn">
+                    <i class="fa-solid fa-pause"></i>
+                </button>
+                <button class="control-btn">
+                    <i class="fa-solid fa-forward-step"></i>
+                </button>
+            </div>
+
+            <!-- Utility Controls -->
+            <div class="utility-controls">
+                <i class="fa-solid fa-download"></i>
+                <i class="fa-solid fa-share-nodes"></i>
+                <i class="fa-solid fa-list-ul"></i>
+                <i class="fa-solid fa-volume-high"></i>
+            </div>
+
+        </div> <!-- End Main Player -->
+
+        <!-- Bottom Navigation -->
+        <div class="bottom-nav">
+            <a href="#" class="nav-item active">
+                <i class="fa-solid fa-house"></i>
+                <span>Home</span>
+            </a>
+            <a href="#" class="nav-item">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <span>Search</span>
+            </a>
+            <a href="#" class="nav-item">
+                <i class="fa-solid fa-bookmark"></i>
+                <span>Library</span>
+            </a>
+            <a href="#" class="nav-item">
+                <i class="fa-solid fa-user"></i>
+                <span>You</span>
+            </a>
         </div>
-        <div class="aotw-songs" id="aotwSongs"></div>
-      </div>
 
-      <a href="/app-release.apk" download class="app-download">
-        <div class="app-download-icon"><i class="fas fa-mobile-screen-button"></i></div>
-        <div class="app-download-info">
-          <div class="ad-title">Get the Android App</div>
-          <div class="ad-sub">Install AfroDownload on your phone</div>
-          <span class="ad-badge">📱 Free Download</span>
-        </div>
-        <i class="fas fa-download"></i>
-      </a>
-
-      <div class="app-download" style="background:linear-gradient(135deg,rgba(37,211,102,.12),rgba(10,127,90,.08));border-color:rgba(37,211,102,.35);cursor:default">
-        <div class="app-download-icon" style="background:linear-gradient(135deg,#0a7f5a,#25D366)"><i class="fas fa-wifi"></i></div>
-        <div class="app-download-info">
-          <div class="ad-title" style="color:#25D366">Works Offline</div>
-          <div class="ad-sub">Tap ⬇️ on any song to save it for offline play</div>
-        </div>
-      </div>
-
-      <div class="hero">
-        <h3>Hello Yungee 👋</h3>
-        <p>Upload, stream & share Afrobeats worldwide</p>
-        <div class="badges">
-          <span class="badge"><i class="fas fa-music"></i> <span id="ht">0 tracks</span></span>
-          <span class="badge"><i class="fas fa-fire"></i> 415 Clean</span>
-        </div>
-      </div>
-
-      <div class="upload" id="upZ" style="display:none">
-        <i class="fas fa-cloud-arrow-up"></i>
-        <div class="ut">Tap to upload to Cloud ☁️</div>
-        <div class="us">MP3, WAV • Max 50MB • Multiple files allowed</div>
-      </div>
-
-      <div class="upload locked" id="lockedBox">
-        <i class="fas fa-lock"></i>
-        <div class="ut">Uploads Locked</div>
-        <div class="us">Founder access only — tap logo 5x</div>
-      </div>
-      <input type="file" id="fi" accept=".mp3,.wav,.m4a,audio/*" multiple hidden>
-
-      <div class="upload-progress" id="upProg">
-        <div class="status"><span class="spinner"></span> <span id="upStatus">Uploading...</span></div>
-        <div class="bar"><div class="bar-fill" id="upBar"></div></div>
-      </div>
-
-      <div class="sec">
-        <h4><i class="fas fa-record-vinyl"></i> Latest Music</h4>
-        <span id="uc">0 songs</span>
-      </div>
-      <div class="album-grid" id="ur"></div>
     </div>
-
-    <div class="screen" id="search">
-      <div class="search">
-        <i class="fas fa-search"></i>
-        <input id="si" placeholder="Search songs or artists...">
-      </div>
-      <div id="sr"></div>
-    </div>
-
-    <div class="screen" id="lib">
-      <div class="sec">
-        <h4><i class="fas fa-music"></i> All Songs</h4>
-        <span id="uc2">0 songs</span>
-      </div>
-      <div id="allLib"></div>
-
-      <div class="sec">
-        <h4><i class="fas fa-heart"></i> Favorites</h4>
-        <span id="clearFavBtn">Clear</span>
-      </div>
-      <div id="fv"></div>
-
-      <div class="sec">
-        <h4><i class="fas fa-download"></i> Downloads</h4>
-        <span id="clearDownBtn">Clear</span>
-      </div>
-      <div id="dl"></div>
-    </div>
-
-    <div class="screen" id="pro">
-      <div class="profile-header">
-        <div class="profile-avatar">
-          <img src="logo.png" alt="Yungee" onerror="this.style.display='none';this.parentElement.textContent='E'">
-        </div>
-        <h3 class="profile-name">Emmanuel Sackey</h3>
-        <p class="profile-role">Founder • Kumasi Ashanti, GH 🇬🇭</p>
-        <a href="/app-release.apk" download class="support-btn" style="background:linear-gradient(135deg,#0a7f5a,#25D366);color:#fff">📱 Download Android App</a>
-        <a href="https://www.paypal.com/paypalme/emmanuelsackey" target="_blank" class="support-btn" style="margin-top:10px">☕ Support AfroDownload</a>
-        <a href="https://paystack.shop/pay/mdgtmyalre" target="_blank" class="support-btn" style="background:linear-gradient(135deg,#0a7f5a,#0fb87a);color:#fff;margin-top:10px">🇬🇭 Pay with MoMo</a>
-        <div class="stats">
-          <div class="stat"><div class="stat-number" id="pu">0</div><div class="stat-label">Uploads</div></div>
-          <div class="stat"><div class="stat-number" id="pf">0</div><div class="stat-label">Likes</div></div>
-          <div class="stat"><div class="stat-number" id="pd">0</div><div class="stat-label">Saved</div></div>
-        </div>
-      </div>
-      <div style="margin-top:24px">
-        <div class="item" id="shareProfileBtn" style="cursor:pointer">
-          <div class="ic"><i class="fas fa-share-nodes" style="color:#ffd966"></i></div>
-          <div class="info"><div class="t">Share App</div><div class="a">afrodownload.site</div></div>
-          <i class="fas fa-chevron-right" style="color:#7a6e4a"></i>
-        </div>
-        <div class="item" id="clearCacheBtn" style="cursor:pointer">
-          <div class="ic"><i class="fas fa-broom" style="color:#25D366"></i></div>
-          <div class="info"><div class="t">Clear Offline Songs</div><div class="a">Free up storage space</div></div>
-          <i class="fas fa-chevron-right" style="color:#7a6e4a"></i>
-        </div>
-        <div class="item" id="cloudSyncBtn" style="cursor:pointer;display:none">
-          <div class="ic"><i class="fas fa-file-export" style="color:#66d9ff"></i></div>
-          <div class="info"><div class="t">Update Public List</div><div class="a">Make songs visible to everyone</div></div>
-          <i class="fas fa-chevron-right" style="color:#7a6e4a"></i>
-        </div>
-        <div class="item" id="logoutBtn" style="cursor:pointer;display:none">
-          <div class="ic"><i class="fas fa-right-from-bracket" style="color:#ff6b6b"></i></div>
-          <div class="info"><div class="t">Exit Founder Mode</div><div class="a">Lock uploads again</div></div>
-          <i class="fas fa-chevron-right" style="color:#7a6e4a"></i>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div class="mini-player" id="miniPlayer">
-  <div class="mini-cover" id="miniCover">🎵</div>
-  <div class="mini-info">
-    <div class="mini-title" id="miniTitle">No song playing</div>
-    <div class="mini-artist" id="miniArtist"></div>
-  </div>
-  <button class="mini-btn" id="miniPlay"><i class="fas fa-play"></i></button>
-  <button class="mini-btn" id="miniNext"><i class="fas fa-forward"></i></button>
-</div>
-
-<div class="nav">
-  <div class="ni active" data-s="home"><i class="fas fa-house"></i><span>Home</span></div>
-  <div class="ni" data-s="search"><i class="fas fa-magnifying-glass"></i><span>Search</span></div>
-  <div class="ni" data-s="lib"><i class="fas fa-bookmark"></i><span>Library</span></div>
-  <div class="ni" data-s="pro"><i class="fas fa-user"></i><span>You</span></div>
-</div>
-
-<div class="player" id="pl">
-  <button class="close-btn" id="cp"><i class="fas fa-xmark"></i></button>
-  <div class="art-wrap">
-    <div class="art" id="pa">🎵</div>
-  </div>
-  <div class="ptitle" id="pt">Title</div>
-  <div class="partist" id="pr">Artist</div>
-  <div class="prog" id="pw"><div class="fill" id="pfill"></div></div>
-  <div class="time-row"><span id="ct">0:00</span><span id="td">0:00</span></div>
-  <div class="volume-row">
-    <i class="fas fa-volume-low"></i>
-    <input type="range" id="volumeSlider" min="0" max="100" value="100">
-    <i class="fas fa-volume-high"></i>
-  </div>
-  <div class="ctrls">
-    <button class="cbtn2" id="prev"><i class="fas fa-backward"></i></button>
-    <button class="cbtn2 play" id="pp"><i class="fas fa-play"></i></button>
-    <button class="cbtn2" id="next"><i class="fas fa-forward"></i></button>
-  </div>
-  <div class="extra-actions">
-    <button class="ibtn" id="shuffleBtn" title="Shuffle"><i class="fas fa-shuffle"></i></button>
-    <button class="ibtn" id="fb"><i class="far fa-heart"></i></button>
-    <button class="ibtn" id="repeatBtn" title="Repeat"><i class="fas fa-repeat"></i></button>
-    <button class="ibtn" id="queueBtn" title="Playlist"><i class="fas fa-list"></i></button>
-    <button class="ibtn" id="db"><i class="fas fa-download"></i></button>
-    <button class="ibtn" id="sb"><i class="fas fa-share-nodes"></i></button>
-  </div>
-</div>
-
-<div class="queue-panel" id="queuePanel">
-  <div class="queue-header">
-    <h3><i class="fas fa-list"></i> Up Next</h3>
-    <button class="ibtn" id="queueClose"><i class="fas fa-xmark"></i></button>
-  </div>
-  <div class="queue-list" id="queueList"></div>
-</div>
-
-<div class="modal" id="dm">
-  <div class="box">
-    <h3>Download</h3>
-    <p id="mt"></p>
-    <div style="display:flex;gap:10px;margin-top:6px">
-      <button class="btn btn-g" style="flex:1" id="cd">Cancel</button>
-      <button class="btn btn-p" style="flex:1" id="cfd"><i class="fas fa-download"></i> Download</button>
-    </div>
-  </div>
-</div>
-
-<div class="modal" id="pinM">
-  <div class="box">
-    <h3>🔒 Founder Access</h3>
-    <p>Enter your secret PIN to unlock uploads</p>
-    <input type="password" id="pinInput" placeholder="••••" maxlength="12" inputmode="numeric" autocomplete="off">
-    <div style="display:flex;gap:10px">
-      <button class="btn btn-g" style="flex:1" id="pinCancel">Cancel</button>
-      <button class="btn btn-p" style="flex:1" id="pinOk">Unlock</button>
-    </div>
-  </div>
-</div>
-
-<div class="modal" id="syncM">
-  <div class="box" style="max-width:440px">
-    <h3>📝 Update Public List</h3>
-    <p style="font-size:.85rem">Copy the list below, then paste it into your Gist. Everyone will see your songs.</p>
-    <textarea id="syncText" readonly style="width:100%;height:180px;background:rgba(0,0,0,.4);border:1.5px solid rgba(255,215,0,.28);border-radius:14px;padding:12px;color:#fff;font-family:monospace;font-size:.7rem;outline:none;resize:none;margin-bottom:14px"></textarea>
-    <div style="display:flex;gap:10px">
-      <button class="btn btn-g" style="flex:1" id="syncClose">Close</button>
-      <button class="btn btn-p" style="flex:1" id="syncCopy">Copy</button>
-    </div>
-    <button class="btn btn-p" style="width:100%;margin-top:10px;background:rgba(102,217,255,.15);color:#66d9ff;border:1.5px solid rgba(102,217,255,.4)" id="syncOpen">Open Gist</button>
-  </div>
-</div>
-
-<div class="modal" id="delM">
-  <div class="box" style="text-align:center">
-    <div style="width:56px;height:56px;border-radius:18px;background:rgba(255,59,59,.15);color:#ff3b3b;display:flex;align-items:center;justify-content:center;margin:0 auto 12px;font-size:24px">
-      <i class="fas fa-trash"></i>
-    </div>
-    <h3 id="delT">Delete?</h3>
-    <p id="delMsg"></p>
-    <div style="display:flex;gap:10px">
-      <button class="btn btn-g" style="flex:1" id="cDel">Cancel</button>
-      <button class="btn btn-p" style="flex:1;background:#ff3b3b;color:#fff" id="okDel">Delete</button>
-    </div>
-  </div>
-</div>
-
-<div class="toast" id="toast"></div>
-
-<script>
-(function(){
-"use strict";
-
-// ═══════════════════════════════════════════════════════════════
-// ⭐ ARTIST OF THE WEEK — CHANGE THIS EVERY WEEK ⭐
-// ═══════════════════════════════════════════════════════════════
-var ARTIST_OF_WEEK = {
-  name: "Bnxn",
-  tagline: "prominent Nigerian Afro-fusion singer, songwriter, and record producer.",
-  bio: " Born in Lagos, Nigeria (with roots tracing to Akwa Ibom State).",
-  photo: "https://res.cloudinary.com/lzgtyuhq/image/upload/v1791855364/Bnxn.jpg",
-  featuredTrack: "online,Fola ft Bnxn my type",
-  socials: {
-    instagram: "",
-    tiktok: "",
-    youtube: ""
-  }
-};
-// ═══════════════════════════════════════════════════════════════
-
-// ═══════════════════════════════════════════════════════════════
-// 🎵 GENRE FILTERING ⭐
-// ═══════════════════════════════════════════════════════════════
-var activeGenre = "All";
-var GENRES = ["Afrobeats", "Gospel", "Hip-Hop", "Amapiano", "Afropop", "Dancehall"];
-
-function getGenre(s){
-  return (s && s.genre) ? s.genre : "Afrobeats";
-}
-
-function filterByGenre(list){
-  if(activeGenre === "All") return list;
-  return list.filter(function(s){ return getGenre(s) === activeGenre; });
-}
-// ═══════════════════════════════════════════════════════════════
-
-var CLOUDINARY_CLOUD   = "lzgtyuhq";
-var CLOUDINARY_PRESET  = "YungeeFounder";
-var FOUNDER_PIN        = "4698";
-var REMOTE_LIBRARY_URL = "https://gist.githubusercontent.com/Afrodownload415/6faabc97ec5e5d983a7658ad75508a58/raw/Songs.json";
-var AUDIO_CACHE_NAME   = "afrodownload-audio-v1";
-
-var isFounder = sessionStorage.getItem('afro_founder') === 'true';
-var remoteSongs = [];
-var ups = JSON.parse(localStorage.getItem('afro_yellow_ups') || '[]');
-var favs = JSON.parse(localStorage.getItem('afro_favs') || '[]');
-var downs = JSON.parse(localStorage.getItem('afro_downs') || '[]');
-var songs = [];
-var cur = null, dTarget = null, delAct = null, isPlay = false, curIndex = 0;
-var isShuffle = false;
-var repeatMode = 0;
-var offlineCache = {};
-var aud = new Audio();
-var $ = function(id){ return document.getElementById(id); };
-
-function toast(m){
-  var t = $('toast');
-  if(!t) return;
-  t.textContent = m;
-  t.classList.add('on');
-  clearTimeout(toast._t);
-  toast._t = setTimeout(function(){ t.classList.remove('on'); }, 2600);
-}
-
-function esc(t){
-  if(!t) return '';
-  var d = document.createElement('div');
-  d.textContent = t;
-  return d.innerHTML;
-}
-
-function loadOfflineCache(){
-  if(!('caches' in window)) return;
-  caches.open(AUDIO_CACHE_NAME).then(function(cache){
-    cache.keys().then(function(requests){
-      offlineCache = {};
-      requests.forEach(function(req){ offlineCache[req.url] = true; });
-      render();
-    });
-  }).catch(function(){});
-}
-
-function cacheAudio(url){
-  if(!('caches' in window) || !url || url.indexOf('http') !== 0) return;
-  caches.open(AUDIO_CACHE_NAME).then(function(cache){
-    cache.match(url).then(function(existing){
-      if(existing){ offlineCache[url] = true; return; }
-      fetch(url).then(function(response){
-        if(response && response.ok){
-          cache.put(url, response.clone());
-          offlineCache[url] = true;
-        }
-      }).catch(function(){});
-    });
-  }).catch(function(){});
-}
-
-function loadRemoteLibrary(cb){
-  if(!REMOTE_LIBRARY_URL){ if(cb) cb(); return; }
-  fetch(REMOTE_LIBRARY_URL, {cache:'no-store'})
-    .then(function(r){ return r.json(); })
-    .then(function(d){ if(Array.isArray(d)) remoteSongs = d; if(cb) cb(); })
-    .catch(function(e){ console.warn('Remote load failed:', e); if(cb) cb(); });
-}
-
-function rebuildSongs(){
-  var map = new Map();
-  remoteSongs.forEach(function(s){ map.set(s.id, s); });
-  ups.forEach(function(s){ map.set(s.id, s); });
-  songs = Array.from(map.values());
-}
-
-function updateFounderUI(){
-  var upZ = $('upZ'), locked = $('lockedBox');
-  if(upZ) upZ.style.display = isFounder ? 'block' : 'none';
-  if(locked) locked.style.display = isFounder ? 'none' : 'block';
-  var fb = $('founderBadge');
-  if(fb) fb.classList.toggle('on', isFounder);
-  var lb = $('logoutBtn');
-  if(lb) lb.style.display = isFounder ? 'flex' : 'none';
-  var cs = $('cloudSyncBtn');
-  if(cs) cs.style.display = isFounder ? 'flex' : 'none';
-}
-
-function isFav(id){ return favs.indexOf(id) >= 0; }
-
-function getCover(s){
-  if(s.coverImg) return '<img src="' + esc(s.coverImg) + '" onerror="this.src=\'logo.png\'">';
-  return '<img src="logo.png">';
-}
-
-// ═══════════════════════════════════════════════════════════════
-// GENRE FILTER PILLS RENDER
-// ═══════════════════════════════════════════════════════════════
-function renderFilterPills(){
-  var container = $('filterBar');
-  if(!container) return;
-  
-  var counts = {};
-  songs.forEach(function(s){
-    var g = getGenre(s);
-    counts[g] = (counts[g] || 0) + 1;
-  });
-  
-  var html = '<span class="filter-pill' + (activeGenre === 'All' ? ' active' : '') + '" data-f="All">All <span class="pill-count">' + songs.length + '</span></span>';
-  
-  GENRES.forEach(function(g){
-    if(counts[g]){
-      html += '<span class="filter-pill' + (activeGenre === g ? ' active' : '') + '" data-f="' + g + '">' + g + ' <span class="pill-count">' + counts[g] + '</span></span>';
-    }
-  });
-  
-  container.innerHTML = html;
-  
-  container.querySelectorAll('.filter-pill').forEach(function(pill){
-    pill.addEventListener('click', function(){
-      activeGenre = pill.dataset.f;
-      render();
-    });
-  });
-}
-// ═══════════════════════════════════════════════════════════════
-
-// ═══════════════════════════════════════════════════════════════
-// ARTIST OF THE WEEK RENDER
-// ═══════════════════════════════════════════════════════════════
-function renderArtistOfWeek(){
-  var a = ARTIST_OF_WEEK;
-  if(!a || !a.name){ return; }
-
-  var photoEl = $('aotwPhoto');
-  if(photoEl){
-    if(a.photo){
-      photoEl.innerHTML = '<img src="' + esc(a.photo) + '" onerror="this.parentElement.innerHTML=\'<div class=&quot;aotw-photo-fallback&quot;>' + esc(a.name.charAt(0).toUpperCase()) + '</div>\'">';
-    } else {
-      photoEl.innerHTML = '<div class="aotw-photo-fallback">' + esc(a.name.charAt(0).toUpperCase()) + '</div>';
-    }
-  }
-
-  if($('aotwName')) $('aotwName').textContent = a.name;
-  if($('aotwTagline')) $('aotwTagline').textContent = a.tagline || '';
-  if($('aotwBio')) $('aotwBio').textContent = a.bio || '';
-
-  var socialEl = $('aotwSocial');
-  if(socialEl){
-    var s = '';
-    if(a.socials && a.socials.instagram) s += '<a href="' + esc(a.socials.instagram) + '" target="_blank" title="Instagram"><i class="fab fa-instagram"></i></a>';
-    if(a.socials && a.socials.tiktok) s += '<a href="' + esc(a.socials.tiktok) + '" target="_blank" title="TikTok"><i class="fab fa-tiktok"></i></a>';
-    if(a.socials && a.socials.youtube) s += '<a href="' + esc(a.socials.youtube) + '" target="_blank" title="YouTube"><i class="fab fa-youtube"></i></a>';
-    socialEl.innerHTML = s;
-  }
-
-  var artistSongs = songs.filter(function(s){
-    return s.artist && s.artist.toLowerCase() === a.name.toLowerCase();
-  });
-  if(!artistSongs.length){
-    artistSongs = songs.filter(function(s){
-      return s.artist && s.artist.toLowerCase().indexOf(a.name.toLowerCase()) !== -1;
-    });
-  }
-
-  var playBtn = $('aotwPlay');
-  if(playBtn){
-    if(artistSongs.length){
-      playBtn.style.display = 'flex';
-      playBtn.onclick = function(){
-        var targetSong = artistSongs[0];
-        if(a.featuredTrack){
-          var found = artistSongs.find(function(s){ return s.title.indexOf(a.featuredTrack) !== -1; });
-          if(found) targetSong = found;
-        }
-        play(targetSong.id);
-      };
-    } else {
-      playBtn.style.display = 'none';
-    }
-  }
-
-  var songsEl = $('aotwSongs');
-  if(songsEl){
-    if(artistSongs.length){
-      var list = artistSongs.slice(0, 5).map(function(s){
-        var cover = getCover(s);
-        return '<div class="aotw-song" data-aid="' + s.id + '">' +
-          '<div class="as-cover">' + cover + '</div>' +
-          '<div class="as-info">' +
-            '<div class="as-title">' + esc(s.title) + '</div>' +
-          '</div>' +
-          '<i class="fas fa-play as-play"></i>' +
-        '</div>';
-      }).join('');
-      songsEl.innerHTML = '<div class="aotw-songs-title"><i class="fas fa-headphones"></i> Featured Tracks</div>' + list;
-      songsEl.querySelectorAll('.aotw-song').forEach(function(el){
-        el.addEventListener('click', function(){
-          play(parseInt(el.dataset.aid, 10));
-        });
-      });
-    } else {
-      songsEl.innerHTML = '<div class="aotw-songs-title"><i class="fas fa-headphones"></i> Featured Tracks</div>' +
-        '<div style="color:#7a6e4a;font-size:.85rem;padding:8px 0;text-align:center">No tracks found for this artist</div>';
-    }
-  }
-}
-// ═══════════════════════════════════════════════════════════════
-
-function cardHtml(s){
-  var cover = getCover(s);
-  var favClass = isFav(s.id) ? 'ibtn fav-on' : 'ibtn';
-  var heartIcon = isFav(s.id) ? '<i class="fas fa-heart"></i>' : '<i class="far fa-heart"></i>';
-  var offlineBadge = offlineCache[s.audio] ? ' <i class="fas fa-check-circle offline-check" title="Available offline"></i>' : '';
-  return '<div class="card">' +
-    '<div class="cv" onclick="play(' + s.id + ')">' + cover + '</div>' +
-    '<div class="ti">' + esc(s.title) + offlineBadge + '</div>' +
-    '<div class="ar">' + esc(s.artist) + '</div>' +
-    '<div class="tag">' + esc(getGenre(s)) + '</div>' +
-    '<div class="acts">' +
-      '<button class="ibtn" onclick="play(' + s.id + ')"><i class="fas fa-play"></i></button>' +
-      '<button class="' + favClass + '" onclick="toggleFav(' + s.id + ')">' + heartIcon + '</button>' +
-      '<button class="ibtn" onclick="openD(' + s.id + ')"><i class="fas fa-download"></i></button>' +
-      (isFounder ? '<button class="ibtn del" onclick="askDelU(' + s.id + ')"><i class="fas fa-trash"></i></button>' : '') +
-    '</div>' +
-  '</div>';
-}
-
-function itemHtml(s, opts){
-  opts = opts || {};
-  var cover = getCover(s);
-  var favClass = isFav(s.id) ? 'ibtn fav-on' : 'ibtn';
-  var heartIcon = isFav(s.id) ? '<i class="fas fa-heart"></i>' : '<i class="far fa-heart"></i>';
-  var offlineBadge = offlineCache[s.audio] ? ' <i class="fas fa-check-circle offline-check" title="Available offline"></i>' : '';
-  var html = '<div class="item">' +
-    '<div class="ic">' + cover + '</div>' +
-    '<div class="info">' +
-      '<div class="t">' + esc(s.title) + offlineBadge + '</div>' +
-      '<div class="a">' + esc(s.artist) + ' · ' + esc(getGenre(s)) + '</div>' +
-    '</div>' +
-    '<button class="ibtn" onclick="play(' + s.id + ')"><i class="fas fa-play"></i></button>' +
-    '<button class="' + favClass + '" onclick="toggleFav(' + s.id + ')">' + heartIcon + '</button>';
-  if(opts.download) html += '<button class="ibtn" onclick="openD(' + s.id + ')"><i class="fas fa-download"></i></button>';
-  if(opts.del) html += '<button class="ibtn del" onclick="' + opts.del + '(' + s.id + ')"><i class="fas fa-trash"></i></button>';
-  html += '</div>';
-  return html;
-}
-
-window.toggleFav = function(id){
-  var i = favs.indexOf(id);
-  if(i >= 0){ favs.splice(i, 1); toast('Removed from favorites'); }
-  else { favs.push(id); toast('Favorite ❤️'); }
-  localStorage.setItem('afro_favs', JSON.stringify(favs));
-  if(cur && cur.id == id) updateHeartButton();
-  render();
-};
-
-function updateHeartButton(){
-  var fb = $('fb');
-  if(!fb) return;
-  if(cur && isFav(cur.id)){
-    fb.classList.add('fav-on');
-    fb.innerHTML = '<i class="fas fa-heart"></i>';
-  } else {
-    fb.classList.remove('fav-on');
-    fb.innerHTML = '<i class="far fa-heart"></i>';
-  }
-}
-
-function updateMiniPlayer(){
-  if(!cur) return;
-  var mp = $('miniPlayer');
-  if(mp) mp.classList.add('on');
-  if($('miniTitle')) $('miniTitle').textContent = cur.title;
-  if($('miniArtist')) $('miniArtist').textContent = cur.artist;
-  if($('miniCover')) $('miniCover').innerHTML = getCover(cur);
-  if($('miniPlay')) $('miniPlay').innerHTML = isPlay ? '<i class="fas fa-pause"></i>' : '<i class="fas fa-play"></i>';
-}
-
-function renderQueue(){
-  var ql = $('queueList');
-  if(!ql) return;
-  if(!songs.length){ ql.innerHTML = '<div class="empty-msg">No songs</div>'; return; }
-  ql.innerHTML = songs.map(function(s){
-    var cover = getCover(s);
-    return '<div class="queue-item' + (cur && cur.id == s.id ? ' active' : '') + '" data-qid="' + s.id + '">' +
-      '<div class="qi-cover">' + cover + '</div>' +
-      '<div class="qi-info">' +
-        '<div class="qi-title">' + esc(s.title) + '</div>' +
-        '<div class="qi-artist">' + esc(s.artist) + '</div>' +
-      '</div>' +
-    '</div>';
-  }).join('');
-  var items = ql.querySelectorAll('.queue-item');
-  items.forEach(function(el){
-    el.addEventListener('click', function(){
-      var id = parseInt(el.getAttribute('data-qid'), 10);
-      play(id);
-      if($('queuePanel')) $('queuePanel').classList.remove('on');
-    });
-  });
-}
-
-function render(){
-  rebuildSongs();
-  renderArtistOfWeek();
-  renderFilterPills();
-  
-  var visibleSongs = filterByGenre(songs);
-  
-  if($('uc')) $('uc').textContent = visibleSongs.length + ' songs';
-  if($('uc2')) $('uc2').textContent = visibleSongs.length + ' songs';
-  if($('ht')) $('ht').textContent = songs.length + ' tracks';
-  if($('pu')) $('pu').textContent = ups.length;
-  if($('pf')) $('pf').textContent = favs.length;
-  if($('pd')) $('pd').textContent = downs.length;
-
-  var ur = $('ur');
-  if(ur){
-    if(visibleSongs.length){
-      ur.innerHTML = visibleSongs.map(cardHtml).join('');
-    } else if(songs.length && activeGenre !== 'All'){
-      ur.innerHTML = '<div class="empty-state"><div class="icon">🎵</div><div class="title">No ' + esc(activeGenre) + ' songs yet</div><div class="sub">Try a different genre or upload more music</div></div>';
-    } else {
-      ur.innerHTML = '<div class="empty-state"><div class="icon">🎵</div><div class="title">Music coming soon</div><div class="sub">' +
-        (isFounder ? 'Tap the upload box above to add songs' : 'Check back soon for new releases') +
-        '</div></div>';
-    }
-  }
-
-  var al = $('allLib');
-  if(al){
-    if(visibleSongs.length){
-      al.innerHTML = visibleSongs.map(function(s){ return itemHtml(s, {download:true, del:isFounder?'askDelU':null}); }).join('');
-    } else {
-      al.innerHTML = '<div class="empty-state"><div class="icon">📚</div><div class="title">No songs here</div><div class="sub">Try selecting a different genre</div></div>';
-    }
-  }
-
-  var fv = $('fv');
-  if(fv){
-    var favSongs = favs.map(function(id){ return songs.find(function(x){ return x.id == id; }); }).filter(Boolean);
-    if(favSongs.length){
-      fv.innerHTML = favSongs.map(function(s){ return itemHtml(s, {del:'askDelF'}); }).join('');
-    } else {
-      fv.innerHTML = '<div class="empty-msg">No favorites yet</div>';
-    }
-  }
-
-  var dl = $('dl');
-  if(dl){
-    var downSongs = downs.map(function(id){ return songs.find(function(x){ return x.id == id; }); }).filter(Boolean);
-    if(downSongs.length){
-      dl.innerHTML = downSongs.map(function(s){ return itemHtml(s, {del:'askDelD'}); }).join('');
-    } else {
-      dl.innerHTML = '<div class="empty-msg">No downloads yet</div>';
-    }
-  }
-
-  renderSearch($('si') ? $('si').value : '');
-}
-
-function renderSearch(q){
-  q = (q || '').toLowerCase();
-  var sr = $('sr');
-  if(!sr) return;
-  var results = songs.filter(function(s){
-    return s.title.toLowerCase().indexOf(q) !== -1 || s.artist.toLowerCase().indexOf(q) !== -1;
-  });
-  if(results.length){
-    sr.innerHTML = results.map(function(s){ return itemHtml(s, {download:true, del:isFounder?'askDelU':null}); }).join('');
-  } else {
-    sr.innerHTML = '<div class="empty-state"><div class="icon">🔍</div><div class="title">' + (songs.length ? 'No results' : 'Library is empty') + '</div><div class="sub">Try a different search term</div></div>';
-  }
-}
-
-window.play = function(id){
-  var s = songs.find(function(x){ return x.id == id; });
-  if(!s) return;
-  if(!s.audio){ toast('This song has no audio URL'); return; }
-  cur = s;
-  curIndex = songs.findIndex(function(x){ return x.id == id; });
-  aud.src = s.audio;
-  aud.play().catch(function(){ toast('Tap play to start'); });
-  isPlay = true;
-  cacheAudio(s.audio);
-  if($('pt')) $('pt').textContent = s.title;
-  if($('pr')) $('pr').textContent = s.artist;
-  if($('pa')) $('pa').innerHTML = getCover(s);
-  if($('pl')) $('pl').classList.add('on','playing');
-  if($('pp')) $('pp').innerHTML = '<i class="fas fa-pause"></i>';
-  updateHeartButton();
-  updateMiniPlayer();
-  if($('queuePanel') && $('queuePanel').classList.contains('on')) renderQueue();
-  toast('Now playing: ' + s.title);
-};
-
-function playNext(){
-  if(!songs.length) return;
-  if(repeatMode === 2){ aud.currentTime = 0; aud.play(); return; }
-  if(isShuffle){ curIndex = Math.floor(Math.random() * songs.length); }
-  else { curIndex = (curIndex + 1) % songs.length; }
-  play(songs[curIndex].id);
-}
-
-function playPrev(){
-  if(!songs.length) return;
-  if(isShuffle){ curIndex = Math.floor(Math.random() * songs.length); }
-  else { curIndex = (curIndex - 1 + songs.length) % songs.length; }
-  play(songs[curIndex].id);
-}
-
-window.openD = function(id){
-  var s = songs.find(function(x){ return x.id == id; });
-  if(!s) return;
-  dTarget = s;
-  if($('mt')) $('mt').textContent = s.title + ' - ' + s.artist;
-  if($('dm')) $('dm').classList.add('on');
-};
-
-window.askDelU = function(id){
-  var s = songs.find(function(x){ return x.id == id; });
-  if(!s) return;
-  if($('delT')) $('delT').textContent = 'Delete upload?';
-  if($('delMsg')) $('delMsg').textContent = 'Delete "' + s.title + '" permanently?';
-  delAct = function(){
-    ups = ups.filter(function(x){ return x.id != id; });
-    favs = favs.filter(function(x){ return x != id; });
-    downs = downs.filter(function(x){ return x != id; });
-    localStorage.setItem('afro_yellow_ups', JSON.stringify(ups));
-    localStorage.setItem('afro_favs', JSON.stringify(favs));
-    localStorage.setItem('afro_downs', JSON.stringify(downs));
-    render();
-    toast('Removed from app');
-  };
-  if($('delM')) $('delM').classList.add('on');
-};
-
-window.askDelF = function(id){
-  if($('delT')) $('delT').textContent = 'Remove favorite?';
-  if($('delMsg')) $('delMsg').textContent = 'Remove from favorites?';
-  delAct = function(){ favs = favs.filter(function(x){ return x != id; }); localStorage.setItem('afro_favs', JSON.stringify(favs)); render(); toast('Removed'); };
-  if($('delM')) $('delM').classList.add('on');
-};
-
-window.askDelD = function(id){
-  if($('delT')) $('delT').textContent = 'Remove download?';
-  if($('delMsg')) $('delMsg').textContent = 'Remove from downloads?';
-  delAct = function(){ downs = downs.filter(function(x){ return x != id; }); localStorage.setItem('afro_downs', JSON.stringify(downs)); render(); toast('Removed'); };
-  if($('delM')) $('delM').classList.add('on');
-};
-
-function clearF(t){
-  var count = (t === 'fav') ? favs.length : downs.length;
-  if(!count){ toast(t === 'fav' ? 'No favorites' : 'No downloads'); return; }
-  if($('delT')) $('delT').textContent = (t === 'fav') ? 'Clear favorites?' : 'Clear downloads?';
-  if($('delMsg')) $('delMsg').textContent = 'Remove ' + count + ' ' + (t === 'fav' ? 'favorites' : 'downloads') + '?';
-  delAct = function(){
-    if(t === 'fav'){ favs = []; localStorage.setItem('afro_favs', '[]'); }
-    else{ downs = []; localStorage.setItem('afro_downs', '[]'); }
-    render();
-    toast('Cleared');
-  };
-  if($('delM')) $('delM').classList.add('on');
-}
-
-function showPinModal(){
-  if($('pinInput')) $('pinInput').value = '';
-  if($('pinM')) $('pinM').classList.add('on');
-  setTimeout(function(){ if($('pinInput')) $('pinInput').focus(); }, 100);
-}
-
-function tryUnlock(){
-  var pin = $('pinInput') ? $('pinInput').value.trim() : '';
-  if(pin === FOUNDER_PIN){
-    isFounder = true;
-    sessionStorage.setItem('afro_founder', 'true');
-    updateFounderUI();
-    render();
-    if($('pinM')) $('pinM').classList.remove('on');
-    toast('Welcome back, founder 👑');
-  } else {
-    toast('Wrong PIN ❌');
-    if($('pinInput')) $('pinInput').value = '';
-  }
-}
-
-function uploadToCloudinary(file, onProgress, onDone, onError){
-  var formData = new FormData();
-  formData.append('file', file);
-  formData.append('upload_preset', CLOUDINARY_PRESET);
-  formData.append('folder', 'afrodownload');
-  var xhr = new XMLHttpRequest();
-  xhr.open('POST', 'https://api.cloudinary.com/v1_1/' + CLOUDINARY_CLOUD + '/auto/upload');
-  xhr.upload.onprogress = function(e){
-    if(e.lengthComputable && onProgress) onProgress(Math.round((e.loaded / e.total) * 100));
-  };
-  xhr.onload = function(){
-    if(xhr.status >= 200 && xhr.status < 300){
-      try { onDone(JSON.parse(xhr.responseText)); } catch(e){ onError(new Error('Bad response')); }
-    } else {
-      var msg = 'Upload failed: ' + xhr.status;
-      try { var resp = JSON.parse(xhr.responseText); if(resp.error && resp.error.message) msg = 'Cloudinary: ' + resp.error.message; } catch(e){}
-      onError(new Error(msg));
-    }
-  };
-  xhr.onerror = function(){ onError(new Error('Network error')); };
-  xhr.send(formData);
-}
-
-function init(){
-  var runBtn = $('runBtn');
-  if(runBtn){
-    runBtn.addEventListener('click', function(){
-      if($('sp')) $('sp').classList.add('hide');
-      setTimeout(function(){
-        if($('sp')) $('sp').style.display = 'none';
-        if($('app')) $('app').style.display = 'flex';
-        updateFounderUI();
-        render();
-      }, 400);
-    });
-  }
-
-  var tapCount = 0, tapTimer;
-  var logoBtn = $('logoBtn');
-  if(logoBtn){
-    logoBtn.addEventListener('click', function(){
-      tapCount++;
-      clearTimeout(tapTimer);
-      tapTimer = setTimeout(function(){ tapCount = 0; }, 900);
-      if(tapCount >= 5){
-        tapCount = 0;
-        if(isFounder){ toast('Already in founder mode 👑'); return; }
-        showPinModal();
-      }
-    });
-  }
-
-  var lockedBox = $('lockedBox');
-  if(lockedBox) lockedBox.addEventListener('click', showPinModal);
-
-  var pinCancel = $('pinCancel');
-  if(pinCancel) pinCancel.addEventListener('click', function(){ if($('pinM')) $('pinM').classList.remove('on'); });
-
-  var pinOk = $('pinOk');
-  if(pinOk) pinOk.addEventListener('click', tryUnlock);
-
-  var pinInput = $('pinInput');
-  if(pinInput) pinInput.addEventListener('keypress', function(e){ if(e.key === 'Enter') tryUnlock(); });
-
-  var navItems = document.querySelectorAll('.ni');
-  navItems.forEach(function(el){
-    el.addEventListener('click', function(){
-      navItems.forEach(function(n){ n.classList.remove('active'); });
-      el.classList.add('active');
-      document.querySelectorAll('.screen').forEach(function(s){ s.classList.remove('on'); });
-      var t = el.dataset.s;
-      var target = $(t);
-      if(target) target.classList.add('on');
-      var labels = {home:'Discover', search:'Search', lib:'Your Library', pro:'Profile'};
-      if($('tt')) $('tt').textContent = labels[t] || 'Discover';
-    });
-  });
-
-  var profileBtn = $('profileBtn');
-  if(profileBtn){
-    profileBtn.addEventListener('click', function(){
-      navItems.forEach(function(n){ n.classList.remove('active'); });
-      var proNav = document.querySelector('[data-s="pro"]');
-      if(proNav) proNav.classList.add('active');
-      document.querySelectorAll('.screen').forEach(function(s){ s.classList.remove('on'); });
-      if($('pro')) $('pro').classList.add('on');
-      if($('tt')) $('tt').textContent = 'Profile';
-    });
-  }
-
-  if($('clearFavBtn')) $('clearFavBtn').addEventListener('click', function(){ clearF('fav'); });
-  if($('clearDownBtn')) $('clearDownBtn').addEventListener('click', function(){ clearF('down'); });
-
-  if($('shareProfileBtn')){
-    $('shareProfileBtn').addEventListener('click', function(){
-      if(navigator.share) navigator.share({title:'AfroDownload', url:location.href});
-      else navigator.clipboard.writeText(location.href).then(function(){ toast('Link copied!'); });
-    });
-  }
-
-  if($('clearCacheBtn')){
-    $('clearCacheBtn').addEventListener('click', function(){
-      if('caches' in window){
-        caches.delete(AUDIO_CACHE_NAME).then(function(){
-          offlineCache = {};
-          toast('Offline songs cleared');
-          render();
-        });
-      } else {
-        toast('Cache not available');
-      }
-    });
-  }
-
-  if($('logoutBtn')){
-    $('logoutBtn').addEventListener('click', function(){
-      isFounder = false;
-      sessionStorage.removeItem('afro_founder');
-      updateFounderUI();
-      render();
-      toast('Founder mode OFF');
-    });
-  }
-
-  if($('cloudSyncBtn')){
-    $('cloudSyncBtn').addEventListener('click', function(){
-      var combined = [];
-      var ids = {};
-      ups.forEach(function(s){ if(!ids[s.id]){ ids[s.id] = true; combined.push(s); } });
-      remoteSongs.forEach(function(s){ if(!ids[s.id]){ ids[s.id] = true; combined.push(s); } });
-      if($('syncText')) $('syncText').value = JSON.stringify(combined, null, 2);
-      if($('syncM')) $('syncM').classList.add('on');
-    });
-  }
-
-  if($('syncClose')) $('syncClose').addEventListener('click', function(){ if($('syncM')) $('syncM').classList.remove('on'); });
-  if($('syncCopy')){
-    $('syncCopy').addEventListener('click', function(){
-      var t = $('syncText');
-      if(!t) return;
-      t.select();
-      try { t.setSelectionRange(0, 999999); } catch(e){}
-      if(navigator.clipboard && navigator.clipboard.writeText){
-        navigator.clipboard.writeText(t.value).then(function(){ toast('Copied! Now paste into Gist'); });
-      } else {
-        document.execCommand('copy');
-        toast('Copied! Now paste into Gist');
-      }
-    });
-  }
-  if($('syncOpen')) $('syncOpen').addEventListener('click', function(){ window.open('https://gist.github.com/Afrodownload415', '_blank'); });
-
-  if($('cd')) $('cd').addEventListener('click', function(){ if($('dm')) $('dm').classList.remove('on'); });
-
-  if($('cfd')){
-    $('cfd').addEventListener('click', function(){
-      if(!dTarget) return;
-      if(downs.indexOf(dTarget.id) === -1){ downs.push(dTarget.id); localStorage.setItem('afro_downs', JSON.stringify(downs)); }
-      if(dTarget.audio){
-        cacheAudio(dTarget.audio);
-        toast('Starting download...');
-        var a = document.createElement('a');
-        a.href = dTarget.audio;
-        a.download = dTarget.title + '.mp3';
-        a.target = '_blank';
-        a.rel = 'noopener';
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        setTimeout(function(){ toast('Saved: ' + dTarget.title); }, 800);
-      } else { toast('No audio file to download'); }
-      if($('dm')) $('dm').classList.remove('on');
-      render();
-    });
-  }
-
-  if($('cp')) $('cp').addEventListener('click', function(){ if($('pl')) $('pl').classList.remove('on','playing'); });
-
-  if($('pp')){
-    $('pp').addEventListener('click', function(){
-      if(isPlay){
-        aud.pause();
-        isPlay = false;
-        $('pp').innerHTML = '<i class="fas fa-play"></i>';
-        if($('pl')) $('pl').classList.remove('playing');
-      } else {
-        aud.play().catch(function(){ toast('Cannot play'); });
-        isPlay = true;
-        $('pp').innerHTML = '<i class="fas fa-pause"></i>';
-        if($('pl')) $('pl').classList.add('playing');
-      }
-      updateMiniPlayer();
-    });
-  }
-
-  if($('prev')) $('prev').addEventListener('click', playPrev);
-  if($('next')) $('next').addEventListener('click', playNext);
-
-  aud.addEventListener('ended', function(){
-    if(repeatMode === 2){ aud.currentTime = 0; aud.play(); return; }
-    if(repeatMode === 1 || isShuffle || curIndex < songs.length - 1) playNext();
-  });
-
-  if($('volumeSlider')) $('volumeSlider').addEventListener('input', function(e){ aud.volume = e.target.value / 100; });
-
-  if($('shuffleBtn')){
-    $('shuffleBtn').addEventListener('click', function(){
-      isShuffle = !isShuffle;
-      $('shuffleBtn').classList.toggle('active-mode', isShuffle);
-      toast(isShuffle ? '🔀 Shuffle ON' : 'Shuffle OFF');
-    });
-  }
-
-  if($('repeatBtn')){
-    $('repeatBtn').addEventListener('click', function(){
-      repeatMode = (repeatMode + 1) % 3;
-      if(repeatMode === 0){ $('repeatBtn').classList.remove('active-mode'); toast('Repeat OFF'); }
-      if(repeatMode === 1){ $('repeatBtn').classList.add('active-mode'); toast('🔁 Repeat All'); }
-      if(repeatMode === 2){ $('repeatBtn').classList.add('active-mode'); toast('🔂 Repeat One'); }
-    });
-  }
-
-  if($('queueBtn')){
-    $('queueBtn').addEventListener('click', function(){ renderQueue(); if($('queuePanel')) $('queuePanel').classList.add('on'); });
-  }
-  if($('queueClose')) $('queueClose').addEventListener('click', function(){ if($('queuePanel')) $('queuePanel').classList.remove('on'); });
-
-  if($('miniPlay')){
-    $('miniPlay').addEventListener('click', function(){
-      if(isPlay){
-        aud.pause(); isPlay = false;
-        $('miniPlay').innerHTML = '<i class="fas fa-play"></i>';
-        if($('pl')) $('pl').classList.remove('playing');
-      } else {
-        aud.play().catch(function(){ toast('Cannot play'); });
-        isPlay = true;
-        $('miniPlay').innerHTML = '<i class="fas fa-pause"></i>';
-        if($('pl')) $('pl').classList.add('playing');
-      }
-      if($('pp')) $('pp').innerHTML = isPlay ? '<i class="fas fa-pause"></i>' : '<i class="fas fa-play"></i>';
-    });
-  }
-  if($('miniNext')) $('miniNext').addEventListener('click', playNext);
-  if($('miniPlayer')){
-    $('miniPlayer').addEventListener('click', function(e){
-      if(e.target.closest('.mini-btn')) return;
-      if($('pl')) $('pl').classList.add('on');
-    });
-  }
-
-  if($('fb')){
-    $('fb').addEventListener('click', function(){ if(!cur){ toast('No song playing'); return; } toggleFav(cur.id); });
-  }
-  if($('db')) $('db').addEventListener('click', function(){ if(cur) openD(cur.id); });
-  if($('sb')){
-    $('sb').addEventListener('click', function(){
-      if(navigator.share && cur) navigator.share({title:cur.title, url:location.href});
-      else navigator.clipboard.writeText(location.href).then(function(){ toast('Link copied!'); });
-    });
-  }
-
-  if($('si')) $('si').addEventListener('input', function(e){ renderSearch(e.target.value); });
-
-  if($('upZ')) $('upZ').addEventListener('click', function(){
-    if(!isFounder){ toast('Founder only'); return; }
-    if($('fi')) $('fi').click();
-  });
-
-  if($('fi')){
-    $('fi').addEventListener('change', function(e){
-      var files = Array.from(e.target.files);
-      e.target.value = '';
-      if(!files.length) return;
-      if(!isFounder){ toast('Founder only'); return; }
-      var valid = files.filter(function(f){ return f.size <= 50 * 1024 * 1024; });
-      var skipped = files.length - valid.length;
-      if(skipped > 0) toast(skipped + ' file(s) skipped (over 50MB)');
-      if(!valid.length) return;
-      if($('upProg')) $('upProg').classList.add('on');
-      if($('upBar')) $('upBar').style.width = '0%';
-      var total = valid.length, completed = 0, failed = 0;
-      function uploadNext(index){
-        if(index >= valid.length){
-          setTimeout(function(){
-            if($('upProg')) $('upProg').classList.remove('on');
-            if($('upBar')) $('upBar').style.width = '0%';
-          }, 1500);
-          var msg = '✅ ' + completed + ' uploaded';
-          if(failed > 0) msg += ', ' + failed + ' failed';
-          toast(msg);
-          return;
-        }
-        var f = valid[index];
-        if($('upBar')) $('upBar').style.width = '0%';
-        if($('upStatus')) $('upStatus').textContent = 'Uploading ' + (index + 1) + ' of ' + total + '...';
-        uploadToCloudinary(f,
-          function(pct){
-            if($('upBar')) $('upBar').style.width = pct + '%';
-            if($('upStatus')) $('upStatus').textContent = 'Uploading ' + (index + 1) + ' of ' + total + ' (' + pct + '%)';
-          },
-          function(result){
-            var ns = { id: Date.now() + index, title: f.name.replace(/\.[^/.]+$/, ''), artist: 'Yungee', cover: '💿', coverImg: '', genre: 'Afrobeats', audio: result.secure_url, publicId: result.public_id, isU: true };
-            ups.unshift(ns);
-            localStorage.setItem('afro_yellow_ups', JSON.stringify(ups));
-            completed++;
-            render();
-            setTimeout(function(){ uploadNext(index + 1); }, 300);
-          },
-          function(err){
-            console.error('Failed:', f.name, err);
-            failed++;
-            setTimeout(function(){ uploadNext(index + 1); }, 300);
-          }
-        );
-      }
-      uploadNext(0);
-    });
-  }
-
-  if($('cDel')) $('cDel').addEventListener('click', function(){ if($('delM')) $('delM').classList.remove('on'); delAct = null; });
-  if($('okDel')) $('okDel').addEventListener('click', function(){ if(delAct) delAct(); if($('delM')) $('delM').classList.remove('on'); delAct = null; });
-
-  aud.addEventListener('timeupdate', function(){
-    if(!aud.duration) return;
-    var p = (aud.currentTime / aud.duration) * 100;
-    if($('pfill')) $('pfill').style.width = p + '%';
-    var fmt = function(n){ return Math.floor(n/60) + ':' + ('0' + Math.floor(n%60)).slice(-2); };
-    if($('ct')) $('ct').textContent = fmt(aud.currentTime);
-    if($('td')) $('td').textContent = fmt(aud.duration);
-  });
-
-  if($('pw')){
-    $('pw').addEventListener('click', function(e){
-      if(!aud.duration) return;
-      var r = e.currentTarget.getBoundingClientRect();
-      aud.currentTime = ((e.clientX - r.left) / r.width) * aud.duration;
-    });
-  }
-}
-
-function boot(){
-  loadOfflineCache();
-  loadRemoteLibrary(function(){
-    init();
-    updateFounderUI();
-    render();
-    console.log('AfroDownload ready 🎧');
-  });
-}
-
-if(document.readyState === 'loading'){
-  document.addEventListener('DOMContentLoaded', boot);
-} else {
-  boot();
-}
-
-})();
-</script>
-
-<script>
-if('serviceWorker' in navigator){
-  window.addEventListener('load', function(){
-    navigator.serviceWorker.register('/sw.js').catch(function(){});
-  });
-}
-</script>
-
-<!-- Cloudflare Web Analytics -->
-<script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "81569f85507248de9e62f23297d9834b"}'></script>
-<!-- End Cloudflare Web Analytics -->
 
 </body>
 </html>
